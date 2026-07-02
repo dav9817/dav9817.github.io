@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Landing-Site Suitability on Mars — MCDA · Davide Bortoletto</title>
+<style>
+:root{
+  --bg:#0c0806; --panel:#1a110c; --text:#d7c8bf; --muted:#9a887c;
+  --head:#ffffff; --accent:#e0561f; --line:#2a1c14;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Helvetica,Arial,sans-serif;
+  line-height:1.75;-webkit-font-smoothing:antialiased}
+.wrap{max-width:760px;margin:0 auto;padding:26px 26px 90px}
+a{color:var(--accent);text-decoration:none}
+.back{display:inline-block;color:var(--muted);font-size:.88rem;margin-bottom:34px}
+.back:hover{color:#fff}
+
+.tagline{display:inline-block;font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;
+  font-weight:700;color:#0c0806;background:var(--accent);border-radius:6px;padding:4px 10px;margin-bottom:16px}
+.subtitle{color:var(--accent);font-size:.95rem;font-style:italic;margin:0 0 8px}
+h1{color:#fff;font-size:clamp(1.8rem,4.4vw,2.6rem);line-height:1.22;font-weight:700;
+  letter-spacing:-.01em;margin:0 0 22px}
+h2{color:#fff;font-size:1.24rem;font-weight:650;margin:46px 0 6px}
+h2 .n{color:var(--accent);font-weight:700;margin-right:.5em}
+p{margin:.6em 0}
+strong{color:#f0e6df}
+em{color:#c8b7ac}
+.lead{color:#e2d5cc;font-size:1.08rem}
+.callout{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);
+  border-radius:10px;padding:16px 20px;margin:24px 0;color:#d7c8bf}
+table{width:100%;border-collapse:collapse;margin:18px 0;font-size:.9rem}
+th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line)}
+th{color:#fff;font-weight:600;background:#160e09}
+ul{margin:.5em 0;padding-left:1.2em}li{margin:.4em 0}
+.hero{width:100%;aspect-ratio:16/7;border:1px solid var(--line);border-radius:14px;margin-bottom:8px;
+  background:radial-gradient(circle at 30% 40%,#7a2d10,#3a1607 45%,#0c0806 80%);
+  display:flex;align-items:center;justify-content:center;font-size:3.4rem}
+.tools{color:#c8b7ac;font-size:.92rem}
+@media(max-width:560px){.wrap{padding:20px 18px 70px}}
+
+/* --- indice dinamico (TOC) stile Notion --- */
+#toc{position:fixed;right:0;top:50%;transform:translateY(-50%);z-index:60;display:flex;flex-direction:column;
+  align-items:flex-end;gap:10px;padding:14px 14px 14px 10px;max-width:40px;overflow:hidden;border-radius:12px 0 0 12px;
+  border:1px solid transparent;border-right:0;
+  transition:max-width .28s ease,background .28s ease,box-shadow .28s ease,border-color .28s ease}
+#toc:hover{max-width:330px;background:var(--bg);border-color:var(--line);box-shadow:0 10px 40px rgba(0,0,0,.16);padding-left:22px}
+#toc a{display:flex;flex-direction:row-reverse;align-items:center;gap:14px;text-decoration:none;color:var(--muted);white-space:nowrap;font-size:.85rem;line-height:1.15;text-align:right}
+#toc a .dash{flex:0 0 auto;width:18px;height:2px;border-radius:2px;background:var(--muted);opacity:.5;
+  transition:width .2s ease,background .2s ease,opacity .2s ease}
+#toc a .lbl{opacity:0;transition:opacity .2s ease}
+#toc:hover a .lbl{opacity:1}
+#toc a.active .dash{width:28px;background:var(--accent);opacity:1}
+#toc a:hover .dash{background:var(--accent);opacity:1}
+#toc a.active .lbl,#toc a:hover .lbl{color:var(--accent)}
+@media(max-width:1024px){#toc{display:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <a class="back" href="../index.html">← GIS Portfolio</a>
+
+  <div class="hero">🔴</div>
+  <span class="tagline">Work in progress · In arrivo</span>
+  <p class="subtitle">Where would you land the first human base? A multi-criteria suitability analysis on planetary data</p>
+  <h1>Landing-Site Suitability on Mars — Multi-Criteria Analysis</h1>
+
+  <p class="lead">Il progetto porta l'analisi di idoneità multi-criterio (MCDA) fuori dalla Terra: combinando dati planetari — quota, temperatura, ghiaccio d'acqua ed energia solare — per individuare dove converrebbe collocare la prima base umana su Marte. Stessa logica GIS dei progetti terrestri (weighted overlay + esclusioni), applicata a un sistema di riferimento marziano.</p>
+
+  <div class="callout">Questa pagina è un'anteprima: il progetto è in fase di sviluppo. La mappa finale di idoneità farà da copertina non appena la pipeline sarà completa.</div>
+
+  <h2><span class="n">1.</span>Concept &amp; Question</h2>
+  <p>Una base marziana ha bisogno, contemporaneamente, di terreno pianeggiante e stabile (atterraggio e costruzione), acqua accessibile (ghiaccio nel sottosuolo, per consumo e produzione di propellente), energia (buona insolazione) e condizioni termiche non proibitive. Nessun singolo fattore basta: il sito ideale è quello che li ottimizza tutti insieme — esattamente il problema che l'MCDA è nata per risolvere.</p>
+
+  <h2><span class="n">2.</span>Planned Data Sources</h2>
+  <table>
+    <tr><th>Fattore</th><th>Dataset previsto</th><th>Ruolo</th></tr>
+    <tr><td>Quota &amp; pendenza</td><td>MOLA DEM (~463 m) — USGS Astrogeology</td><td>Idoneità morfologica (slope)</td></tr>
+    <tr><td>Temperatura</td><td>THEMIS — Mars Odyssey (via ODE / JMARS)</td><td>Vincolo termico</td></tr>
+    <tr><td>Ghiaccio sottosuperficiale</td><td>Neutron spectrometer / letteratura (es. Feldman et al.)</td><td>Prossimità all'acqua</td></tr>
+    <tr><td>Insolazione</td><td>Mars Climate Database (LMD) o proxy da latitudine + DEM</td><td>Potenziale energetico</td></tr>
+  </table>
+
+  <h2><span class="n">3.</span>Planned Method</h2>
+  <ul>
+    <li>Setup CRS marziano (Mars 2000) e import del DEM MOLA come layer di validazione (Valles Marineris, Olympus Mons).</li>
+    <li>Derivazione dello Slope dal DEM e riclassificazione in classi di idoneità (0–5° ottimo, &gt;15° escluso).</li>
+    <li>Riclassificazione di temperatura, ghiaccio e insolazione su scala comune.</li>
+    <li>Weighted Overlay (MCDA) dei fattori + maschere di esclusione per le pendenze proibitive.</li>
+    <li>Mappa finale di idoneità e individuazione dei siti candidati per la base.</li>
+  </ul>
+
+  <h2>Tools &amp; Skills (previsti)</h2>
+  <p class="tools">QGIS · Planetary data (MOLA, THEMIS) · Slope analysis · Reclassification · Weighted Overlay (MCDA) · Exclusion masks · Cartographic design.</p>
+
+  <a class="back" href="../index.html" style="margin-top:44px">← GIS Portfolio</a>
+</div>
+<script>
+(function(){
+  var heads=[].slice.call(document.querySelectorAll('.wrap h2'));
+  if(heads.length<2) return;
+  var nav=document.createElement('nav'); nav.id='toc'; nav.setAttribute('aria-label','Indice');
+  var items=[], num=0;
+  heads.forEach(function(h,i){
+    if(!h.id) h.id='sec-'+(i+1);
+    var c=h.cloneNode(true), n=c.querySelector('.n'); if(n) n.remove();
+    var title=c.textContent.trim().replace(/\s+/g,' ');
+    var label=title;
+    if(h.querySelector('.n')){ num++; label=('0'+num).slice(-2)+'  '+title; }
+    var a=document.createElement('a'); a.href='#'+h.id;
+    var d=document.createElement('span'); d.className='dash';
+    var l=document.createElement('span'); l.className='lbl'; l.textContent=label;
+    a.appendChild(d); a.appendChild(l);
+    a.addEventListener('click',function(e){e.preventDefault();h.scrollIntoView({behavior:'smooth',block:'start'});history.replaceState(null,'','#'+h.id);});
+    nav.appendChild(a); items.push({a:a,h:h});
+  });
+  document.body.appendChild(nav);
+  function spy(){var cur=items[0];items.forEach(function(o){if(o.h.getBoundingClientRect().top<=140)cur=o;});items.forEach(function(o){o.a.classList.toggle('active',o===cur);});}
+  window.addEventListener('scroll',spy,{passive:true});window.addEventListener('resize',spy);spy();
+})();
+</script>
+</body>
+</html>

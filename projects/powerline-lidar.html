@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Powerline Vegetation Risk — LiDAR · Davide Bortoletto</title>
+<style>
+:root{
+  --bg:#ffffff; --panel:#f6f7f5; --text:#2e3330; --muted:#6b7280;
+  --head:#141a17; --accent:#2f7d4f; --line:#e3e6e2;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Helvetica,Arial,sans-serif;
+  line-height:1.75;-webkit-font-smoothing:antialiased}
+.wrap{max-width:820px;margin:0 auto;padding:26px 26px 90px;counter-reset:sec}
+a{color:var(--accent);text-decoration:none}
+.back{display:inline-block;color:var(--muted);font-size:.88rem;margin-bottom:34px}
+.back:hover{color:var(--head)}
+
+.subtitle{color:var(--accent);font-size:.95rem;font-style:italic;margin:0 0 8px}
+h1{color:var(--head);font-size:clamp(1.8rem,4.2vw,2.5rem);line-height:1.25;font-weight:700;
+  letter-spacing:-.01em;margin:0 0 8px}
+
+h2{color:var(--accent);font-family:"SF Mono",ui-monospace,Menlo,Consolas,monospace;
+  font-size:1.5rem;font-weight:600;margin:60px 0 20px;letter-spacing:-.01em;
+  display:flex;align-items:baseline;gap:16px;padding-bottom:6px;border-bottom:1px solid var(--line)}
+h2 .n{font-size:0;line-height:0}
+h2 .n::before{counter-increment:sec;content:counter(sec,decimal-leading-zero);
+  font-family:"SF Mono",ui-monospace,Menlo,Consolas,monospace;font-size:3.2rem;font-weight:800;
+  line-height:.85;color:var(--accent);opacity:.2;letter-spacing:-.02em}
+h3{color:#26302b;font-size:1.02rem;font-weight:650;margin:26px 0 4px}
+p{margin:.55em 0}
+strong{color:var(--head)}
+em{color:#3f4a44}
+
+figure{margin:22px 0}
+figure img{width:100%;border-radius:12px;border:1px solid var(--line);display:block}
+.hero{position:relative;border-radius:14px;overflow:hidden;margin:0 0 30px;border:1px solid var(--line)}
+.hero img{width:100%;height:360px;object-fit:cover;object-position:center;display:block;border:0;border-radius:0}
+.hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(8,12,8,.12) 28%,rgba(8,12,8,.74) 100%)}
+.hero-txt{position:absolute;left:0;right:0;bottom:0;z-index:2;padding:26px 30px}
+.hero-txt h1{color:#fff;margin:0 0 8px;letter-spacing:-.01em;text-shadow:0 2px 12px rgba(0,0,0,.5)}
+.hero-sub{color:#eef1ee;font-style:italic;font-size:.98rem;margin:0;max-width:680px;text-shadow:0 1px 8px rgba(0,0,0,.5)}
+figcaption{color:var(--muted);font-size:.82rem;text-align:center;margin:8px 0 0}
+.ph{width:100%;aspect-ratio:16/9;border:1px dashed #b9c2bb;border-radius:12px;background:
+  repeating-linear-gradient(45deg,#f2f4f1,#f2f4f1 12px,#ecefe9 12px,#ecefe9 24px);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;color:#7c8a80;
+  font-size:.82rem;text-align:center;padding:14px;gap:6px}
+.ph b{font-family:"SF Mono",Menlo,Consolas,monospace;font-size:.8rem;color:#4f5d54}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px 22px}
+.three{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.mapitem{display:flex;flex-direction:column}
+.mapitem h4{font-size:.98rem;font-weight:650;color:#26302b;margin:22px 0 4px}
+.mapdesc{font-size:.9rem;color:#3f4a44;margin:0 0 12px}
+.mapitem figure{margin:auto 0 0}
+.revealcard{position:relative;overflow:hidden;border-radius:12px;border:1px solid var(--line);margin:16px 0;align-self:start}
+.revealcard figure{margin:0}
+.revealcard img{display:block;width:100%;height:auto;border:0;border-radius:0;transition:transform .45s ease,filter .35s ease}
+.revealcard:hover img{transform:scale(3);filter:brightness(1.04) saturate(1.25)}
+.revealcard .reveal{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;
+  padding:24px 26px;opacity:0;transition:opacity .35s ease;
+  background:rgba(255,255,255,.5);backdrop-filter:blur(16px) saturate(1.1);-webkit-backdrop-filter:blur(16px) saturate(1.1)}
+.revealcard:hover .reveal{opacity:1}
+.revealcard .reveal h4{color:var(--head);margin:0 0 10px;font-size:1.05rem;font-weight:650;text-shadow:0 1px 10px rgba(255,255,255,.75)}
+.revealcard .reveal p{color:#2e3330;font-size:.92rem;line-height:1.5;margin:0;text-shadow:0 1px 10px rgba(255,255,255,.75)}
+.revealcard .reveal em{color:var(--accent)}
+
+table{width:100%;border-collapse:collapse;margin:18px 0;font-size:.88rem}
+th,td{text-align:left;padding:9px 11px;border-bottom:1px solid var(--line)}
+th{color:var(--head);font-weight:600;background:var(--panel)}
+.lead{color:#3a423c;font-size:1.06rem}
+.callout{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);
+  border-radius:10px;padding:14px 18px;margin:22px 0;color:#3f4a44;font-size:.95rem}
+ul{margin:.5em 0;padding-left:1.2em}
+li{margin:.35em 0}
+.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:26px 0}
+.kpi{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 14px;text-align:center}
+.kpi b{display:block;color:var(--head);font-size:1.4rem;font-weight:700}
+.kpi span{color:var(--muted);font-size:.8rem}
+.tools{color:#3f4a44;font-size:.92rem}
+.refs{color:var(--muted);font-size:.86rem}
+hr{border:none;border-top:1px solid var(--line);margin:54px 0}
+@media(max-width:560px){.two,.three{grid-template-columns:1fr}.kpis{grid-template-columns:1fr}.wrap{padding:20px 18px 70px}}
+
+details.why{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:10px;margin:18px 0}
+details.why>summary{cursor:pointer;list-style:none;padding:14px 18px;color:var(--accent);font-size:.92rem;font-weight:600}
+details.why>summary::-webkit-details-marker{display:none}
+details.why>summary::before{content:"▸  "}
+details.why[open]>summary::before{content:"▾  "}
+details.why .wb{padding:0 18px 8px}
+details.why .wb p{margin:.35em 0 .9em;font-size:.92rem;color:var(--text);line-height:1.55}
+details.why .wb p:last-child{margin-bottom:2px}
+
+/* --- indice dinamico (TOC) stile Notion --- */
+#toc{position:fixed;right:0;top:50%;transform:translateY(-50%);z-index:60;display:flex;flex-direction:column;
+  align-items:flex-end;gap:10px;padding:14px 14px 14px 10px;max-width:40px;overflow:hidden;border-radius:12px 0 0 12px;
+  border:1px solid transparent;border-right:0;
+  transition:max-width .28s ease,background .28s ease,box-shadow .28s ease,border-color .28s ease}
+#toc:hover{max-width:330px;background:var(--bg);border-color:var(--line);box-shadow:0 10px 40px rgba(0,0,0,.16);padding-left:22px}
+#toc a{display:flex;flex-direction:row-reverse;align-items:center;gap:14px;text-decoration:none;color:var(--muted);white-space:nowrap;font-size:.85rem;line-height:1.15;text-align:right}
+#toc a .dash{flex:0 0 auto;width:18px;height:2px;border-radius:2px;background:var(--muted);opacity:.5;
+  transition:width .2s ease,background .2s ease,opacity .2s ease}
+#toc a .lbl{opacity:0;transition:opacity .2s ease}
+#toc:hover a .lbl{opacity:1}
+#toc a.active .dash{width:28px;background:var(--accent);opacity:1}
+#toc a:hover .dash{background:var(--accent);opacity:1}
+#toc a.active .lbl,#toc a:hover .lbl{color:var(--accent)}
+@media(max-width:1024px){#toc{display:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <a class="back" href="../index.html">← GIS Portfolio</a>
+
+  <div class="hero">
+    <img src="../assets/img/lidar/chm_hero.webp" alt="Canopy Height Model (CHM)">
+    <div class="hero-txt">
+      <h1>Powerline Vegetation Risk — LiDAR Analysis &amp; Management Scenarios</h1>
+      <p class="hero-sub">A LiDAR-based geometric model of tree-fall interference with an HV overhead line — 5-year management scenario comparison</p>
+    </div>
+  </div>
+
+  <h2><span class="n">1.</span>Project Overview</h2>
+  <p class="lead">Lo studio simula la progettazione di una nuova linea aerea ad alta tensione e ne valuta l'interferenza con la vegetazione forestale circostante. A partire da dati LiDAR viene costruito un modello geometrico del rischio di caduta degli alberi sui conduttori e vengono confrontate tre strategie di gestione (potatura/abbattimento), misurandone il rischio residuo a 5 anni.</p>
+
+  <h2><span class="n">2.</span>Strategic Value &amp; Output</h2>
+  <p>La gestione della vegetazione lungo le linee ad alta tensione è una voce di costo rilevante per i gestori di rete e un fattore critico nella prevenzione di guasti e incendi. Il modello produce una mappa di rischio basata sulla geometria reale (altezza della pianta rispetto alla distanza dalla linea), stabilisce la priorità degli interventi e fornisce un confronto quantitativo tra una strategia "a soglia di altezza", una geometrica ed una geometrica previsionale, in termini di rischio residuo e di bosco effettivamente rimosso.</p>
+
+  <h2><span class="n">3.</span>Study Area</h2>
+  <p>L'area di studio è un versante boscato di montagna a Padergnone, frazione del Comune di Vallelaghi (Provincia Autonoma di Trento), nella Valle dei Laghi — l'antico solco di origine glaciale, orientato NNE–SSW, che collega la conca di Trento al basso Sarca e al Lago di Garda. Il sito si affaccia sui laghi di Toblino e Santa Massenza, in un contesto a spiccata impronta sub-mediterranea, caratterizzato da boschi misti di carpino nero, leccio e pino. L'area si sviluppa su un dislivello di circa 870–1.260 m s.l.m., condizione che rende la distanza albero–conduttore fortemente variabile e quindi adatta a un modello di rischio basato sulla geometria locale.</p>
+  <p>Il dato LiDAR utilizzato risale al 2007 (volo della Provincia Autonoma di Trento), il sistema di riferimento è EPSG:32632 (WGS 84 / UTM 32N) e i raster derivati hanno risoluzione di 1 m.</p>
+  <figure><img src="../assets/img/lidar/inquadramento.webp" alt="Inquadramento area di studio"><figcaption>Inquadramento dell'area di studio.</figcaption></figure>
+  <figure><img src="../assets/img/lidar/lidar_3d.webp" alt="Render 3D nuvola LiDAR"><figcaption>Render 3D della nuvola di punti LiDAR.</figcaption></figure>
+
+  <h2><span class="n">4.</span>Data Source</h2>
+  <table>
+    <tr><th>Dataset</th><th>Source</th><th>Type</th></tr>
+    <tr><td>Administrative boundaries</td><td>ISTAT</td><td>Vector (polygon)</td></tr>
+    <tr><td>LiDAR point cloud</td><td>Autonomous Province of Trento (Padergnone)</td><td>.las</td></tr>
+    <tr><td>HV line</td><td>Manual digitalization from orthophoto interpretation</td><td>Vector (line)</td></tr>
+    <tr><td>DTM / DSM</td><td>Derived from LiDAR (ground / canopy)</td><td>Raster 1 m</td></tr>
+    <tr><td>CHM</td><td>DSM − DTM</td><td>Raster 1 m</td></tr>
+  </table>
+
+  <h2><span class="n">5.</span>Methodology</h2>
+  <figure><img src="../assets/img/lidar/methodology.webp" alt="Schema metodologico (workflow)"><figcaption>Schema metodologico (workflow)</figcaption></figure>
+  <p>Dalla nuvola di punti si ricavano il DTM (terreno) e il DSM (chiome); la loro differenza genera il CHM, l'altezza pura della vegetazione. I valori NoData vengono riempiti per evitarne la propagazione nell'algebra raster. La linea, digitalizzata per fotointerpretazione, viene rasterizzata e si calcola la distanza euclidea di ogni cella dai conduttori. Il rischio è espresso dall'indice geometrico Δ = altezza chioma − distanza dalla linea (indica di quanto un albero, cadendo, supererebbe i cavi). Un filtro ad altezza ≥ 12 m esclude arbusti e vegetazione bassa (falsi positivi), e i valori di Δ vengono riclassificati in cinque classi di rischio (0–4).</p>
+  <details class="why">
+    <summary>Perché queste scelte? — l'indice Δ, il filtro 12 m, i NoData</summary>
+    <div class="wb">
+      <p>L'indice geometrico Δ = altezza − distanza — modella l'albero come un'asta rigida che, cadendo, ruota attorno alla base: la sua cima raggiunge in orizzontale una distanza pari alla propria altezza. Quindi se l'altezza supera la distanza dalla linea (Δ &gt; 0), l'albero cadendo arriva a — o scavalca — i conduttori; Δ misura proprio di quanto. È un modo semplice e trasparente per trasformare la geometria altezza/distanza in un indice di rischio continuo.</p>
+      <p>Il filtro ad altezza ≥ 12 m — sotto una certa altezza un albero non può fisicamente raggiungere i cavi (data la quota dei conduttori e le distanze in gioco): includerlo produrrebbe solo falsi positivi. La soglia elimina arbusti e vegetazione bassa, concentrando l'analisi sugli alberi realmente pericolosi.</p>
+      <p>Il riempimento dei NoData — nell'algebra raster il NoData è "contagioso": qualsiasi operazione che coinvolge una cella vuota restituisce una cella vuota, aprendo buchi nella mappa. Riempire i NoData prima dei calcoli evita che questi buchi si propaghino nel modello di rischio.</p>
+    </div>
+  </details>
+  <p>Su questa base si innestano le strategie di gestione: il taglio viene simulato in raster — abbattimento (altezza → 0) per le celle troppo vicine ai conduttori, potatura ad altezza di sicurezza per quelle più lontane — e si stima la crescita futura della vegetazione (+2 m su 5 anni, a 0,4 m/anno). Riapplicando la stessa formula al bosco "post-intervento e cresciuto" si ottiene il rischio residuo, che consente di confrontare gli scenari in modo quantitativo.</p>
+
+  <h2><span class="n">6.</span>Intermediate Maps</h2>
+  <div class="two">
+    <div class="revealcard">
+      <figure><img src="../assets/img/lidar/dtm.webp" alt="DTM"></figure>
+      <div class="reveal"><h4>6.1 DTM</h4><p>Modello digitale del terreno: la quota del suolo nudo, ricostruita dai soli ritorni LiDAR classificati come terreno. Descrive la morfologia del versante ed è la superficie di base da cui si misura l'altezza della vegetazione.</p></div>
+    </div>
+    <div class="revealcard">
+      <figure><img src="../assets/img/lidar/dsm.webp" alt="DSM"></figure>
+      <div class="reveal"><h4>6.2 DSM</h4><p>Modello digitale della superficie: la quota del primo elemento intercettato dal laser, chiome comprese. Rappresenta il «tetto» del bosco; sottratto al DTM restituisce lo spessore della vegetazione.</p></div>
+    </div>
+  </div>
+  <div class="two">
+    <div class="revealcard">
+      <figure><img src="../assets/img/lidar/chm.webp" alt="CHM"></figure>
+      <div class="reveal"><h4>6.3 CHM</h4><p>Modello di altezza delle chiome (DSM − DTM): l'altezza pura della vegetazione, depurata dalla pendenza del terreno. I toni gialli indicano gli alberi più alti (fino a ~30 m), i viola il suolo e la vegetazione bassa. È l'input principale del modello di rischio.</p></div>
+    </div>
+    <div class="revealcard">
+      <figure><img src="../assets/img/lidar/proximity.webp" alt="Proximity Map"></figure>
+      <div class="reveal"><h4>6.4 Proximity Map</h4><p>Mappa di prossimità dall'infrastruttura elettrica (linea AT e piloni). Il raster è suddiviso in fasce costanti di 20 m; i toni scuri indicano la vicinanza ai cavi, i chiari l'allontanamento progressivo. È un input fondamentale per il calcolo del rischio.</p></div>
+    </div>
+  </div>
+  <figure><img src="../assets/img/lidar/chm_classes.webp" alt="Classi di altezza del CHM"><figcaption>Riclassificazione del CHM in classi di altezza della vegetazione.</figcaption></figure>
+
+  <h2><span class="n">7.</span>Risk Model &amp; Classification</h2>
+  <table>
+    <tr><th>Value</th><th>Risk class</th><th>Condition (Δ)</th><th>Physical meaning</th></tr>
+    <tr><td>0</td><td>No risk</td><td>Δ &lt; 0 or H &lt; 12 m</td><td>Tree too short or too far to reach the conductors</td></tr>
+    <tr><td>1</td><td>Moderate</td><td>0 ≤ Δ &lt; 2 m</td><td>Reaches the line only with the canopy tip</td></tr>
+    <tr><td>2</td><td>High</td><td>2 ≤ Δ &lt; 5 m</td><td>Overtops the line when falling: impact likely</td></tr>
+    <tr><td>3</td><td>Very High</td><td>5 ≤ Δ ≤ 10 m</td><td>Large overshoot beyond the conductors</td></tr>
+    <tr><td>4</td><td>Critical</td><td>Δ &gt; 10 m</td><td>Tall stem right next to the line: immediate hazard</td></tr>
+  </table>
+
+  <h2><span class="n">8.</span>Management Scenarios</h2>
+  <p>Su un orizzonte di 5 anni (crescita +2 m, a 0,4 m/anno) si confrontano tre strategie, applicando la stessa formula di rischio:</p>
+  <ul>
+    <li>Scenario A — a soglia: abbattimento di tutti gli alberi ≥ 20 m, a prescindere dalla distanza dalla linea (logica speditiva).</li>
+    <li>Scenario B — geometrico: taglio mirato delle sole celle attualmente a rischio.</li>
+    <li>Scenario C — geometrico previsionale: taglio delle celle che saranno a rischio entro l'orizzonte temporale, con un margine di crescita.</li>
+  </ul>
+  <p class="callout">Perché +2 m in 5 anni? Un tasso medio di 0,4 m/anno è una scelta cautelativa: in un popolamento maturo la chioma dominante cresce lentamente, mentre la crescita più rapida riguarda sottobosco e margini — proprio ciò che genera <em>nuovo</em> rischio. Sottostimare il rischio futuro è l'errore più costoso per un gestore di rete.</p>
+
+  <h2><span class="n">9.</span>Results &amp; Comparison</h2>
+  <div class="kpis">
+    <div class="kpi"><b>−3%</b><span>Scenario A (a soglia)</span></div>
+    <div class="kpi"><b>−60%</b><span>Scenario B (geometrico)</span></div>
+    <div class="kpi"><b>−100%</b><span>Scenario C (previsionale)</span></div>
+  </div>
+  <p>Il confronto tra i tre approcci racconta una progressione chiara. La gestione a soglia (Scenario A), che abbatte gli alberi oltre i 20 m a prescindere dalla distanza dalla linea, riduce il rischio complessivo di appena il 3% circa: gran parte del pericolo, infatti, proviene da alberi di 12–20 m vicini ai conduttori, che un criterio basato sulla sola altezza non riesce a intercettare — in sostanza colpisce il bersaglio sbagliato. La gestione geometrica sul presente (Scenario B) centra invece il bersaglio giusto e azzera il rischio attuale; intervenendo però solo sulle celle a rischio oggi, lascia che la crescita della vegetazione (+2 m in cinque anni) faccia ricomparire circa 9.555 m² di rischio residuo a 5 anni — un valore comunque inferiore di circa il 60% rispetto al bosco non trattato (~23.937 m²). Solo la gestione geometrica previsionale (Scenario C) anticipa questa crescita e mantiene il rischio residuo a zero per l'intero orizzonte temporale: è proprio la capacità di prevedere, più che di tagliare di più, a distinguere lo Scenario C dallo Scenario B.</p>
+  <h3>Scenario A — gestione a soglia (≥ 20 m)</h3>
+  <div class="two">
+    <figure><img src="../assets/img/lidar/scenario_a_today.webp" alt="Scenario A — rischio oggi"><figcaption>9.1.1 Rischio oggi (gestione a soglia).</figcaption></figure>
+    <figure><img src="../assets/img/lidar/scenario_a_residual.webp" alt="Scenario A — rischio residuo 5 anni"><figcaption>9.1.2 Rischio residuo a 5 anni.</figcaption></figure>
+  </div>
+  <h3>Scenario B — gestione geometrica (sul presente)</h3>
+  <div class="two">
+    <figure><img src="../assets/img/lidar/scenario_b_today.webp" alt="Scenario B — rischio oggi"><figcaption>9.2.1 Rischio oggi (geometrico).</figcaption></figure>
+    <figure><img src="../assets/img/lidar/scenario_b_residual.webp" alt="Scenario B — rischio residuo 5 anni"><figcaption>9.2.2 Rischio residuo a 5 anni (senza previsione).</figcaption></figure>
+  </div>
+  <h3>Scenario C — gestione geometrica previsionale</h3>
+  <div class="two">
+    <figure><img src="../assets/img/lidar/scenario_c_base.webp" alt="Scenario C — rischio previsto a 5 anni"><figcaption>9.3.1 Rischio previsto a 5 anni (nessun intervento).</figcaption></figure>
+    <figure><img src="../assets/img/lidar/scenario_c_residual.webp" alt="Scenario C — rischio residuo pari a 0"><figcaption>9.3.2 Rischio residuo a 5 anni: pari a 0 grazie alla gestione sulla previsione.</figcaption></figure>
+  </div>
+  <figure><img src="../assets/img/lidar/risk_chart.webp" alt="Grafico di confronto del rischio tra scenari"><figcaption>Confronto quantitativo del rischio residuo tra i tre scenari.</figcaption></figure>
+  <figure><img src="../assets/img/lidar/risk_table.webp" alt="Tabella di confronto del rischio tra scenari"><figcaption>Tabella di sintesi del confronto tra gli scenari.</figcaption></figure>
+
+  <h2><span class="n">10.</span>Intervention Magnitude &amp; Cut Type</h2>
+  <div class="three">
+    <figure><img src="../assets/img/lidar/cut_type_a.webp" alt="Tipo di taglio — Scenario A"><figcaption>Scenario A — tipo di taglio.</figcaption></figure>
+    <figure><img src="../assets/img/lidar/cut_type_b.webp" alt="Tipo di taglio — Scenario B"><figcaption>Scenario B — tipo di taglio.</figcaption></figure>
+    <figure><img src="../assets/img/lidar/cut_type_c.webp" alt="Tipo di taglio — Scenario C"><figcaption>Scenario C — tipo di taglio.</figcaption></figure>
+  </div>
+  <figure><img src="../assets/img/lidar/cut_type_chart.webp" alt="Superficie trattata per tipo di intervento, per scenario"><figcaption>Superficie trattata per tipo — potatura (giallo) vs abbattimento (rosso), per scenario.</figcaption></figure>
+  <table>
+    <tr><th>Strategy</th><th>Cut area</th><th>Volume removed</th><th>Pruning</th><th>Felling</th><th>Residual risk</th></tr>
+    <tr><td>A — Threshold (≥ 20 m)</td><td>732 m²</td><td>15.413 m³</td><td>0</td><td>732 m²</td><td>23.205 m²</td></tr>
+    <tr><td>B — Geometric (current)</td><td>18.644 m²</td><td>189.235 m³</td><td>12.669 m²</td><td>5.975 m²</td><td>9.555 m²</td></tr>
+    <tr><td>C — Geometric previsional</td><td>23.937 m²</td><td>245.868 m³</td><td>16.985 m²</td><td>6.952 m²</td><td>0 m²</td></tr>
+  </table>
+  <p>A prima vista la gestione geometrica sembra penalizzante: rimuove molto più bosco del taglio a soglia, con un volume asportato circa 16 volte superiore. È però un confronto ingannevole, per tre ragioni. Conta innanzitutto <em>cosa</em> si rimuove: la maggior parte dell'intervento geometrico è potatura — circa il 71% della superficie trattata — che abbassa la pianta lasciandola in vita, mentre l'abbattimento vero e proprio è riservato alla sola fascia a ridosso dei conduttori, dove un fusto intero, cadendo, colpirebbe comunque la linea. Conta poi l'<em>efficienza</em>: intervenendo dove la geometria altezza-distanza lo richiede, il metodo geometrico elimina circa il doppio del rischio per ogni metro cubo tagliato. E conta infine la <em>durata nel tempo</em>: grazie alla potatura calibrata sulla crescita futura, lo scenario previsionale (C) mantiene il rischio residuo a zero per l'intero orizzonte di cinque anni ed evita interventi d'urgenza, mentre il taglio a soglia lascia rientrare il rischio quasi inalterato già a breve termine. In sintesi, il metodo geometrico non "taglia di meno": taglia meglio — più mirato, più graduato e più duraturo.</p>
+  <p>Questa differenza si riflette anche sul piano economico, dove ciò che conta è il costo <em>totale</em> sul ciclo pluriennale, non quello del singolo intervento. Su un versante impervio la voce più pesante non è il taglio in sé, ma la <em>mobilitazione</em> della squadra — accesso, mezzi, eventuale disalimentazione della linea — un costo fisso per ogni uscita: la gestione a soglia, riducendo il rischio solo del 3%, obbliga a tornare più volte, mentre il previsionale concentra tutto in un'unica uscita che tiene per cinque anni. A ciò si somma il costo dei <em>guasti evitati</em>, spesso la voce dominante: con oltre 23.000 m² lasciati a rischio, il taglio a soglia espone a disservizi, penali di continuità e — nel caso peggiore — inneschi d'incendio, mentre azzerare il rischio elimina questo costo atteso. Infine la <em>programmabilità</em>: un rischio residuo nullo per un orizzonte noto permette un ciclo di manutenzione ordinario e pianificato, ben più economico degli interventi d'urgenza reattivi. In quest'ottica la spesa maggiore del giorno del taglio non è un costo ma un investimento, che il metodo geometrico ammortizza sull'intero quinquennio — fermo restando che qui si ragiona per ordini di grandezza: tradurre superfici e volumi in euro richiede un modello di costo dedicato (cfr. sviluppi futuri).</p>
+
+  <h2><span class="n">11.</span>Limitations &amp; Future Development</h2>
+  <ul>
+    <li>Modello pixel-based: il rischio di caduta è in realtà un fenomeno per-albero; l'estensione naturale è l'analisi object-based (individual tree crown detection).</li>
+    <li>Linea modellata come tracciato 2D; sviluppo successivo: quota reale dei conduttori (catenaria con abbassamento termico).</li>
+    <li>Crescita uniforme (+2 m): in realtà varia per specie; integrazione di tassi di crescita specie-specifici e del concetto di <em>danger tree</em> secondo le distanze di sicurezza normate.</li>
+    <li>Analisi economica: uno sviluppo naturale è un modello di costo (€) che traduca superfici trattate, volumi e rischio residuo in un confronto costo-beneficio / TCO tra gli scenari, integrando costi di mobilitazione, guasti evitati e ciclo di manutenzione.</li>
+  </ul>
+
+  <hr>
+  <h2 style="margin-top:0">Tools &amp; Skills</h2>
+  <p class="tools">QGIS · GDAL · LiDAR point-cloud processing · DTM / DSM / CHM generation · Raster map algebra · Proximity analysis · Vectorization &amp; Zonal Statistics · Cartographic design.</p>
+
+  <h2>References</h2>
+  <ul class="refs">
+    <li>Provincia Autonoma di Trento — Dati LiDAR e cartografia tecnica (Geoportale PAT).</li>
+    <li>QGIS Development Team. <em>QGIS Geographic Information System.</em> OSGeo; GDAL/OGR contributors.</li>
+    <li>CEI EN 50341 — <em>Overhead electrical lines exceeding AC 1 kV</em> (clearance e distanze di sicurezza).</li>
+    <li>Walker M., Dahle G.A., et al. (2023). <em>Literature Review of UAS and LiDAR with Application to Distribution Utility Vegetation Management.</em> Arboriculture &amp; Urban Forestry, 49(3).</li>
+    <li>Li W., Guo Q., Jakubowski M.K., Kelly M. (2012). <em>A new method for segmenting individual trees from the LiDAR point cloud.</em> PE&amp;RS, 78(1): 75–84.</li>
+  </ul>
+
+  <a class="back" href="../index.html" style="margin-top:40px">← GIS Portfolio</a>
+</div>
+
+<script>
+/* Se un file immagine non è ancora presente, mostra un placeholder col nome-file atteso.
+   Appena copi la mappa in assets/img/... l'immagine compare da sola (nessuna modifica all'HTML). */
+function _ph(img){
+  var src=(img.getAttribute('src')||'').split('/').pop();
+  var box=document.createElement('div');
+  box.className='ph';
+  box.innerHTML='immagine mancante<b>'+src+'</b>';
+  img.replaceWith(box);
+}
+document.querySelectorAll('figure img').forEach(function(img){
+  if(img.complete && img.naturalWidth===0){_ph(img);}
+  else{img.addEventListener('error',function(){_ph(img);});}
+});
+</script>
+<script>
+(function(){
+  var heads=[].slice.call(document.querySelectorAll('.wrap h2'));
+  if(heads.length<2) return;
+  var nav=document.createElement('nav'); nav.id='toc'; nav.setAttribute('aria-label','Indice');
+  var items=[], num=0;
+  heads.forEach(function(h,i){
+    if(!h.id) h.id='sec-'+(i+1);
+    var c=h.cloneNode(true), n=c.querySelector('.n'); if(n) n.remove();
+    var title=c.textContent.trim().replace(/\s+/g,' ');
+    var label=title;
+    if(h.querySelector('.n')){ num++; label=('0'+num).slice(-2)+'  '+title; }
+    var a=document.createElement('a'); a.href='#'+h.id;
+    var d=document.createElement('span'); d.className='dash';
+    var l=document.createElement('span'); l.className='lbl'; l.textContent=label;
+    a.appendChild(d); a.appendChild(l);
+    a.addEventListener('click',function(e){e.preventDefault();h.scrollIntoView({behavior:'smooth',block:'start'});history.replaceState(null,'','#'+h.id);});
+    nav.appendChild(a); items.push({a:a,h:h});
+  });
+  document.body.appendChild(nav);
+  function spy(){var cur=items[0];items.forEach(function(o){if(o.h.getBoundingClientRect().top<=140)cur=o;});items.forEach(function(o){o.a.classList.toggle('active',o===cur);});}
+  window.addEventListener('scroll',spy,{passive:true});window.addEventListener('resize',spy);spy();
+})();
+</script>
+</body>
+</html>
