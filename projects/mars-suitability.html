@@ -4,51 +4,112 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="dark">
+<title>Human Base Site Suitability on Mars — GIS MCDA · Davide Bortoletto</title>
 <link rel="icon" href="../assets/img/home/favicon.png">
-<title>Landing-Site Suitability on Mars — MCDA · Davide Bortoletto</title>
 <style>
 :root{color-scheme:dark;
-  --bg:#0c0806; --panel:#1a110c; --text:#d7c8bf; --muted:#9a887c;
-  --head:#ffffff; --accent:#e0561f; --line:#2a1c14;
+  --bg:#0c0806; --panel:#17100b; --text:#cdbfb6; --muted:#96857a;
+  --head:#ffffff; --accent:#e0483a; --line:#2a1c14;
 }
 *{box-sizing:border-box}
+html{scroll-behavior:smooth}
 body{margin:0;background:var(--bg);color:var(--text);
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Helvetica,Arial,sans-serif;
   line-height:1.75;-webkit-font-smoothing:antialiased}
-.wrap{max-width:760px;margin:0 auto;padding:26px 26px 90px}
+.wrap{max-width:820px;margin:0 auto;padding:26px 26px 90px;counter-reset:sec}
 a{color:var(--accent);text-decoration:none}
 .back{display:inline-block;color:var(--muted);font-size:.88rem;margin-bottom:34px}
 .back:hover{color:#fff}
 
-.tagline{display:inline-block;font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;
-  font-weight:700;color:#0c0806;background:var(--accent);border-radius:6px;padding:4px 10px;margin-bottom:16px}
 .subtitle{color:var(--accent);font-size:.95rem;font-style:italic;margin:0 0 8px}
-h1{color:#fff;font-size:clamp(1.8rem,4.4vw,2.6rem);line-height:1.22;font-weight:700;
-  letter-spacing:-.01em;margin:0 0 22px}
-h2{color:#fff;font-size:1.24rem;font-weight:650;margin:46px 0 6px}
-h2 .n{color:var(--accent);font-weight:700;margin-right:.5em}
-p{margin:.6em 0}
-strong{color:#f0e6df}
+h1{color:#fff;font-size:clamp(1.8rem,4.2vw,2.5rem);line-height:1.25;font-weight:700;
+  letter-spacing:-.01em;margin:0 0 26px}
+.cover{width:100%;border-radius:14px;border:1px solid var(--line);display:block;margin:0 0 8px}
+figcaption{color:var(--muted);font-size:.82rem;text-align:center;margin:6px 0 0}
+
+h2{color:var(--accent);font-family:"SF Mono",ui-monospace,Menlo,Consolas,monospace;
+  font-size:1.5rem;font-weight:600;margin:60px 0 20px;letter-spacing:-.01em;
+  display:flex;align-items:baseline;gap:16px;padding-bottom:6px;border-bottom:1px solid var(--line)}
+h2 .n{font-size:0;line-height:0}
+h2 .n::before{counter-increment:sec;content:counter(sec,decimal-leading-zero);
+  font-family:"SF Mono",ui-monospace,Menlo,Consolas,monospace;font-size:3.2rem;font-weight:800;
+  line-height:.85;color:var(--accent);opacity:.2;letter-spacing:-.02em}
+h3{color:#efe4dc;font-size:1.02rem;font-weight:650;margin:26px 0 4px}
+p{margin:.55em 0}
+strong{color:#efe4dc}
 em{color:#c8b7ac}
-.lead{color:#e2d5cc;font-size:1.08rem}
-.callout{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);
-  border-radius:10px;padding:16px 20px;margin:24px 0;color:#d7c8bf}
+code{background:#1b120c;border:1px solid var(--line);border-radius:5px;padding:1px 6px;
+  font-family:"SF Mono",Menlo,Consolas,monospace;font-size:.86em;color:var(--accent)}
+
+figure{margin:22px 0}
+figure img{width:100%;border-radius:12px;border:1px solid var(--line);display:block;background:#0a0603}
+.hero{position:relative;border-radius:14px;overflow:hidden;margin:0 0 30px;border:1px solid var(--line)}
+.hero img{width:100%;height:360px;object-fit:cover;object-position:center;display:block;border:0;border-radius:0;background:#0a0603}
+.hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,6,3,.12) 28%,rgba(10,6,3,.78) 100%)}
+.hero-txt{position:absolute;left:0;right:0;bottom:0;z-index:2;padding:26px 30px}
+.hero-txt h1{color:#fff;margin:0 0 8px;letter-spacing:-.01em;text-shadow:0 2px 12px rgba(0,0,0,.6)}
+.hero-sub{color:#f2e7e0;font-style:italic;font-size:.98rem;margin:0;max-width:680px;text-shadow:0 1px 8px rgba(0,0,0,.6)}
+
+.revealcard{position:relative;overflow:hidden;border-radius:12px;border:1px solid var(--line);margin:22px 0}
+.revealcard figure{margin:0}
+.revealcard img{display:block;width:100%;height:auto;border:0;border-radius:0;transition:transform .45s ease,filter .35s ease}
+.revealcard:hover img{transform:scale(3);filter:brightness(1.05) saturate(1.25)}
+.revealcard .reveal{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;
+  padding:26px 30px;opacity:0;transition:opacity .35s ease;
+  background:rgba(8,5,3,.5);backdrop-filter:blur(16px) saturate(1.05);-webkit-backdrop-filter:blur(16px) saturate(1.05)}
+.revealcard:hover .reveal{opacity:1}
+.revealcard .reveal h4{color:#fff;margin:0 0 10px;font-size:1.08rem;font-weight:650}
+.revealcard .reveal p{color:#ede2da;font-size:.95rem;line-height:1.55;margin:0}
+.revealcard .reveal em{color:inherit}
+.revealcard .reveal h4,.revealcard .reveal p{text-shadow:0 1px 8px rgba(0,0,0,.6)}
+.revealcard.spread:hover img{transform:scale(1.6);filter:blur(30px) saturate(1.6) brightness(1.12)}
+.revealcard.spread .reveal{background:rgba(8,5,3,.3)}
+
+/* placeholder mostrato finché l'immagine non è presente */
+.imgph{width:100%;min-height:200px;border-radius:12px;border:1px dashed var(--line);
+  background:repeating-linear-gradient(45deg,#140d08,#140d08 12px,#17100b 12px,#17100b 24px);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;
+  color:var(--muted);font-size:.86rem;text-align:center;padding:26px 20px}
+.imgph .ic{font-size:1.8rem;opacity:.7}
+.imgph code{background:#1b120c;color:var(--accent)}
+
 table{width:100%;border-collapse:collapse;margin:18px 0;font-size:.9rem}
 th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line)}
-th{color:#fff;font-weight:600;background:#160e09}
-ul{margin:.5em 0;padding-left:1.2em}li{margin:.4em 0}
-.hero{width:100%;aspect-ratio:16/7;border:1px solid var(--line);border-radius:14px;margin-bottom:8px;
-  background:radial-gradient(circle at 30% 40%,#7a2d10,#3a1607 45%,#0c0806 80%);
-  display:flex;align-items:center;justify-content:center;font-size:3.4rem}
+th{color:#fff;font-weight:600;background:#140d08}
+td{color:var(--text)}
+
+.lead{color:#dccec4;font-size:1.06rem}
+.callout{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);
+  border-radius:10px;padding:14px 18px;margin:22px 0;color:#c8b7ac;font-size:.95rem}
+ul{margin:.5em 0;padding-left:1.2em}
+li{margin:.35em 0}
+.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:26px 0}
+.kpi{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 14px;text-align:center}
+.kpi b{display:block;color:#fff;font-size:1.5rem;font-weight:700}
+.kpi span{color:var(--muted);font-size:.8rem}
 .tools{color:#c8b7ac;font-size:.92rem}
-@media(max-width:560px){.wrap{padding:20px 18px 70px}}
+.refs{color:var(--muted);font-size:.86rem}
+.refs li{margin:.4em 0}
+iframe.map{width:100%;height:480px;border:1px solid var(--line);border-radius:14px;display:block;background:#0a0603}
+h3 .mdot{display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--accent);margin-right:11px;vertical-align:middle;box-shadow:0 0 6px 1px rgba(224,72,58,.5)}
+hr{border:none;border-top:1px solid var(--line);margin:54px 0}
+@media(max-width:560px){.kpis{grid-template-columns:1fr}.wrap{padding:20px 18px 70px}}
+
+details.why{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:10px;margin:18px 0}
+details.why>summary{cursor:pointer;list-style:none;padding:14px 18px;color:var(--accent);font-size:.92rem;font-weight:600}
+details.why>summary::-webkit-details-marker{display:none}
+details.why>summary::before{content:"▸  "}
+details.why[open]>summary::before{content:"▾  "}
+details.why .wb{padding:0 18px 8px}
+details.why .wb p{margin:.35em 0 .9em;font-size:.92rem;color:#cdbfb6;line-height:1.55}
+details.why .wb p:last-child{margin-bottom:2px}
 
 /* --- indice dinamico (TOC) stile Notion --- */
 #toc{position:fixed;right:0;top:50%;transform:translateY(-50%);z-index:60;display:flex;flex-direction:column;
   align-items:flex-end;gap:10px;padding:14px 14px 14px 10px;max-width:40px;overflow:hidden;border-radius:12px 0 0 12px;
   border:1px solid transparent;border-right:0;
   transition:max-width .28s ease,background .28s ease,box-shadow .28s ease,border-color .28s ease}
-#toc:hover{max-width:330px;background:var(--bg);border-color:var(--line);box-shadow:0 10px 40px rgba(0,0,0,.16);padding-left:22px}
+#toc:hover{max-width:390px;background:var(--bg);border-color:var(--line);box-shadow:0 10px 40px rgba(0,0,0,.16);padding-left:22px}
 #toc a{display:flex;flex-direction:row-reverse;align-items:center;gap:14px;text-decoration:none;color:var(--muted);white-space:nowrap;font-size:.85rem;line-height:1.15;text-align:right}
 #toc a .dash{flex:0 0 auto;width:18px;height:2px;border-radius:2px;background:var(--muted);opacity:.5;
   transition:width .2s ease,background .2s ease,opacity .2s ease}
@@ -65,42 +126,340 @@ ul{margin:.5em 0;padding-left:1.2em}li{margin:.4em 0}
 
   <a class="back" href="../index.html">← GIS Portfolio</a>
 
-  <div class="hero">🔴</div>
-  <span class="tagline">Work in progress · In arrivo</span>
-  <p class="subtitle">Where would you land the first human base? A multi-criteria suitability analysis on planetary data</p>
-  <h1>Landing-Site Suitability on Mars — Multi-Criteria Analysis</h1>
+  <div class="hero">
+    <img src="../assets/img/mars/hero.webp" alt="Render 3D del globo di Marte con la mappa di idoneità">
+    <div class="hero-txt">
+      <h1>Human Base Site Suitability on Mars — GIS Multi-Criteria Analysis</h1>
+      <p class="hero-sub">Where would you build the first human base? A GIS multi-criteria suitability analysis (MCDA) built entirely on open NASA/USGS data.</p>
+    </div>
+  </div>
 
-  <p class="lead">Il progetto porta l'analisi di idoneità multi-criterio (MCDA) fuori dalla Terra: combinando dati planetari — quota, temperatura, ghiaccio d'acqua ed energia solare — per individuare dove converrebbe collocare la prima base umana su Marte. Stessa logica GIS dei progetti terrestri (weighted overlay + esclusioni), applicata a un sistema di riferimento marziano.</p>
+  <h2><span class="n">1.</span>Project Overview</h2>
+  <p class="lead">L'obiettivo del progetto è individuare le aree più idonee a ospitare una futura base umana su Marte attraverso un'analisi multicriteriale (MCDA) sviluppata interamente in QGIS. Invece di concentrarsi sugli aspetti biologici (come la ricerca di vita microbica), lo studio adotta una prospettiva puramente ingegneristica, focalizzandosi sull'idoneità a costruire un'ipotetica base marziana.</p>
+  <p>A questo scopo sono stati selezionati e mappati cinque criteri chiave: la morfologia del terreno (pendenza ed elevazione), le risorse strategiche (accessibilità all'acqua ghiacciata nel sottosuolo), la geologia (tipologia del materiale superficiale) e i fattori ambientali (insolazione e temperature medie). Tutti i dataset sono stati riclassificati su una scala comune di idoneità (0–5) e integrati tramite la tecnica del <em>weighted overlay</em>. Dal modello finale sono stati estratti i siti candidati e derivati una zonizzazione funzionale del territorio e un indice di priorità strategica a supporto delle decisioni di localizzazione.</p>
 
-  <div class="callout">Questa pagina è un'anteprima: il progetto è in fase di sviluppo. La mappa finale di idoneità farà da copertina non appena la pipeline sarà completa.</div>
+  <h2><span class="n">2.</span>Strategic Value &amp; Output</h2>
+  <p>La scelta del sito d'insediamento è una delle decisioni più critiche e vincolanti dell'intera esplorazione marziana. Da questa scelta geografica dipende direttamente la sostenibilità del bilancio energetico della base — il delicato equilibrio tra la capacità di generare potenza (legata all'insolazione per l'efficacia del fotovoltaico) e la necessità di consumarla (riscaldamento degli habitat in un ambiente freddo ed estrazione del ghiaccio). Oltre ai fattori energetici, la localizzazione vincola la sicurezza strutturale e l'accesso a risorse vitali come l'acqua, fondamentale per la produzione <em>in situ</em> di ossigeno e propellente tramite tecnologie ISRU (<em>In-Situ Resource Utilization</em>).</p>
+  <p>Lo studio dimostra come dati planetari aperti e strumenti GIS open-source possano produrre, in modo trasparente e riproducibile, una mappa decisionale di idoneità, una rosa di siti candidati ordinati e una lettura pianificatoria del territorio (vocazioni acqua/energia e priorità strategica). L'output principale è la mappa di idoneità composita 0–5 con i relativi siti candidati.</p>
+  <figure>
+    <img src="../assets/img/mars/suitability_verdict.webp" alt="Mappa di idoneità composita con i siti candidati">
+    <figcaption>Mappa di idoneità composita (0–5) estratta dal modello.</figcaption>
+  </figure>
 
-  <h2><span class="n">1.</span>Concept &amp; Question</h2>
-  <p>Una base marziana ha bisogno, contemporaneamente, di terreno pianeggiante e stabile (atterraggio e costruzione), acqua accessibile (ghiaccio nel sottosuolo, per consumo e produzione di propellente), energia (buona insolazione) e condizioni termiche non proibitive. Nessun singolo fattore basta: il sito ideale è quello che li ottimizza tutti insieme — esattamente il problema che l'MCDA è nata per risolvere.</p>
+  <h2><span class="n">3.</span>Study Area</h2>
+  <p>L'area di studio interessa l'intero pianeta Marte, circoscritta alla fascia latitudinale compresa tra ±60°. Questa delimitazione risponde a una duplice necessità: da un lato coincide con l'estensione dei dati sul ghiaccio sotterraneo (progetto SWIM), dall'altro riflette precisi vincoli logistici — le zone polari sono troppo fredde e a lungo al buio, mentre le regioni equatoriali presentano forte scarsità di ghiaccio accessibile. Sotto il profilo tecnico, l'intero flusso di lavoro adotta il sistema di riferimento Mars 2000 (Sphere) (ESRI:104971, raggio 3.396.190 m), nativo dei modelli MOLA/HRSC: ogni layer è stato riproiettato in questo CRS per garantire coerenza geometrica durante le sovrapposizioni.</p>
+  <p>Per l'esplorazione visiva dei dati è stato implementato un globo 3D interattivo di Marte: si ruota e si zooma liberamente, e dal pannello <em>Layers</em> si attivano e disattivano i singoli livelli dell'analisi — le mappe intermedie (§6), i criteri riclassificati (§7), la mappa di idoneità con i siti candidati (§8–9) e le vocazioni funzionali (§10) — proiettati direttamente sulla sfera. La base è il mosaico Viking a colori naturali; i livelli SWIM e di idoneità coprono la fascia di analisi ±60°.</p>
+  <figure>
+    <iframe class="map" style="height:520px" src="../assets/maps/mars_globe.html?v=40" loading="lazy" title="Marte — Globo 3D interattivo con pannello dei layer"></iframe>
+    <figcaption><em>Globo 3D interattivo — trascina per ruotare, scroll o pinch per lo zoom; apri “Layers” per sovrapporre i livelli dell'analisi sulla superficie del pianeta.</em></figcaption>
+  </figure>
 
-  <h2><span class="n">2.</span>Planned Data Sources</h2>
-  <table>
-    <tr><th>Fattore</th><th>Dataset previsto</th><th>Ruolo</th></tr>
-    <tr><td>Quota &amp; pendenza</td><td>MOLA DEM (~463 m) — USGS Astrogeology</td><td>Idoneità morfologica (slope)</td></tr>
-    <tr><td>Temperatura</td><td>THEMIS — Mars Odyssey (via ODE / JMARS)</td><td>Vincolo termico</td></tr>
-    <tr><td>Ghiaccio sottosuperficiale</td><td>Neutron spectrometer / letteratura (es. Feldman et al.)</td><td>Prossimità all'acqua</td></tr>
-    <tr><td>Insolazione</td><td>Mars Climate Database (LMD) o proxy da latitudine + DEM</td><td>Potenziale energetico</td></tr>
-  </table>
-
-  <h2><span class="n">3.</span>Planned Method</h2>
+  <h3>I principali elementi geografici di Marte</h3>
+  <p>Alcuni riferimenti fisiografici e geologici utili come contesto per leggere i risultati del modello di idoneità:</p>
   <ul>
-    <li>Setup CRS marziano (Mars 2000) e import del DEM MOLA come layer di validazione (Valles Marineris, Olympus Mons).</li>
-    <li>Derivazione dello Slope dal DEM e riclassificazione in classi di idoneità (0–5° ottimo, &gt;15° escluso).</li>
-    <li>Riclassificazione di temperatura, ghiaccio e insolazione su scala comune.</li>
-    <li>Weighted Overlay (MCDA) dei fattori + maschere di esclusione per le pendenze proibitive.</li>
-    <li>Mappa finale di idoneità e individuazione dei siti candidati per la base.</li>
+    <li>Dicotomia crostale: la fondamentale asimmetria geomorfologica di Marte, tra le pianure vulcaniche basse e giovani del nord (<em>Vastitas Borealis, Acidalia, Utopia, Arcadia</em>) e le antiche terre alte, densamente craterizzate, del sud (<em>Noachis, Terra Cimmeria, Arabia Terra</em>).</li>
+    <li>Olympus Mons &amp; Tharsis: il colossale rigonfiamento vulcanico che ospita i tre <em>Tharsis Montes</em> (<em>Ascraeus, Pavonis, Arsia</em>) e l'<em>Olympus Mons</em> (~22 km), il vulcano a scudo più alto dell'intero Sistema Solare.</li>
+    <li>Valles Marineris: un immenso sistema di canyon esteso per oltre 4.000 km, con profondità fino a 7 km; è la più grande frattura tettonica del pianeta, originata dal sollevamento della vicina regione di Tharsis.</li>
+    <li>Hellas Planitia: il più grande bacino da impatto visibile su Marte (~2.300 km di diametro). Essendo il punto più depresso della superficie, registra la pressione atmosferica più elevata e temperature meno rigide: per questo la sua area circostante emerge spontaneamente tra i siti candidati del modello.</li>
+    <li>Arcadia Planitia: pianura settentrionale liscia con vaste riserve di ghiaccio sotterraneo a medie latitudini. È uno dei principali siti ottimali individuati dall'analisi, in accordo con le aree di atterraggio al vaglio della NASA per le future missioni umane.</li>
+    <li>Calotte polari (Planum Boreum e Australe): estesi plateau stratificati di ghiaccio d'acqua (e CO₂ al polo sud). Pur essendo i principali serbatoi idrici, il modello li esclude per i vincoli termici e di illuminazione troppo estremi.</li>
+    <li>Siti di esplorazione robotica: i crateri <em>Jezero</em> (Perseverance), <em>Gale</em> (Curiosity) e <em>Gusev</em> (Spirit), integrati nella mappa come benchmark geografici e riferimenti noti per orientare la navigazione.</li>
   </ul>
 
-  <h2>Tools &amp; Skills (previsti)</h2>
-  <p class="tools">QGIS · Planetary data (MOLA, THEMIS) · Slope analysis · Reclassification · Weighted Overlay (MCDA) · Exclusion masks · Cartographic design.</p>
+  <h2><span class="n">4.</span>Data Source</h2>
+  <table>
+    <tr><th>Dataset</th><th>Use</th><th>Resolution</th><th>Source</th></tr>
+    <tr><td>MOLA / HRSC Blended DEM Global v2</td><td>Elevation → slope, hillshade</td><td>200 m</td><td>USGS Astrogeology / PDS</td></tr>
+    <tr><td>SWIM 2.0 — Combined Ice Consistency</td><td>Water-ice access</td><td>3 km</td><td>Planetary Science Institute / NASA (Morgan et al. 2021)</td></tr>
+    <tr><td>TES Thermal Inertia (Nightside 2003)</td><td>Surface material / soil</td><td>3 km (20 ppd)</td><td>MGS-TES, Putzig &amp; Mellon (PSI, 2005)</td></tr>
+    <tr><td>Mars Climate Database v6.1</td><td>Mean surface temperature</td><td>GCM (~5°)</td><td>LMD / ESA</td></tr>
+    <tr><td>Insolation (latitude proxy)</td><td>Solar potential (energy)</td><td>derived</td><td>Computed from DEM</td></tr>
+    <tr><td>Viking Colorized Mosaic (MDIM 2.1)</td><td>Basemap</td><td>232 m</td><td>USGS / NASA</td></tr>
+  </table>
 
-  <a class="back" href="../index.html" style="margin-top:44px">← GIS Portfolio</a>
+  <h2><span class="n">5.</span>Methodology</h2>
+  <figure>
+    <img src="../assets/img/mars/methodology.webp" alt="Cockpit metodologico della pipeline MCDA">
+    <figcaption>Il cockpit metodologico: dalle fonti planetarie grezze alla mappa decisionale finale, in cinque fasi.</figcaption>
+  </figure>
+  <p>La metodologia si fonda sull'Analisi Multicriterio (MCDA), un approccio decisionale strutturato che integra fattori eterogenei — morfologici, geologici, energetici e di risorsa — in un unico modello quantitativo, trasparente e riproducibile. L'intero flusso, sviluppato in QGIS, si articola in cinque fasi sequenziali.</p>
+  <h3><span class="mdot"></span>Selezione e derivazione dei criteri</h3>
+  <p>Dalle fonti open-source NASA/USGS sono stati individuati i cinque fattori che governano l'idoneità ingegneristica: pendenza, accesso all'acqua ghiacciata, tipologia di materiale superficiale (inerzia termica), insolazione e temperatura. Ogni criterio è stato ricavato dai dati originari tramite elaborazioni dedicate — calcolo della pendenza dal DEM, fusione dei tre livelli di ghiaccio SWIM, conversione dei dati binari TES, estrazione delle temperature dal modello climatico globale.</p>
+  <h3><span class="mdot"></span>Riclassificazione su scala comune (0–5)</h3>
+  <p>Criteri espressi in unità fisiche diverse (gradi, kelvin, indici di consistenza) non sono direttamente confrontabili né sommabili. Ciascun layer è stato quindi normalizzato su una scala ordinale di idoneità da 0 a 5 (0 = area inadatta o vincolo escludente, 5 = condizione ottimale).</p>
+  <h3><span class="mdot"></span>Armonizzazione su griglia comune</h3>
+  <p>I cinque criteri provengono da fonti con CRS, risoluzioni ed estensioni differenti. Prima dell'overlay ogni layer è stato riproiettato e ricampionato — con metodo <em>average</em>, che preserva l'informazione mediando i pixel sorgente — su una griglia comune: CRS Mars 2000 Sphere, estensione −180°/+180° × −60°/+60° (la fascia imposta dalla copertura del ghiaccio) e risoluzione di 0,05° (≈ 3 km).</p>
+  <h3><span class="mdot"></span>Weighted Overlay (somma pesata)</h3>
+  <p>Il cuore dell'MCDA è la creazione di un indice composito di idoneità, ottenuto combinando i criteri riclassificati attraverso una somma pesata in cui ogni fattore contribuisce in proporzione alla sua importanza strategica. Perché l'indice resti coerente con la scala 0–5, la somma dei pesi è pari a 1: <code>idoneità = Σ pesoᵢ × criterioᵢ</code>.</p>
+  <h3><span class="mdot"></span>Estrazione dei siti e letture interpretative</h3>
+  <p>Dalla mappa finale si isolano e vettorializzano le aree a punteggio più elevato, ottenendo i siti candidati. Due passaggi interpretativi finali traducono l'indice nel linguaggio della pianificazione: una carta delle vocazioni (bilancio tra risorsa idrica e potenziale energetico) e un indice di priorità strategica (idoneità ponderata per la rarità geografica del territorio).</p>
+  <details class="why">
+    <summary>Perché queste scelte? — scala 0–5, ricampionamento average, pesi asimmetrici</summary>
+    <div class="wb">
+      <p>Scala a soli cinque livelli — è una scelta metodologicamente consapevole: riflette in modo onesto il reale grado di incertezza dei dati planetari (in particolare ghiaccio e insolazione), evita di attribuire al modello una falsa precisione e garantisce coerenza tra i criteri. Adottare scale di ampiezza diversa altererebbe infatti in modo implicito i pesi nella fase di sovrapposizione.</p>
+      <p>Ricampionamento <em>average</em> — quando si porta un raster su una griglia più grossolana, ogni nuova cella finisce per coprire più pixel della mappa originale. Il metodo <em>average</em> assegna alla cella la media di tutti i pixel che ricadono al suo interno: così il valore finale riassume l'intera area, senza buttare via informazione. L'alternativa più semplice, il <em>nearest neighbour</em>, si limita invece a copiare il valore di un solo pixel (il più vicino al centro) ignorando tutti gli altri: va benissimo per i dati categorici, dove una media non avrebbe senso, ma su grandezze continue come pendenza, temperatura o consistenza del ghiaccio rischia di restituire un valore poco rappresentativo e più "a scacchiera". Per questo, aggregando verso il basso dati continui, la media è la scelta corretta.</p>
+      <p>Pesi asimmetrici — l'assegnazione segue un principio chiaro: le risorse locali insostituibili (acqua ed energia) pesano di più; i fattori "ingegnerizzabili" (terreno, temperatura) pesano meno, perché le loro criticità possono essere superate con soluzioni tecniche. È questo giudizio, esplicitato nella tabella dei pesi, a rendere il modello leggibile e discutibile.</p>
+    </div>
+  </details>
+
+  <h2><span class="n">6.</span>Intermediate Maps</h2>
+  <p>Prima del <em>Weighted Overlay</em>, i dataset di partenza sono stati elaborati, standardizzati e omogeneizzati per generare i layer cartografici intermedi — i pilastri informativi del modello, pronti per essere riclassificati sulla scala comune di idoneità.</p>
+
+  <div class="revealcard spread">
+    <figure><img src="../assets/img/mars/01_dem_geomorphology.webp" alt="DEM e geomorfologia di Marte"></figure>
+    <div class="reveal"><h4>6.1 DEM &amp; Geomorphology</h4><p>Basato sul dataset globale MOLA/HRSC (200 m), questo livello e il relativo <em>hillshade</em> definiscono topografia e orografia di base. La carta suddivide la superficie in cinque macro-unità geomorfologiche — pianure settentrionali (Vastitas Borealis), terre alte meridionali, bacini profondi (Hellas), province vulcaniche (Tharsis, Elysium) e plateau di transizione — evidenziando la netta dicotomia crostale nord/sud.</p></div>
+  </div>
+
+  <div class="revealcard">
+    <figure><img src="../assets/img/mars/02_slope_accessibility.webp" alt="Pendenza e accessibilità"></figure>
+    <div class="reveal"><h4>6.2 Slope / Accessibility</h4><p>Layer derivato dal DEM globale applicando il corretto fattore di scala (metri per grado) specifico per il raggio planetario di Marte. Parametro cruciale in ambito ingegneristico per escludere aree scoscese o pericolose e identificare i terreni pianeggianti adatti alle manovre di atterraggio e alla costruzione delle infrastrutture.</p></div>
+  </div>
+
+  <div class="revealcard">
+    <figure><img src="../assets/img/mars/03_ice_0-1m.webp" alt="Ghiaccio sottosuperficiale 0–1 m (SWIM)"></figure>
+    <div class="reveal"><h4>6.3 Subsurface Ice — SWIM 2.0</h4><p>Per mappare presenza e raggiungibilità della risorsa idrica sono stati integrati i dati SWIM (<em>Subsurface Water Ice Mapping</em>), analizzati su tre livelli di profondità (0–1 m, 1–5 m, oltre 5 m) per restituire un quadro tridimensionale della consistenza e stabilità del ghiaccio sotterraneo. Passa il mouse sulle altre due schede per i livelli più profondi.</p></div>
+  </div>
+  <div class="revealcard">
+    <figure><img src="../assets/img/mars/04_ice_1-5m.webp" alt="Ghiaccio sottosuperficiale 1–5 m (SWIM)"></figure>
+    <div class="reveal"><h4>Ice consistency — 1–5 m</h4><p>Fascia intermedia di profondità: il ghiaccio resta accessibile con scavi più impegnativi. Nel modello di idoneità entra con un peso ridotto (moltiplicatore 0,6) rispetto allo strato superficiale.</p></div>
+  </div>
+  <div class="revealcard">
+    <figure><img src="../assets/img/mars/05_ice_over5m.webp" alt="Ghiaccio sottosuperficiale oltre 5 m (SWIM)"></figure>
+    <div class="reveal"><h4>Ice consistency — oltre 5 m</h4><p>Strato più profondo: risorsa presente ma logisticamente onerosa. Contribuisce all'indice combinato con il peso minore (moltiplicatore 0,3), pesando meno degli strati raggiungibili in superficie.</p></div>
+  </div>
+
+  <div class="revealcard">
+    <figure><img src="../assets/img/mars/06_thermal_inertia.webp" alt="Inerzia termica e materiale superficiale"></figure>
+    <div class="reveal"><h4>6.4 Thermal Inertia (surface material)</h4><p>Elaborato dai dati dello strumento TES (<em>Thermal Emission Spectrometer</em>), analizza l'inerzia termica notturna per classificare consistenza e consolidazione dei materiali superficiali — dalla polvere fine e sabbia fino al <em>bedrock</em> roccioso esposto. È l'equivalente planetario di una carta di copertura del suolo, indispensabile per valutare la stabilità geotecnica dei terreni e la facilità di scavo.</p></div>
+  </div>
+
+  <div class="revealcard">
+    <figure><img src="../assets/img/mars/07_temperature_proxy.webp" alt="Temperatura — proxy da latitudine ed elevazione"></figure>
+    <div class="reveal"><h4>6.5 Temperature — proxy</h4><p>Prima stima (<em>proxy</em>) della temperatura basata esclusivamente su latitudine ed elevazione. Un'approssimazione rapida, poi sostituita dal dato modellato per garantire rigore scientifico — passa alla scheda successiva.</p></div>
+  </div>
+  <div class="revealcard">
+    <figure><img src="../assets/img/mars/08_temperature_mcd.webp" alt="Temperatura — Mars Climate Database"></figure>
+    <div class="reveal"><h4>Temperature — Mars Climate Database</h4><p>Il layer proxy è stato sostituito con i dati di temperatura media annua modellati dal <em>Mars Climate Database</em> (MCD) tramite modelli di circolazione globale (GCM), ottenendo una mappatura climatica decisamente più accurata e coerente con la fisica atmosferica del pianeta.</p></div>
+  </div>
+
+  <h2><span class="n">7.</span>Suitability Criteria — Reclassification (0–5)</h2>
+  <p>Per consentire l'integrazione dei diversi livelli nel <em>Weighted Overlay</em>, ogni criterio è stato standardizzato e riclassificato sulla scala comune di idoneità 0–5 (0 = area inadatta o vincolo escludente, 5 = condizione ottimale).</p>
+  <div class="revealcard">
+    <figure><img src="../assets/img/mars/09_criterion_slope.webp" alt="Criterio riclassificato — pendenza"></figure>
+    <div class="reveal"><h4>Slope (pendenza)</h4><p>Penalizza i terreni scoscesi per garantire stabilità strutturale e sicurezza di atterraggio. Pendenze 0°–2° (aree pianeggianti ottimali) ricevono il punteggio massimo (5); i versanti oltre 25° ottengono 0, perché instabili o inaccessibili ai mezzi di superficie.</p></div>
+  </div>
+  <div class="revealcard">
+    <figure><img src="../assets/img/mars/10_criterion_ice.webp" alt="Criterio riclassificato — ghiaccio"></figure>
+    <div class="reveal"><h4>Ice — SWIM (risorsa idrica)</h4><p>Ottenuto fondendo i tre layer di profondità con peso decrescente (1,0 per 0–1 m; 0,6 per 1–5 m; 0,3 oltre 5 m). L'analisi si concentra sulle evidenze positive di ghiaccio, normalizzando poi l'indice combinato sulla scala 0–5.</p></div>
+  </div>
+  <div class="revealcard">
+    <figure><img src="../assets/img/mars/11_criterion_thermal_inertia.webp" alt="Criterio riclassificato — inerzia termica"></figure>
+    <div class="reveal"><h4>Thermal Inertia (geotecnica)</h4><p>Descrive coesione e natura del materiale. Valori bassi (24–100), riconducibili a polveri fini e sabbie non consolidate, ottengono il punteggio minimo (1); valori elevati (≥ 500), indicativi di roccia affiorante, sono ottimali per l'ancoraggio di fondazioni e infrastrutture pesanti (5).</p></div>
+  </div>
+  <div class="revealcard">
+    <figure><img src="../assets/img/mars/12_criterion_insolation.webp" alt="Criterio riclassificato — insolazione"></figure>
+    <div class="reveal"><h4>Insolation (radiazione solare)</h4><p>Apporto energetico calcolato geometricamente usando come <em>proxy</em> il coseno della latitudine. Massima idoneità (5) all'equatore, dove il fotovoltaico opera alla massima efficienza, con degradazione progressiva fino a 0 in prossimità dei poli.</p></div>
+  </div>
+  <div class="revealcard">
+    <figure><img src="../assets/img/mars/13_criterion_temperature.webp" alt="Criterio riclassificato — temperatura"></figure>
+    <div class="reveal"><h4>Temperature (fattore termico)</h4><p>Basato sui dati di temperatura media annua del <em>Mars Climate Database</em>. L'idoneità è direttamente proporzionale ai valori termici: le aree relativamente più "calde" ricevono il punteggio massimo (5), riducendo il dispendio energetico per il riscaldamento degli habitat e la termoregolazione degli impianti.</p></div>
+  </div>
+
+  <h2><span class="n">8.</span>Weighted Overlay &amp; Suitability Model</h2>
+  <p>L'indice composito finale è stato calcolato come somma pesata dei cinque layer riclassificati: <code>idoneità = Σ pesoᵢ × criterioᵢ</code>. La somma dei pesi è pari a 1, così l'output resta sulla scala continua 0–5. L'assegnazione dei pesi riflette un principio ingegneristico fondamentale: le risorse locali insostituibili valgono più delle criticità ambientali compensabili con la tecnologia.</p>
+  <table>
+    <tr><th>Criterion</th><th>Weight</th><th>Rationale</th></tr>
+    <tr><td>Ice (water)</td><td>0,35</td><td>Hardest constraint: the lack of accessible water for ISRU effectively disqualifies the site. It is the dominant parameter of the model.</td></tr>
+    <tr><td>Insolation (energy)</td><td>0,20</td><td>Crucial for the energy budget, but partly "engineerable" (by oversizing the photovoltaic array or adding nuclear reactors).</td></tr>
+    <tr><td>Slope (terrain)</td><td>0,15</td><td>Strongly affects operations, but construction and manoeuvres remain feasible on moderate slopes with adequate civil engineering.</td></tr>
+    <tr><td>Thermal inertia (soil)</td><td>0,15</td><td>Determines foundation stability and mitigates dust risk; important but not as decisive as water availability.</td></tr>
+    <tr><td>Temperature</td><td>0,15</td><td>Contained weight because it is already physically correlated with insolation, following the same latitudinal trend.</td></tr>
+  </table>
+  <p>L'elaborazione produce il raster <code>suitability.tif</code>, superficie continua 0–5 che costituisce la mappa di idoneità finale — la base analitica da cui sono stati estratti i poligoni dei siti candidati ottimali.</p>
+
+  <h2><span class="n">9.</span>Results — Candidate Sites</h2>
+  <p>Per estrarre i siti candidati è stata applicata una query spaziale isolando le celle sopra il 96° percentile (idoneità ≥ 3,18, ovvero il ~4% dei terreni migliori del pianeta), poi vettorializzate in poligoni. Un filtro geometrico di area ha scartato i poligoni sotto i 3.000 km²: da questa selezione emergono quattro macro-aree, riconducibili a due famiglie geografiche principali.</p>
+  <div class="kpis">
+    <div class="kpi"><b>~13,6%</b><span>terra idonea sul totale di Marte</span></div>
+    <div class="kpi"><b>4</b><span>macro-siti candidati (&gt; 3.000 km²)</span></div>
+    <div class="kpi"><b>3,58</b><span>idoneità massima (circum-Hellas)</span></div>
+  </div>
+  <table>
+    <tr><th>#</th><th>Region</th><th>Lat</th><th>Area (km²)</th><th>Suitability</th></tr>
+    <tr><td>1</td><td>Northern mid-latitudes (Arcadia / Vastitas)</td><td>53,9°N</td><td>983.263</td><td>3,30</td></tr>
+    <tr><td>2</td><td>Circum-Hellas south</td><td>−51,4°</td><td>272.280</td><td>3,58</td></tr>
+    <tr><td>3</td><td>Circum-Hellas south</td><td>−56,0°</td><td>118.245</td><td>3,55</td></tr>
+    <tr><td>4</td><td>Elysium Planitia</td><td>21,6°N</td><td>52.874</td><td>3,27</td></tr>
+  </table>
+
+  <h3>Confronto sintetico dei siti candidati</h3>
+  <p>I quattro macro-siti mostrano un chiaro compromesso tra <em>estensione</em> e <em>qualità</em>: Arcadia/Vastitas domina per area ma con idoneità media, mentre la fascia circum-Hellas raggiunge i punteggi più alti su superfici più contenute.</p>
+  <figure><svg viewBox="0 0 760 232" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Inter,Roboto,Helvetica,Arial,sans-serif">
+<text x="4" y="20" fill="#efe4dc" font-size="14" font-weight="700">The four candidate sites compared</text>
+<text x="4" y="42" fill="#96857a" font-size="11" font-weight="600">SITE</text>
+<text x="250" y="42" fill="#96857a" font-size="11" font-weight="600">SUITABILITY (0–5)</text>
+<text x="540" y="42" fill="#96857a" font-size="11" font-weight="600">AREA (km²)</text>
+<text x="4" y="58" fill="#efe4dc" font-size="12.5" font-weight="650">Arcadia / Vastitas</text>
+<text x="4" y="73" fill="#96857a" font-size="10.5">Northern mid-lat. · +53,9°</text>
+<rect x="250" y="46" width="250" height="13" rx="6" fill="#17100b"/>
+<rect x="250" y="46" width="83.3" height="13" rx="6" fill="#c7843c"/>
+<text x="340.3" y="56.5" fill="#fff" font-size="11.5" font-weight="700">3,30</text>
+<rect x="540" y="46" width="180" height="13" rx="6" fill="#17100b"/>
+<rect x="540" y="46" width="180.0" height="13" rx="6" fill="#c2bbb2"/>
+<text x="727.0" y="56.5" fill="#cdbfb6" font-size="11">0,98 M</text>
+<text x="4" y="102" fill="#efe4dc" font-size="12.5" font-weight="650">Circum-Hellas (1)</text>
+<text x="4" y="117" fill="#96857a" font-size="10.5">South · -51,4°</text>
+<rect x="250" y="90" width="250" height="13" rx="6" fill="#17100b"/>
+<rect x="250" y="90" width="238.9" height="13" rx="6" fill="#4ea156"/>
+<text x="495.9" y="100.5" fill="#fff" font-size="11.5" font-weight="700">3,58</text>
+<rect x="540" y="90" width="180" height="13" rx="6" fill="#17100b"/>
+<rect x="540" y="90" width="49.8" height="13" rx="6" fill="#c2bbb2"/>
+<text x="596.8" y="100.5" fill="#cdbfb6" font-size="11">272k</text>
+<text x="4" y="146" fill="#efe4dc" font-size="12.5" font-weight="650">Circum-Hellas (2)</text>
+<text x="4" y="161" fill="#96857a" font-size="10.5">South · -56,0°</text>
+<rect x="250" y="134" width="250" height="13" rx="6" fill="#17100b"/>
+<rect x="250" y="134" width="222.2" height="13" rx="6" fill="#63a754"/>
+<text x="479.2" y="144.5" fill="#fff" font-size="11.5" font-weight="700">3,55</text>
+<rect x="540" y="134" width="180" height="13" rx="6" fill="#17100b"/>
+<rect x="540" y="134" width="21.6" height="13" rx="6" fill="#c2bbb2"/>
+<text x="568.6" y="144.5" fill="#cdbfb6" font-size="11">118k</text>
+<text x="4" y="190" fill="#efe4dc" font-size="12.5" font-weight="650">Elysium Planitia</text>
+<text x="4" y="205" fill="#96857a" font-size="10.5">Equatorial · +21,6°</text>
+<rect x="250" y="178" width="250" height="13" rx="6" fill="#17100b"/>
+<rect x="250" y="178" width="66.7" height="13" rx="6" fill="#c17038"/>
+<text x="323.7" y="188.5" fill="#fff" font-size="11.5" font-weight="700">3,27</text>
+<rect x="540" y="178" width="180" height="13" rx="6" fill="#17100b"/>
+<rect x="540" y="178" width="9.7" height="13" rx="6" fill="#c2bbb2"/>
+<text x="556.7" y="188.5" fill="#cdbfb6" font-size="11">53k</text>
+<line x1="266.7" y1="38" x2="266.7" y2="191" stroke="#e0483a" stroke-width="1" stroke-dasharray="3 3" opacity="0.7"/>
+<text x="269.7" y="204" fill="#e0483a" font-size="9.5">96th-pct threshold (3,18)</text>
+</svg>
+    <figcaption>Idoneità composita (0–5) e area di ciascun sito. La linea tratteggiata segna la soglia di selezione (96° percentile, 3,18).</figcaption>
+  </figure>
+  <figure><svg viewBox="0 0 760 300" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Inter,Roboto,Helvetica,Arial,sans-serif">
+<text x="4" y="20" fill="#efe4dc" font-size="14" font-weight="700">Latitude vs suitability — bubble size = area</text>
+<line x1="64" y1="238.0" x2="712" y2="238.0" stroke="#2a1c14" stroke-width="1"/>
+<text x="56" y="241.5" fill="#96857a" font-size="10" text-anchor="end">3,2</text>
+<line x1="64" y1="191.8" x2="712" y2="191.8" stroke="#2a1c14" stroke-width="1"/>
+<text x="56" y="195.3" fill="#96857a" font-size="10" text-anchor="end">3,3</text>
+<line x1="64" y1="145.6" x2="712" y2="145.6" stroke="#2a1c14" stroke-width="1"/>
+<text x="56" y="149.1" fill="#96857a" font-size="10" text-anchor="end">3,4</text>
+<line x1="64" y1="99.4" x2="712" y2="99.4" stroke="#2a1c14" stroke-width="1"/>
+<text x="56" y="102.9" fill="#96857a" font-size="10" text-anchor="end">3,5</text>
+<line x1="64" y1="53.2" x2="712" y2="53.2" stroke="#2a1c14" stroke-width="1"/>
+<text x="56" y="56.7" fill="#96857a" font-size="10" text-anchor="end">3,6</text>
+<line x1="64.0" y1="44" x2="64.0" y2="238" stroke="#2a1c14" stroke-width="1" opacity="0.6"/>
+<text x="64.0" y="256" fill="#96857a" font-size="10" text-anchor="middle">60°S</text>
+<line x1="226.0" y1="44" x2="226.0" y2="238" stroke="#2a1c14" stroke-width="1" opacity="0.6"/>
+<text x="226.0" y="256" fill="#96857a" font-size="10" text-anchor="middle">30°S</text>
+<line x1="388.0" y1="44" x2="388.0" y2="238" stroke="#2a1c14" stroke-width="1.6" opacity="0.9"/>
+<text x="388.0" y="256" fill="#96857a" font-size="10" text-anchor="middle">0°</text>
+<line x1="550.0" y1="44" x2="550.0" y2="238" stroke="#2a1c14" stroke-width="1" opacity="0.6"/>
+<text x="550.0" y="256" fill="#96857a" font-size="10" text-anchor="middle">30°N</text>
+<line x1="712.0" y1="44" x2="712.0" y2="238" stroke="#2a1c14" stroke-width="1" opacity="0.6"/>
+<text x="712.0" y="256" fill="#96857a" font-size="10" text-anchor="middle">60°N</text>
+<text x="388" y="272" fill="#96857a" font-size="10.5" text-anchor="middle" font-weight="600">Latitude</text>
+<text x="16" y="141" fill="#96857a" font-size="10.5" text-anchor="middle" font-weight="600" transform="rotate(-90 16 141)">Suitability</text>
+<circle cx="679.1" cy="191.8" r="37.0" fill="#c7843c" fill-opacity="0.34" stroke="#c7843c" stroke-width="1.6"/>
+<circle cx="679.1" cy="191.8" r="2.2" fill="#fff"/>
+<circle cx="110.4" cy="62.5" r="22.8" fill="#4ea156" fill-opacity="0.34" stroke="#4ea156" stroke-width="1.6"/>
+<circle cx="110.4" cy="62.5" r="2.2" fill="#fff"/>
+<circle cx="85.6" cy="76.3" r="17.4" fill="#63a754" fill-opacity="0.34" stroke="#63a754" stroke-width="1.6"/>
+<circle cx="85.6" cy="76.3" r="2.2" fill="#fff"/>
+<circle cx="504.6" cy="205.7" r="14.0" fill="#c17038" fill-opacity="0.34" stroke="#c17038" stroke-width="1.6"/>
+<circle cx="504.6" cy="205.7" r="2.2" fill="#fff"/>
+<text x="673.1" y="147.8" fill="#e7dcd4" font-size="11" font-weight="650" text-anchor="end">Arcadia / Vastitas</text>
+<text x="136.4" y="56.5" fill="#e7dcd4" font-size="11" font-weight="650" text-anchor="start">Hellas (1)</text>
+<text x="63.6" y="80.3" fill="#e7dcd4" font-size="11" font-weight="650" text-anchor="end">Hellas (2)</text>
+<text x="504.6" y="179.7" fill="#e7dcd4" font-size="11" font-weight="650" text-anchor="middle">Elysium Planitia</text>
+</svg>
+    <figcaption>Distribuzione latitudinale dei siti rispetto all'idoneità; la dimensione della bolla è proporzionale all'area. Emergono le due famiglie geografiche (nord: Arcadia; sud: circum-Hellas) più il sito equatoriale di Elysium.</figcaption>
+  </figure>
+
+  <p>Le pianure delle medie latitudini nord (Arcadia/Vastitas) formano il poligono continuo più esteso in assoluto (~1 milione di km²), distinguendosi per morfologia pianeggiante e ghiaccio diffuso a profondità ridotte, a una latitudine ancora favorevole all'energia solare. La fascia circum-Hellas meridionale ottiene i punteggi più alti del modello (fino a 3,58): la depressione del bacino di Hellas genera pressione atmosferica maggiore e temperature meno rigide che, combinate con la stabilità del ghiaccio delle medie latitudini sud, massimizzano l'efficienza del sito. Nessun sito raggiunge il punteggio massimo di 5: ogni localizzazione resta, intrinsecamente, un compromesso ingegneristico e ambientale.</p>
+  <p class="callout">Validazione esterna: i siti individuati nell'emisfero nord (come <em>Arcadia Planitia</em>) coincidono quasi perfettamente con le regioni attualmente studiate dalla NASA come potenziali <em>Landing Zones</em> per le future missioni umane. Il modello GIS ha quindi saputo convergere in autonomia verso i reali obiettivi strategici della pianificazione aerospaziale internazionale.</p>
+  <p>Per ciascun macro-sito, l'analisi è supportata da una carta del terreno dedicata, focalizzata sulla tessitura del suolo (derivata dall'inerzia termica su soglie TES) e sul micro-rilievo.</p>
+  <div class="revealcard">
+    <figure><img src="../assets/img/mars/15_site_arcadia.webp" alt="Sito Arcadia / Vastitas — idoneità"></figure>
+    <div class="reveal"><h4>Arcadia / Vastitas — idoneità</h4><p>Il macro-sito più esteso: pianura settentrionale liscia con ghiaccio diffuso a bassa profondità. Passa alla scheda successiva per la carta del terreno.</p></div>
+  </div>
+  <div class="revealcard">
+    <figure><img src="../assets/img/mars/15_site_arcadia_terrain.webp" alt="Sito Arcadia / Vastitas — terreno"></figure>
+    <div class="reveal"><h4>Arcadia / Vastitas — terreno</h4><p>Tessitura del suolo e micro-rilievo derivati dall'inerzia termica: consistenza dei materiali e stabilità geotecnica per l'ancoraggio delle infrastrutture.</p></div>
+  </div>
+  <div class="revealcard">
+    <figure><img src="../assets/img/mars/16_site_hellas.webp" alt="Sito circum-Hellas — idoneità"></figure>
+    <div class="reveal"><h4>Circum-Hellas — idoneità</h4><p>La famiglia di siti con i punteggi più alti del modello, guidata dalla depressione del bacino di Hellas: pressione maggiore e temperature meno rigide.</p></div>
+  </div>
+  <div class="revealcard">
+    <figure><img src="../assets/img/mars/16_site_hellas_terrain.webp" alt="Sito circum-Hellas — terreno"></figure>
+    <div class="reveal"><h4>Circum-Hellas — terreno</h4><p>Carta del terreno del margine di Hellas: tessitura del suolo e micro-rilievo a supporto della valutazione di idoneità.</p></div>
+  </div>
+  <div class="revealcard">
+    <figure><img src="../assets/img/mars/17_site_elysium.webp" alt="Sito Elysium Planitia — idoneità"></figure>
+    <div class="reveal"><h4>Elysium Planitia — idoneità</h4><p>Il sito più equatoriale (21,6°N): pianura vulcanica con buona insolazione, compromesso tra energia e accesso al ghiaccio.</p></div>
+  </div>
+  <div class="revealcard">
+    <figure><img src="../assets/img/mars/17_site_elysium_terrain.webp" alt="Sito Elysium Planitia — terreno"></figure>
+    <div class="reveal"><h4>Elysium Planitia — terreno</h4><p>Tessitura e micro-rilievo del sito equatoriale, per valutare stabilità delle fondazioni e facilità di scavo.</p></div>
+  </div>
+
+  <h2><span class="n">10.</span>Functional Zoning &amp; Strategic-Priority Index</h2>
+  <p>Per tradurre il raster continuo in uno strumento operativo di pianificazione, è stata eseguita un'aggregazione spaziale su griglia esagonale. Questa discretizzazione abbatte i bias di campionamento tipici delle griglie regolari, assegnando a ciascuna macro-cella una vocazione funzionale determinata dal bilancio tra risorsa idrica sotterranea e potenziale energetico:</p>
+  <ul>
+    <li>Vocazione Idrica / Insediamento: celle ricche di ghiaccio a latitudini più elevate (<em>poleward</em>), orientate all'estrazione e all'approvvigionamento della risorsa idrica.</li>
+    <li>Vocazione Energetica / FV: prevalentemente a ridosso dell'equatore; scarso ghiaccio accessibile ma tassi di insolazione ideali per la generazione solare.</li>
+    <li>Vocazione Mista: la condizione più bilanciata, dove buone risorse idriche e stabili livelli di insolazione mitigano la necessità di lunghi collegamenti logistici di superficie.</li>
+  </ul>
+  <figure>
+    <img src="../assets/img/mars/18_functional_zoning.webp" alt="Carta delle vocazioni funzionali (Idrica / Energetica / Mista)">
+    <figcaption>Carta delle vocazioni: la dicotomia acqua-energia tradotta in macro-destinazioni d'uso del territorio marziano.</figcaption>
+  </figure>
+  <p>Come estensione esplorativa è stato implementato un indice di priorità strategica che pesa l'idoneità assoluta per la <em>rarità geografica</em> di ciascun territorio, secondo il principio della "rendita di scarsità": le configurazioni più rare e difficili da replicare assumono matematicamente un valore prioritario da presidiare. L'analisi su scala planetaria evidenzia che la terra complessivamente idonea rappresenta solo il ~13,6% della superficie di Marte, e che al suo interno la classe Mista si estende appena per il ~3,1% — la nicchia geografica in assoluto più rara, critica e strategica dell'intero corpo planetario.</p>
+  <p class="callout">Nota metodologica: l'indice di priorità strategica è da intendersi esclusivamente come valore relativo e adimensionale di efficienza spaziale, e non fa alcun riferimento a stime economiche o monetarie.</p>
+
+  <h2>Limitations &amp; Future Development</h2>
+  <ul>
+    <li>Copertura ±60°: l'analisi è definita solo dove esistono i dati di ghiaccio (SWIM); poli ed equatore restano fuori.</li>
+    <li>Pesi soggettivi: un'<em>analisi di sensitività</em> (rifare l'overlay variando i pesi) rafforzerebbe la robustezza della classifica — sviluppo naturale.</li>
+    <li>Ghiaccio e temperatura derivano da stime/modelli con incertezza reale (SWIM: consistenza, non misura diretta; MCD: griglia ~5°).</li>
+    <li>Insolazione e temperatura condividono l'asse latitudinale (correlazione gestita con pesi differenziati per non contare due volte la latitudine).</li>
+    <li>Inerzia termica: relazione con l'idoneità assunta monotòna (il bedrock duro è più difficile da scavare pur favorendo le fondazioni).</li>
+    <li>Fattori operativi non modellati: tempeste di polvere stagionali, accesso solare invernale alle latitudini estreme sud.</li>
+  </ul>
+
+  <hr>
+  <h2 style="margin-top:0">Tools &amp; Skills</h2>
+  <p class="tools">QGIS · GDAL · Python (raster processing con NumPy/PIL) · MCDA weighted overlay · Riclassificazione e algebra raster · Zonal statistics su griglia esagonale · Reprojection &amp; datum planetari (Mars 2000 Sphere) · Data engineering (binario PDS TES, ASCII MCD → GeoTIFF) · Globo 3D interattivo (Three.js / WebGL) · Piramidi di tile &amp; streaming level-of-detail · Shader GLSL (atmosfera fresnel, color grading) · Data-visualization in SVG · HTML / CSS / JavaScript · Cartographic design &amp; post-produzione.</p>
+
+  <h2>References</h2>
+  <ul class="refs">
+    <li>USGS Astrogeology — <em>Mars MOLA/HRSC Blended DEM Global 200 m v2</em> e <em>Viking MDIM 2.1 Colorized Mosaic</em>.</li>
+    <li>Morgan G. A., Putzig N. E., et al. (2021). <em>Availability of subsurface water-ice resources in the northern mid-latitudes of Mars (SWIM).</em> Nature Astronomy, 5, 230–236.</li>
+    <li>Putzig N. E., Mellon M. T. (2007) / Putzig et al. (2005). <em>Thermal inertia and surface properties of Mars from the MGS-TES.</em> Icarus.</li>
+    <li>Forget F., Millour E., et al. — <em>Mars Climate Database (LMD/ESA), v6.1.</em></li>
+    <li>Edwards C. S., et al. (2011). <em>Mosaicking of global planetary image datasets: THEMIS Day-IR.</em> JGR Planets.</li>
+    <li>QGIS Development Team — <em>QGIS Geographic Information System</em> (OSGeo); GDAL/OGR contributors — <em>GDAL</em>.</li>
+  </ul>
+
+  <a class="back" href="../index.html" style="margin-top:40px">← GIS Portfolio</a>
 </div>
 <script>
+/* placeholder elegante finché le immagini non sono presenti */
+(function(){
+  function ph(img){
+    if(img.dataset.phdone) return; img.dataset.phdone='1';
+    var d=document.createElement('div'); d.className='imgph';
+    var name=(img.getAttribute('src')||'').split('/').pop();
+    d.innerHTML='<div class="ic">🖼️</div><div>Immagine in arrivo</div><code>'+name+'</code>';
+    img.replaceWith(d);
+  }
+  [].slice.call(document.querySelectorAll('img')).forEach(function(img){
+    if(img.complete && img.naturalWidth===0){ ph(img); }
+    img.addEventListener('error',function(){ ph(img); });
+  });
+})();
+/* --- indice dinamico (TOC) --- */
 (function(){
   var heads=[].slice.call(document.querySelectorAll('.wrap h2'));
   if(heads.length<2) return;

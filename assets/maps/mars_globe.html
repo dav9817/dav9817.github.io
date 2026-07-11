@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Marte — Globo 3D interattivo</title>
+<style>
+  :root{--accent:#e0483a;--panel:rgba(18,11,7,.92);--line:#3a281d;--muted:#b7a496}
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%;background:#07090f;overflow:hidden;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Helvetica,Arial,sans-serif}
+  #stage{position:fixed;inset:0}
+  #stage::before{content:"";position:absolute;inset:0;z-index:0;
+    background:radial-gradient(circle at 50% 48%,rgba(224,72,58,.03),rgba(7,9,15,0) 55%)}
+  canvas{display:block;position:relative;z-index:1;touch-action:none;cursor:grab}
+  canvas:active{cursor:grabbing}
+
+  /* buttons */
+  .btn{position:absolute;z-index:5;display:flex;align-items:center;gap:8px;
+    background:var(--panel);color:#f0e6df;border:1px solid var(--line);border-radius:10px;
+    padding:9px 12px;font-size:.86rem;font-weight:600;cursor:pointer;
+    backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);user-select:none}
+  .btn:hover{border-color:var(--accent);color:#fff}
+  #btn{top:14px;left:14px}
+  #grid-btn{top:14px;right:14px;padding:9px 11px}
+  #grid-btn.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+  #grid-btn svg{display:block;stroke:currentColor;fill:none}
+  #poi-btn{top:60px;right:14px;padding:9px 11px}
+  #poi-btn.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+  #poi-btn svg{display:block;stroke:currentColor;fill:none}
+  #reset-btn{top:106px;right:14px;padding:9px 11px}
+  #reset-btn svg{display:block;stroke:currentColor;fill:none}
+  #kp{position:absolute;z-index:5;top:14px;right:62px;width:82px;height:82px;border-radius:11px;overflow:hidden;
+    border:1px solid var(--line);box-shadow:0 4px 14px rgba(0,0,0,.45);background:#05060a}
+  #kpc{width:100%;height:100%;display:block;position:relative;z-index:1}
+  #kpmk{position:absolute;top:50%;left:50%;z-index:2;transform:translate(-50%,-50%);pointer-events:none;
+    min-width:15px;min-height:15px;
+    background:
+      linear-gradient(var(--accent),var(--accent)) left top/9px 2px no-repeat,
+      linear-gradient(var(--accent),var(--accent)) left top/2px 9px no-repeat,
+      linear-gradient(var(--accent),var(--accent)) right top/9px 2px no-repeat,
+      linear-gradient(var(--accent),var(--accent)) right top/2px 9px no-repeat,
+      linear-gradient(var(--accent),var(--accent)) left bottom/9px 2px no-repeat,
+      linear-gradient(var(--accent),var(--accent)) left bottom/2px 9px no-repeat,
+      linear-gradient(var(--accent),var(--accent)) right bottom/9px 2px no-repeat,
+      linear-gradient(var(--accent),var(--accent)) right bottom/2px 9px no-repeat;
+    filter:drop-shadow(0 0 1px rgba(0,0,0,.95)) drop-shadow(0 0 4px rgba(224,72,58,.9))}
+  @media(max-width:520px){#kp{display:none}}
+  #scale{position:absolute;z-index:5;right:14px;bottom:12px;pointer-events:none;text-align:right;
+    color:#f0e6df;font-size:.72rem;font-weight:700;letter-spacing:.02em;text-shadow:0 1px 6px rgba(0,0,0,.9)}
+  #scale .bar{height:3px;background:#f0e6df;border-radius:2px;margin:4px 0 0 auto;
+    box-shadow:0 1px 3px rgba(0,0,0,.7);transition:width .12s ease}
+  #legend{position:absolute;z-index:5;right:14px;bottom:50px;max-width:224px;display:none;pointer-events:none;
+    background:rgba(9,6,4,.74);border:1px solid rgba(255,255,255,.1);border-radius:11px;padding:9px 12px 10px;
+    color:#f0e6df;font-size:.72rem;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+  #legend .lt{font-weight:700;color:#fff;font-size:.75rem;margin-bottom:6px}
+  #legend .li{display:flex;align-items:center;gap:7px;margin:3px 0;line-height:1.25}
+  #legend .sw{width:11px;height:11px;border-radius:3px;flex:0 0 auto;box-shadow:0 0 0 1px rgba(0,0,0,.4)}
+  #legend .lg{height:9px;border-radius:3px;margin:1px 0 3px;box-shadow:0 0 0 1px rgba(0,0,0,.4)}
+  #legend .lr{display:flex;justify-content:space-between;gap:10px;color:var(--muted);font-size:.63rem}
+  #legend .ln{margin-top:6px;color:var(--muted);font-size:.63rem}
+  .btn .ic{width:15px;height:11px;position:relative;display:inline-block}
+  .btn .ic i{position:absolute;left:0;right:0;height:2px;background:currentColor;border-radius:2px}
+  .btn .ic i:nth-child(1){top:0}.btn .ic i:nth-child(2){top:4.5px}.btn .ic i:nth-child(3){top:9px}
+
+  #panel{position:absolute;z-index:6;top:14px;left:14px;width:290px;max-width:calc(100% - 28px);
+    max-height:calc(100% - 28px);overflow-y:auto;background:var(--panel);border:1px solid var(--line);
+    border-radius:12px;padding:12px 14px 14px;color:#e7dcd4;box-shadow:0 18px 50px rgba(0,0,0,.5);
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    transform:translateY(-8px);opacity:0;pointer-events:none;transition:opacity .18s,transform .18s}
+  #panel.open{opacity:1;transform:none;pointer-events:auto}
+  #panel h3{margin:2px 0 2px;font-size:.9rem;color:#fff;display:flex;justify-content:space-between;align-items:center}
+  #panel .x{cursor:pointer;color:var(--muted);font-size:1.1rem;line-height:1;padding:0 2px}
+  #panel .x:hover{color:#fff}
+  #panel .hint{color:var(--muted);font-size:.72rem;line-height:1.35;margin:0 0 8px}
+  .grp{margin-top:9px;color:var(--accent);font-size:.68rem;letter-spacing:.09em;text-transform:uppercase;
+    font-weight:700;border-top:1px solid var(--line);padding-top:8px}
+  .grp:first-of-type{border-top:0;padding-top:2px}
+  label.row{display:flex;align-items:center;gap:9px;padding:5px 4px;border-radius:7px;cursor:pointer;font-size:.83rem}
+  label.row:hover{background:rgba(224,72,58,.10)}
+  label.row input{accent-color:var(--accent);width:15px;height:15px;flex:0 0 auto;margin:0}
+  .swatch{width:9px;height:9px;border-radius:50%;flex:0 0 auto;background:#5a4a3f;opacity:.55}
+  label.row.on{color:#fff}label.row.on .swatch{background:var(--accent);opacity:1}
+
+  /* graticule degree labels */
+  #grat{position:absolute;inset:0;z-index:3;pointer-events:none;overflow:hidden;display:none}
+  .glab{position:absolute;transform:translate(-50%,-50%);color:#e6f6ff;font-size:10px;font-weight:600;
+    letter-spacing:.3px;white-space:nowrap;padding:0 2px;
+    text-shadow:0 0 3px rgba(0,0,0,.95),0 0 7px rgba(0,0,0,.8)}
+  /* POI overlay */
+  #poi{position:absolute;inset:0;z-index:3;pointer-events:none;overflow:hidden}
+  .dot{position:absolute;width:7px;height:7px;border-radius:50%;pointer-events:auto;cursor:pointer;
+    transform:translate(-50%,-50%);transition:transform .12s ease;
+    background:radial-gradient(circle at 50% 38%,#fff,#ece6df 72%);
+    box-shadow:0 0 0 1.5px rgba(10,6,4,.6),0 0 8px 1px rgba(255,255,255,.45)}
+  .dot::after{content:"";position:absolute;inset:-4px;border-radius:50%;border:1px solid rgba(255,255,255,.5);opacity:.55;transition:.12s}
+  .dot:hover{transform:translate(-50%,-50%) scale(1.4)}
+  .dot:hover::after{opacity:.95;inset:-6px}
+  .dot.sel{transform:translate(-50%,-50%) scale(1.6);z-index:3;
+    box-shadow:0 0 0 2px var(--accent),0 0 12px 2px rgba(224,72,58,.55)}
+  .dot.sel::after{border-color:var(--accent);opacity:1;inset:-7px}
+  .lab{position:absolute;color:#fff;font-size:10.5px;font-weight:600;letter-spacing:.8px;
+    white-space:nowrap;transform:translate(15px,-50%);pointer-events:auto;cursor:pointer;
+    text-shadow:0 0 4px rgba(0,0,0,.95),0 0 8px rgba(0,0,0,.7);transition:font-size .12s}
+  .lab.sel{transform:translate(17px,-50%)}
+  .lab.sel{font-size:13px;font-weight:700}
+
+  #poiinfo{position:absolute;z-index:8;display:none;max-width:230px;padding:11px 13px 12px;border-radius:12px;
+    background:#211611;border:1px solid var(--line);box-shadow:0 12px 34px rgba(0,0,0,.55);color:#f0e6df;
+    transform:translate(-50%,0)}
+  #poiinfo.show{display:block}
+  #poiinfo::before{content:"";position:absolute;top:-7px;left:calc(50% + var(--cx,0px));transform:translateX(-50%);
+    width:0;height:0;border-left:7px solid transparent;border-right:7px solid transparent;border-bottom:7px solid #211611;
+    filter:drop-shadow(0 -1px 0 var(--line))}
+  #poiinfo .tag{font-size:9.5px;letter-spacing:1.2px;text-transform:uppercase;font-weight:700;color:var(--accent)}
+  #poiinfo h4{margin:3px 0 5px;font-size:14px;font-weight:650}
+  #poiinfo p{margin:0;font-size:11.5px;line-height:1.5;color:#d8c8bd}
+  #poiinfo .co{margin-top:7px;font-size:10px;color:var(--muted);letter-spacing:.3px}
+
+  #cap{position:absolute;z-index:5;left:14px;bottom:12px;max-width:calc(100% - 150px);pointer-events:none;
+    color:#f0e6df;font-size:.8rem;line-height:1.35;background:rgba(9,6,4,.66);border:1px solid rgba(255,255,255,.08);
+    border-radius:11px;padding:7px 13px;backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px)}
+  #cap b{color:#fff}#cap span{color:var(--muted)}
+  #load{position:absolute;z-index:8;top:14px;left:50%;transform:translateX(-50%);
+    display:flex;align-items:center;gap:8px;background:var(--panel);border:1px solid var(--line);
+    border-radius:999px;padding:6px 13px 6px 11px;color:#f0e6df;font-size:.74rem;font-weight:600;
+    pointer-events:none;opacity:0;transition:opacity .2s;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+  #load.on{opacity:1}
+  #load .sp{width:13px;height:13px;border-radius:50%;border:2px solid rgba(255,255,255,.22);
+    border-top-color:var(--accent);animation:spin .7s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+<div id="stage">
+  <button class="btn" id="btn"><span class="ic"><i></i><i></i><i></i></span>Layers</button>
+  <button class="btn" id="grid-btn" title="Lat/long grid">
+    <svg width="18" height="18" viewBox="0 0 24 24" stroke-width="1.8" stroke-linecap="round">
+      <rect x="3.5" y="3.5" width="17" height="17" rx="1.5"/>
+      <line x1="9.3" y1="3.5" x2="9.3" y2="20.5"/><line x1="14.7" y1="3.5" x2="14.7" y2="20.5"/>
+      <line x1="3.5" y1="9.3" x2="20.5" y2="9.3"/><line x1="3.5" y1="14.7" x2="20.5" y2="14.7"/>
+    </svg></button>
+  <button class="btn" id="poi-btn" title="Points of interest">
+    <svg width="18" height="18" viewBox="0 0 24 24" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 21c4.5-4.2 7-7.6 7-11a7 7 0 0 0-14 0c0 3.4 2.5 6.8 7 11z"/>
+      <circle cx="12" cy="10" r="2.4"/>
+    </svg></button>
+  <button class="btn" id="reset-btn" title="Clean map — Viking base only">
+    <svg width="18" height="18" viewBox="0 0 24 24" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" fill="none">
+      <path d="M4 7h16"/><path d="M9 7V4.8h6V7"/><path d="M6.5 7l1 12.2h9l1-12.2"/><path d="M10 10.5v5.5M14 10.5v5.5"/>
+    </svg></button>
+  <div id="kp" title="La tua posizione sul pianeta"><canvas id="kpc"></canvas><span id="kpmk"></span></div>
+  <div id="panel" aria-label="Layers">
+    <h3>Layers <span class="x" id="close">×</span></h3>
+    <p class="hint">The selected layer is projected onto the globe. Enable several and the most recently activated one is shown on top. SWIM/suitability maps cover the ±60° band. Clear all to return to the base.</p>
+    <div id="list"></div>
+  </div>
+  <div id="legend"></div>
+  <div id="scale"><span id="scaleTxt">—</span><div class="bar" id="scaleBar"></div></div>
+  <div id="poi"></div>
+  <div id="poiinfo"></div>
+  <div id="cap"><b>Base — Viking mosaic</b> <span>natural colour</span></div>
+  <div id="load"><span class="sp"></span><span id="loadTxt">loading…</span></div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="globe_tex.js?v=16"></script>
+<script>
+const LAYERS=[
+ {g:'§6 · Intermediate maps'},
+ {id:'l01_dem',   t:'DEM & Geomorphology',      c:'MOLA/HRSC topography · 5 geomorphic units'},
+ {id:'l02_slope', t:'Slope / Accessibility',    c:'Slope derived from the DEM'},
+ {id:'l03_ice01', t:'Ice 0–1 m (SWIM)',         c:'Shallow ice consistency · ±60°'},
+ {id:'l04_ice15', t:'Ice 1–5 m (SWIM)',         c:'Intermediate ice consistency · ±60°'},
+ {id:'l05_ice5',  t:'Ice >5 m (SWIM)',          c:'Deep ice consistency · ±60°'},
+ {id:'l06_ti',    t:'Thermal inertia',          c:'Surface material (TES)'},
+ {id:'l07_tproxy',t:'Temperature (proxy)',      c:'Estimate from latitude & elevation'},
+ {id:'l08_tmcd',  t:'Temperature (MCD)',        c:'Annual mean · Mars Climate Database'},
+ {g:'§7 · Reclassified criteria (0–5)'},
+ {id:'l09_cslope',t:'Slope criterion',          c:'Suitability 0–5 · slope'},
+ {id:'l10_cice',  t:'Ice criterion',            c:'Suitability 0–5 · water · ±60°'},
+ {id:'l11_cti',   t:'Thermal-inertia criterion',c:'Suitability 0–5 · geotechnics'},
+ {id:'l12_cinsol',t:'Insolation criterion',     c:'Suitability 0–5 · solar energy'},
+ {id:'l13_ctemp', t:'Temperature criterion',    c:'Suitability 0–5 · thermal factor'},
+ {g:'§8–9 · Suitability'},
+ {id:'l14_suit',  t:'Composite suitability + sites', c:'Weighted overlay 0–5 · candidate sites · ±60°'},
+ {g:'§10 · Land vocations'},
+ {id:'l18_zoning',t:'Functional zoning',        c:'Water / Energy / Mixed · ±60°'},
+];
+const BASE={id:'base',t:'Base — Viking mosaic',c:'natural colour'};
+
+const FEAT=[{"n":"Olympus Mons","lo":-134,"la":18.4,"t":"volcano","d":"Largest volcano in the Solar System (~22 km high, ~600 km wide), a shield volcano on the Tharsis rise.","tl":"Volcano"},{"n":"Alba Mons","lo":-109.6,"la":40.5,"t":"volcano","d":"Vast low-relief volcano north of Tharsis, among the largest on Mars by area.","tl":"Volcano"},{"n":"Ascraeus Mons","lo":-104.5,"la":11.9,"t":"volcano","d":"Northernmost of the three Tharsis Montes shield volcanoes (~18 km high).","tl":"Volcano"},{"n":"Pavonis Mons","lo":-113,"la":1,"t":"volcano","d":"Central Tharsis Montes shield volcano, sitting almost on the equator.","tl":"Volcano"},{"n":"Arsia Mons","lo":-120.5,"la":-8.3,"t":"volcano","d":"Southernmost Tharsis Montes volcano, with a huge summit caldera.","tl":"Volcano"},{"n":"Elysium Mons","lo":147.2,"la":25,"t":"volcano","d":"Main volcano of the Elysium rise, the second-largest volcanic province on Mars.","tl":"Volcano"},{"n":"Hecates Tholus","lo":150.2,"la":32.1,"t":"volcano","d":"Shield volcano at the northern end of the Elysium volcanic province.","tl":"Volcano"},{"n":"Apollinaris Mons","lo":174.4,"la":-9.3,"t":"volcano","d":"Isolated ancient volcano near the equator, south of Elysium.","tl":"Volcano"},{"n":"Arcadia Planitia","lo":-175,"la":47.2,"t":"lowland","d":"Smooth northern lowland; a leading candidate region for a human base — buried water ice and flat terrain.","tl":"Lowland plain"},{"n":"Amazonis Planitia","lo":-164,"la":24.8,"t":"lowland","d":"Very smooth, geologically young lowland plain west of Tharsis.","tl":"Lowland plain"},{"n":"Vastitas Borealis","lo":90,"la":72,"t":"lowland","d":"Vast lowland encircling the north pole, the broad low floor of the northern hemisphere.","tl":"Lowland plain"},{"n":"Acidalia Planitia","lo":-22,"la":50,"t":"lowland","d":"Dark northern lowland between Tharsis and Arabia Terra.","tl":"Lowland plain"},{"n":"Chryse Planitia","lo":-40,"la":26.7,"t":"lowland","d":"Circular lowland basin; Viking 1 and Mars Pathfinder landing area.","tl":"Lowland plain"},{"n":"Utopia Planitia","lo":117,"la":46.7,"t":"lowland","d":"Largest recognized impact basin; Viking 2 site; extensive buried water ice.","tl":"Lowland plain"},{"n":"Isidis Planitia","lo":87,"la":12.9,"t":"lowland","d":"Large impact basin on the highland–lowland dichotomy boundary.","tl":"Lowland plain"},{"n":"Elysium Planitia","lo":154.7,"la":3,"t":"lowland","d":"Flat equatorial plain; InSight lander site (marsquake monitoring).","tl":"Lowland plain"},{"n":"Hellas Planitia","lo":70.5,"la":-42.4,"t":"lowland","d":"Largest visible impact basin (~2,300 km, ~7 km deep); highest surface pressure on Mars.","tl":"Lowland plain"},{"n":"Argyre Planitia","lo":-43,"la":-49.7,"t":"lowland","d":"Major southern impact basin, ringed by rugged mountains.","tl":"Lowland plain"},{"n":"Arabia Terra","lo":6,"la":21,"t":"highland","d":"Heavily cratered, dust-mantled highland transition region.","tl":"Highland"},{"n":"Terra Sabaea","lo":42,"la":-2,"t":"highland","d":"Ancient cratered highland east of Arabia Terra.","tl":"Highland"},{"n":"Noachis Terra","lo":5,"la":-45,"t":"highland","d":"Densely cratered southern highland; type area of the Noachian period.","tl":"Highland"},{"n":"Terra Cimmeria","lo":145,"la":-33,"t":"highland","d":"Rugged southern highland with strong remnant crustal magnetism.","tl":"Highland"},{"n":"Terra Sirenum","lo":-150,"la":-40,"t":"highland","d":"Southern highland region with ancient valley networks.","tl":"Highland"},{"n":"Tempe Terra","lo":-71,"la":40,"t":"highland","d":"Fractured highland block on the northern lowland margin.","tl":"Highland"},{"n":"Xanthe Terra","lo":-48,"la":2,"t":"highland","d":"Cratered highland dissected by outflow channels near Valles Marineris.","tl":"Highland"},{"n":"Margaritifer Terra","lo":-25,"la":-5,"t":"highland","d":"Highland rich in outflow channels and clay/sulfate deposits.","tl":"Highland"},{"n":"Syrtis Major Planum","lo":69.5,"la":8.4,"t":"highland","d":"Low shield volcano forming a prominent dark albedo feature.","tl":"Highland"},{"n":"Lunae Planum","lo":-65,"la":10,"t":"highland","d":"Elevated plateau east of Tharsis, source region of Kasei Valles.","tl":"Highland"},{"n":"Solis Planum","lo":-90,"la":-26,"t":"highland","d":"High volcanic plain south of Valles Marineris (the 'eye of Mars').","tl":"Highland"},{"n":"Syria Planum","lo":-103,"la":-13,"t":"highland","d":"Elevated volcanic plateau near the centre of the Tharsis rise.","tl":"Highland"},{"n":"Meridiani Planum","lo":-2,"la":0,"t":"highland","d":"Hematite-bearing plain; Opportunity rover landing site.","tl":"Highland"},{"n":"Hesperia Planum","lo":111,"la":-22,"t":"highland","d":"Ridged volcanic plain; type area of the Hesperian period.","tl":"Highland"},{"n":"Valles Marineris","lo":-59,"la":-13,"t":"vallis","d":"Canyon system over 4,000 km long and up to 7 km deep.","tl":"Valley / fossae"},{"n":"Kasei Valles","lo":-73,"la":25,"t":"vallis","d":"One of the largest outflow-channel systems, draining north from Lunae Planum.","tl":"Valley / fossae"},{"n":"Ares Vallis","lo":-25,"la":10,"t":"vallis","d":"Outflow channel; Mars Pathfinder landed near its mouth.","tl":"Valley / fossae"},{"n":"Cerberus Fossae","lo":160,"la":11,"t":"vallis","d":"Young volcanic/tectonic fissures; source of recent lava and marsquakes.","tl":"Valley / fossae"},{"n":"Planum Boreum","lo":0,"la":88,"t":"polar","d":"North polar plateau capped by layered water ice.","tl":"Polar plain"},{"n":"Planum Australe","lo":0,"la":-87,"t":"polar","d":"South polar plateau, with permanent CO₂ and water ice.","tl":"Polar plain"},{"n":"Gale (Curiosity)","lo":137.8,"la":-5.4,"t":"crater","d":"Crater with a central mound (Aeolis Mons); Curiosity rover site since 2012.","tl":"Crater"},{"n":"Jezero (Perseverance)","lo":77.6,"la":18.4,"t":"crater","d":"Ancient crater lake with a preserved delta; Perseverance rover site since 2021.","tl":"Crater"},{"n":"Gusev","lo":175.6,"la":-14.6,"t":"crater","d":"Crater that once hosted a lake; Spirit rover landing site.","tl":"Crater"},{"n":"Schiaparelli","lo":16.8,"la":-3,"t":"crater","d":"Large ancient impact crater in the equatorial highlands.","tl":"Crater"},{"n":"Huygens","lo":55.6,"la":-14,"t":"crater","d":"Large degraded impact basin in the southern highlands.","tl":"Crater"}];
+const COL={volcano:"#ff9a5a",lowland:"#78d2ff",highland:"#ffe18c",vallis:"#c8aaff",polar:"#e6e6ff",crater:"#ff7878"};
+const RAD={volcano:5,crater:3.5,vallis:9,lowland:15,highland:15,polar:18}; // raggio evidenziazione (gradi)
+
+// ---------- three ----------
+const stage=document.getElementById('stage');
+const scene=new THREE.Scene();
+const camera=new THREE.PerspectiveCamera(38,1,0.1,100); camera.position.set(0,0,3.4);
+const renderer=new THREE.WebGLRenderer({antialias:true,alpha:true});
+renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+renderer.outputEncoding=THREE.sRGBEncoding;
+stage.appendChild(renderer.domElement);
+const group=new THREE.Group(); scene.add(group);
+// gradazione colore (satura, calda, blu→nero) applicata SOLO alla base Viking (uG=1)
+function makeGraded(opts,gradeOn){
+  const m=new THREE.MeshBasicMaterial(opts||{}); m.userData.g={value:gradeOn?1:0};
+  m.onBeforeCompile=(sh)=>{ sh.uniforms.uG=m.userData.g;
+    sh.fragmentShader='uniform float uG;\n'+sh.fragmentShader.replace('#include <encodings_fragment>',
+      'if(uG>0.5){ vec3 gC=gl_FragColor.rgb; float gL=dot(gC,vec3(0.299,0.587,0.114)); gC=mix(vec3(gL),gC,1.2); gC*=vec3(1.1,1.0,0.92); float blu=clamp((gC.b-gC.r)*2.5,0.0,1.0); gC*=mix(1.0,0.62,blu); gC*=1.07; gl_FragColor.rgb=clamp(gC,0.0,1.0); }\n#include <encodings_fragment>'); };
+  return m;
+}
+const globeMat=makeGraded({color:0xffffff}, true);
+const globe=new THREE.Mesh(new THREE.SphereGeometry(1,96,64),globeMat);
+group.add(globe); group.rotation.y=-1.4; group.rotation.x=0.15;
+const stack=[]; // layer attivi (ordine di attivazione)
+let poiOn=false; // punti d'interesse: disattivati di default (si attivano col pulsante)
+
+// starfield
+(function(){const n=900,p=new Float32Array(n*3);
+  for(let i=0;i<n;i++){const r=18+Math.random()*22,t=Math.random()*Math.PI*2,ph=Math.acos(2*Math.random()-1);
+    p[i*3]=r*Math.sin(ph)*Math.cos(t);p[i*3+1]=r*Math.sin(ph)*Math.sin(t);p[i*3+2]=r*Math.cos(ph);}
+  const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.BufferAttribute(p,3));
+  scene.add(new THREE.Points(g,new THREE.PointsMaterial({color:0xffffff,size:0.06,transparent:true,opacity:.7})));})();
+
+// ombreggiatura a cupola: scurisce progressivamente verso il limbo (effetto sfera illuminata)
+(function(){
+  const m=new THREE.ShaderMaterial({
+    vertexShader:'varying vec3 vN; void main(){ vN=normalize(normalMatrix*normal); gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0); }',
+    fragmentShader:'varying vec3 vN; void main(){ vec3 L=normalize(vec3(-0.35,0.42,0.84)); float lit=smoothstep(-0.2,0.9,dot(vN,L)); float rim=1.0-max(dot(vN,vec3(0.0,0.0,1.0)),0.0); float d=mix(0.55,1.0,lit); d*=mix(1.0,0.78,smoothstep(0.5,1.0,rim)); gl_FragColor=vec4(vec3(d),1.0); }',
+    side:THREE.FrontSide, transparent:true, blending:THREE.MultiplyBlending, depthWrite:false
+  });
+  const dome=new THREE.Mesh(new THREE.SphereGeometry(1,96,64),m);
+  dome.scale.setScalar(1.003); dome.renderOrder=2; group.add(dome);
+})();
+
+function ll2v(lo,la,r){r=r||1;const u=(lo+180)/360,v=(90-la)/180,phi=2*Math.PI*u,th=Math.PI*v,st=Math.sin(th);
+  return new THREE.Vector3(-r*Math.cos(phi)*st, r*Math.cos(th), r*Math.sin(phi)*st);}
+
+// ---------- graticola 3D ----------
+const grat=(function(){
+  const pts=[],R=1.004;
+  for(const b of [-60,-30,0,30,60]){for(let l=-180;l<180;l+=4){pts.push(ll2v(l,b,R),ll2v(l+4,b,R));}}
+  for(let l=-180;l<180;l+=30){for(let b=-84;b<84;b+=4){pts.push(ll2v(l,b,R),ll2v(l,b+4,R));}}
+  const g=new THREE.BufferGeometry().setFromPoints(pts);
+  const m=new THREE.LineBasicMaterial({color:0xbfe8ff,transparent:true,opacity:.6,depthWrite:false});
+  const seg=new THREE.LineSegments(g,m); seg.visible=false; seg.renderOrder=2; group.add(seg); return seg;
+})();
+// etichette dei gradi (overlay HTML, mostrate solo con la graticola attiva)
+const gratWrap=document.createElement('div'); gratWrap.id='grat'; stage.appendChild(gratWrap);
+const gratLabels=[];
+function lonLab(l){l=((l+180)%360+360)%360-180;return l===0?'0°':l>0?l+'°E':(-l)+'°W';}
+function latLab(b){return b>0?b+'°N':b<0?(-b)+'°S':'0°';}
+[-150,-120,-90,-60,-30,0,30,60,90,120,150,180].forEach(l=>{
+  const e=document.createElement('div');e.className='glab';e.textContent=lonLab(l);
+  gratWrap.appendChild(e);gratLabels.push({v:ll2v(l,0,1.02),el:e});});
+[-60,-30,30,60].forEach(b=>{
+  const e=document.createElement('div');e.className='glab';e.textContent=latLab(b);
+  gratWrap.appendChild(e);gratLabels.push({v:ll2v(0,b,1.02),el:e});});
+
+// ---------- texture ----------
+// ---- keyplan: mini-globo 3D sincronizzato con la vista ----
+const kp=document.getElementById('kp'), kpmk=document.getElementById('kpmk');
+const kpRenderer=new THREE.WebGLRenderer({canvas:document.getElementById('kpc'),antialias:true,alpha:true});
+kpRenderer.setPixelRatio(Math.min(devicePixelRatio,2)); kpRenderer.outputEncoding=THREE.sRGBEncoding;
+const kpScene=new THREE.Scene();
+const kpCam=new THREE.PerspectiveCamera(30,1,0.1,10); kpCam.position.set(0,0,5.6);
+const kpSphere=new THREE.Mesh(new THREE.SphereGeometry(1,48,32),new THREE.MeshBasicMaterial({color:0xffffff}));
+kpScene.add(kpSphere);
+function kpResize(){const w=kp.clientWidth,h=kp.clientHeight; if(w&&h){kpRenderer.setSize(w,h,false); kpCam.aspect=w/h; kpCam.updateProjectionMatrix();}}
+kpResize(); window.addEventListener('resize',kpResize);
+function updateKeyplan(){
+  kpSphere.quaternion.copy(group.quaternion);
+  kpRenderer.render(kpScene,kpCam);
+  const R=kp.clientWidth*0.33;   // raggio proiettato del mini-globo
+  const hLat=(camera.position.z-1)*Math.tan(FOV/2), hLon=hLat*(camera.aspect||1.7);
+  kpmk.style.width =Math.max(6,Math.min(kp.clientWidth-4, 2*R*Math.sin(Math.min(1.4,hLon))))+'px';
+  kpmk.style.height=Math.max(6,Math.min(kp.clientHeight-4,2*R*Math.sin(Math.min(1.4,hLat))))+'px';
+}
+
+const cache={}, loadEl=document.getElementById('load'), loadTxt=document.getElementById('loadTxt'), maxAniso=renderer.capabilities.getMaxAnisotropy();
+function showLoad(m){loadTxt.textContent=m;loadEl.classList.add('on');}
+function hideLoad(){loadEl.classList.remove('on');}
+let curLayer=BASE; const hiLoading={};
+function wantHi(){return camera.position.z<2.45;} // dopo un po' di zoom carica l'alta risoluzione
+function loadTex(src,clamp){return new Promise((res,rej)=>{const img=new Image();
+  img.onload=()=>{const t=new THREE.Texture(img);t.encoding=THREE.sRGBEncoding;t.anisotropy=maxAniso;
+    if(!clamp)t.wrapS=THREE.RepeatWrapping;t.needsUpdate=true;res(t);};
+  img.onerror=rej; img.src=src;});}
+// legende (ricostruite dalle mappe; colori facilmente ritoccabili)
+const ICE={t:'Subsurface ice (SWIM)',items:[['#ffffff','No / negative ice signal'],['#7cbbe0','Moderate ice consistency'],['#123b6e','High ice consistency']]};
+const CRIT={t:'Suitability criterion (0–5)',items:[['#9c2a28','Unsuitable'],['#c46833','Poor'],['#cfa848','Marginal'],['#a9b24a','Suitable'],['#79a44c','Highly suitable'],['#3d7838','Optimal']]};
+const TGRAD=['#3a30c8','#1f8fd0','#35c06a','#d8d83a','#e88a2e','#b81f1f'];
+const LEG={
+  l01_dem:{t:'Topography & geomorphology',items:[['#f0e2c4','Deep basins & depressions'],['#efa268','Northern lowlands (Vastitas Borealis)'],['#f07d2e','Southern highlands'],['#c65525','High-altitude plateaus & transition'],['#7a2818','Volcanic provinces & major edifices']]},
+  l02_slope:{t:'Slope / Accessibility',items:[['#1fc0ef','Flat & ideal landing zones'],['#f6ec3a','Gentle slopes (accessible)'],['#f59836','Steep slopes (hazardous)'],['#8e1c1c','Extreme terrain (critical)']]},
+  l03_ice01:ICE, l04_ice15:ICE, l05_ice5:ICE,
+  l06_ti:{t:'Thermal inertia (surface material)',items:[['#df3f1a','Fine dust & active mantling'],['#f18f2a','Unconsolidated sand & fine regolite'],['#8bcf2c','Coarse regolite & cemented soils'],['#3a3a3a','Bedrock & exposed rocky outcrops'],['#c9c9c9','No data (no TES coverage)']]},
+  l07_tproxy:{t:'Temperature (proxy)',grad:TGRAD,lo:'145 K',hi:'228 K'},
+  l08_tmcd:{t:'Temperature (MCD)',grad:TGRAD,lo:'145 K',hi:'228 K'},
+  l09_cslope:CRIT, l10_cice:CRIT, l11_cti:CRIT, l12_cinsol:CRIT, l13_ctemp:CRIT,
+  l14_suit:{t:'Composite suitability',grad:['#b0322a','#d8c24a','#3f9e57'],lo:'2.5',hi:'4.1'},
+  l18_zoning:{t:'Functional zoning',items:[['#f5e13a','Energy / photovoltaic'],['#3d8cce','Water / settlement'],['#74cf74','Mixed']]}
+};
+const legendEl=document.getElementById('legend');
+function updateLegend(l){
+  const d=LEG[l.id];
+  if(!d){legendEl.style.display='none';legendEl.innerHTML='';return;}
+  let h='<div class="lt">'+d.t+'</div>';
+  if(d.items){ d.items.forEach(it=>{ h+='<div class="li"><span class="sw" style="background:'+it[0]+'"></span>'+it[1]+'</div>'; }); }
+  else{ const g='linear-gradient(90deg,'+d.grad.join(',')+')';
+    h+='<div class="lg" style="background:'+g+'"></div><div class="lr"><span>'+d.lo+'</span><span>'+d.hi+'</span></div>'; }
+  if(d.note) h+='<div class="ln">'+d.note+'</div>';
+  legendEl.innerHTML=h; legendEl.style.display='block';
+}
+function apply(l,tex){globe.material.map=tex;globe.material.needsUpdate=true;
+  globeMat.userData.g.value=(l.id==='base'||l.id==='l18_zoning')?1:0;
+  document.getElementById('cap').innerHTML='<b>'+l.t+'</b> <span>'+l.c+'</span>'; updateLegend(l);
+  if(l.id==='base' && !kpSphere.material.map){kpSphere.material.map=tex;kpSphere.material.needsUpdate=true;}}
+function texFor(l){
+  if(l.id!=='base' && wantHi() && window.TEXHI && window.TEXHI[l.id]) return {src:window.TEXHI[l.id],k:l.id+'#h'};
+  return {src:(window.TEX&&window.TEX[l.id]),k:l.id+'#l'};
+}
+function setTexture(l){
+  curLayer=l;
+  const t=texFor(l);
+  if(cache[t.k]){apply(l,cache[t.k]);hideLoad();return;}
+  if(!t.src){showLoad('texture not found');return;}
+  showLoad(t.k.endsWith('#h')?'loading HD…':'loading…');
+  loadTex(t.src).then(tex=>{cache[t.k]=tex;hideLoad();if(curLayer===l)apply(l,tex);})
+    .catch(()=>{showLoad('load error');});
+}
+// carica la texture HD del layer corrente quando si è zoomato (file separato, lazy)
+function maybeUpgrade(){
+  if(!wantHi())return; const l=curLayer; if(l.id==='base')return;
+  if(tileSets[l.id])return; // i layer con tiling gestiscono l'HD da soli
+  if(window.TEXHI && window.TEXHI[l.id]){ if(cache[l.id+'#h']){if(globe.material.map!==cache[l.id+'#h'])apply(l,cache[l.id+'#h']);hideLoad();} else setTexture(l); return; }
+  if(hiLoading[l.id])return; hiLoading[l.id]=1; showLoad('loading HD…');
+  const s=document.createElement('script'); s.src='globe_hi/'+l.id+'.js?v=1';
+  s.onload=()=>{ if(curLayer.id===l.id && wantHi()) setTexture(l); else hideLoad(); };
+  s.onerror=()=>{ hiLoading[l.id]=0; hideLoad(); };
+  document.head.appendChild(s);
+}
+
+// ---- tiling piramidale: mappe ad altissima risoluzione tagliate a mattonelle, caricate per visibilità+zoom ----
+const tileSets={
+  base:     {cols:8,rows:4,lat:90,dir:'globe_tiles/base/'},
+  l01_dem:  {cols:8,rows:4,lat:90,dir:'globe_tiles/l01_dem/'},
+  l02_slope:{cols:8,rows:4,lat:90,dir:'globe_tiles/l02_slope/'},
+  l03_ice01:{cols:8,rows:3,lat:60,dir:'globe_tiles/l03_ice01/'},
+  l04_ice15:{cols:8,rows:3,lat:60,dir:'globe_tiles/l04_ice15/'},
+  l05_ice5: {cols:8,rows:3,lat:60,dir:'globe_tiles/l05_ice5/'},
+  l06_ti:   {cols:8,rows:4,lat:90,dir:'globe_tiles/l06_ti/'},
+  l07_tproxy:{cols:8,rows:4,lat:90,dir:'globe_tiles/l07_tproxy/'},
+  l08_tmcd: {cols:8,rows:4,lat:90,dir:'globe_tiles/l08_tmcd/'},
+  l09_cslope:{cols:8,rows:4,lat:90,dir:'globe_tiles/l09_cslope/'},
+  l10_cice: {cols:8,rows:3,lat:60,dir:'globe_tiles/l10_cice/'},
+  l11_cti:  {cols:8,rows:4,lat:90,dir:'globe_tiles/l11_cti/'},
+  l12_cinsol:{cols:8,rows:3,lat:60,dir:'globe_tiles/l12_cinsol/'},
+  l13_ctemp:{cols:8,rows:4,lat:90,dir:'globe_tiles/l13_ctemp/'},
+  l14_suit: {cols:8,rows:3,lat:60,dir:'globe_tiles/l14_suit/'},
+  l18_zoning:{cols:8,rows:4,lat:90,dir:'globe_tiles/l18_zoning/'}
+};
+const tileMeshes={}, tileTexCache={}, tileScriptLoading={};
+const _pt=new THREE.Vector3(), _pc=new THREE.Vector3();
+function wantTiles(){return camera.position.z<2.2;}
+function ensureTileTex(key,cb){
+  if(tileTexCache[key]){cb(tileTexCache[key]);return;}
+  if(window.TILES && window.TILES[key]) loadTex(window.TILES[key],true).then(t=>{tileTexCache[key]=t;cb(t);});
+}
+function loadTile(id,i,j,cb){
+  const key=id+'_'+i+'_'+j;
+  if(tileTexCache[key]||(window.TILES&&window.TILES[key])){ensureTileTex(key,cb);return;}
+  if(tileScriptLoading[key])return; tileScriptLoading[key]=1; showLoad('loading HD…');
+  const s=document.createElement('script'); s.src=tileSets[id].dir+'t'+i+'_'+j+'.js?v=2';
+  s.onload=()=>{ hideLoad(); ensureTileTex(key,cb); };
+  s.onerror=()=>{ tileScriptLoading[key]=0; hideLoad(); };
+  document.head.appendChild(s);
+}
+function makeTile(id,i,j,tex){
+  const ts=tileSets[id], dlon=360/ts.cols, dlat=2*ts.lat/ts.rows;
+  const lon0=-180+i*dlon, latTop=ts.lat-j*dlat;
+  const phiStart=2*Math.PI*(lon0+180)/360, phiLen=2*Math.PI*dlon/360;
+  const thetaStart=Math.PI*(90-latTop)/180, thetaLen=Math.PI*dlat/180;
+  const g=new THREE.SphereGeometry(1.0016,28,28,phiStart,phiLen,thetaStart,thetaLen);
+  const tm=makeGraded({map:tex}, id==='base'||id==='l18_zoning');
+  const m=new THREE.Mesh(g,tm); m.renderOrder=1; group.add(m); return m;
+}
+function ensureTiles(){
+  const id=curLayer.id, ts=tileSets[id], on=ts&&wantTiles();
+  for(const k in tileMeshes){ if(!on||k.indexOf(id+'|')!==0) tileMeshes[k].visible=false; }
+  if(!on) return;
+  const dlon=360/ts.cols, dlat=2*ts.lat/ts.rows;
+  for(let i=0;i<ts.cols;i++)for(let j=0;j<ts.rows;j++){
+    const cLon=-180+(i+0.5)*dlon, cLat=ts.lat-(j+0.5)*dlat;
+    _pt.copy(ll2v(cLon,cLat,1)).applyQuaternion(group.quaternion);
+    _pc.copy(camera.position).sub(_pt).normalize();
+    const front=_pt.clone().normalize().dot(_pc)>-0.12, key=id+'|'+i+'_'+j;
+    if(front){
+      if(tileMeshes[key]) tileMeshes[key].visible=true;
+      else loadTile(id,i,j,tex=>{ if(!tileMeshes[key]) tileMeshes[key]=makeTile(id,i,j,tex); tileMeshes[key].visible=wantTiles()&&curLayer.id===id; });
+    } else if(tileMeshes[key]) tileMeshes[key].visible=false;
+  }
+}
+setTexture(BASE);
+
+// ---------- POI overlay ----------
+const poiWrap=document.getElementById('poi'), poiinfo=document.getElementById('poiinfo');
+let selPOI=null;
+const markers=FEAT.map(d=>{
+  const v=ll2v(d.lo,d.la,1.012);
+  const dot=document.createElement('div'); dot.className='dot';
+  const lab=document.createElement('div'); lab.className='lab'; lab.textContent=d.n;
+  lab.style.color='#fff'; lab.style.textShadow='0 0 4px rgba(0,0,0,.98),0 0 8px rgba(0,0,0,.72)';
+  poiWrap.appendChild(dot); poiWrap.appendChild(lab);
+  const pick=(e)=>{e.stopPropagation(); selectPOI(d);};
+  dot.addEventListener('pointerdown',e=>e.stopPropagation());
+  lab.addEventListener('pointerdown',e=>e.stopPropagation());
+  dot.addEventListener('click',pick); lab.addEventListener('click',pick);
+  return {d,v,dot,lab};
+});
+function selectPOI(d){
+  selPOI=d; auto=false;
+  markers.forEach(m=>{const s=m.d===d;m.dot.classList.toggle('sel',s);m.lab.classList.toggle('sel',s);});
+  poiinfo.innerHTML='<div class="tag">'+d.tl+'</div><h4>'+d.n+'</h4><p>'+d.d+'</p><div class="co">'+
+    Math.abs(d.la).toFixed(1)+'°'+(d.la>=0?'N':'S')+'  '+Math.abs(d.lo).toFixed(1)+'°'+(d.lo>=0?'E':'W')+'</div>';
+  poiinfo.classList.add('show');
+}
+function deselectPOI(){selPOI=null;poiinfo.classList.remove('show');
+  markers.forEach(m=>{m.dot.classList.remove('sel');m.lab.classList.remove('sel');});}
+const _p=new THREE.Vector3();
+function projFront(v,W,H){
+  _p.copy(v).applyQuaternion(group.quaternion);
+  const nrm=_p.clone().normalize(), view=camera.position.clone().sub(_p).normalize();
+  if(nrm.dot(view)<=0.06) return null;
+  const s=_p.clone().project(camera);
+  return {x:(s.x*.5+.5)*W, y:(-s.y*.5+.5)*H};
+}
+function updateOverlay(){
+  const W=stage.clientWidth,H=stage.clientHeight;
+  // graticule labels
+  const gv=grat.visible; gratWrap.style.display=gv?'block':'none';
+  if(gv){ gratLabels.forEach(o=>{ const p=projFront(o.v,W,H);
+    if(!p){o.el.style.display='none';return;} o.el.style.display='block';
+    o.el.style.left=p.x+'px'; o.el.style.top=p.y+'px'; }); }
+  // POI
+  poiWrap.style.display=poiOn?'block':'none';
+  if(poiOn){
+    const labVis=camera.position.z<2.55;
+    markers.forEach(m=>{ const p=projFront(m.v,W,H);
+      if(!p){m.dot.style.display='none';m.lab.style.display='none';return;}
+      m.dot.style.display='block'; m.lab.style.display=(labVis||m.d===selPOI)?'block':'none';
+      m.dot.style.left=m.lab.style.left=p.x+'px'; m.dot.style.top=m.lab.style.top=p.y+'px'; });
+    if(selPOI){ const p=projFront(ll2v(selPOI.lo,selPOI.la,1.012),W,H);
+      if(p){ const x=Math.max(120,Math.min(W-120,p.x)); poiinfo.style.left=x+'px'; poiinfo.style.top=Math.min(H-8,p.y+30)+'px';
+        const w=poiinfo.offsetWidth||220, off=Math.max(-w/2+14,Math.min(w/2-14,p.x-x)); poiinfo.style.setProperty('--cx',off+'px'); } }
+  } else if(selPOI){ deselectPOI(); }
+}
+
+// ---------- controls ----------
+let drag=false,px=0,py=0,moved=false,lastInput=performance.now(),auto=true;
+const el=renderer.domElement;
+el.addEventListener('pointerdown',e=>{el.setPointerCapture(e.pointerId);drag=true;moved=false;px=e.clientX;py=e.clientY;auto=false;});
+el.addEventListener('pointermove',e=>{if(!drag)return;const dx=(e.clientX-px)/180,dy=(e.clientY-py)/180;
+  if(Math.abs(e.clientX-px)+Math.abs(e.clientY-py)>3)moved=true; px=e.clientX;py=e.clientY;
+  group.rotation.y+=dx;group.rotation.x=Math.max(-1.25,Math.min(1.25,group.rotation.x+dy));lastInput=performance.now();});
+el.addEventListener('pointerup',e=>{drag=false;lastInput=performance.now();
+  if(!moved){ if(selPOI)deselectPOI(); if(panel.classList.contains('open'))openP(false); }});
+el.addEventListener('pointercancel',()=>{drag=false;});
+el.addEventListener('wheel',e=>{e.preventDefault();camera.position.z=Math.max(1.4,Math.min(4.2,camera.position.z+e.deltaY*0.0016));auto=false;lastInput=performance.now();maybeUpgrade();},{passive:false});
+let pd=0;
+el.addEventListener('touchmove',e=>{if(e.touches.length===2){e.preventDefault();
+  const a=e.touches[0],b=e.touches[1],d=Math.hypot(a.clientX-b.clientX,a.clientY-b.clientY);
+  if(pd)camera.position.z=Math.max(1.4,Math.min(4.2,camera.position.z-(d-pd)*0.006));pd=d;auto=false;lastInput=performance.now();maybeUpgrade();}},{passive:false});
+el.addEventListener('touchend',()=>pd=0);
+
+function resize(){const w=stage.clientWidth,h=stage.clientHeight;renderer.setSize(w,h);camera.aspect=w/h;camera.updateProjectionMatrix();}
+window.addEventListener('resize',resize);resize();
+const MARS_R=3396190, FOV=38*Math.PI/180;
+const scaleTxt=document.getElementById('scaleTxt'), scaleBar=document.getElementById('scaleBar');
+function updateScale(){
+  const H=stage.clientHeight; if(!H)return;
+  const worldPerPx=2*(camera.position.z-1)*Math.tan(FOV/2)/H;
+  const mpp=worldPerPx*MARS_R;                 // metri per pixel al centro del globo
+  const raw=mpp*64, e=Math.floor(Math.log10(raw)), f=raw/Math.pow(10,e);
+  const nf=f<1.5?1:f<3.5?2:f<7.5?5:10, D=nf*Math.pow(10,e), px=D/mpp;
+  scaleTxt.textContent = D>=1000 ? Math.round(D/1000)+' km' : Math.round(D)+' m';
+  scaleBar.style.width=Math.round(px)+'px';
+}
+(function loop(){requestAnimationFrame(loop);
+  if(auto&&!drag&&!selPOI)group.rotation.y+=0.0011;
+  if(!auto&&!drag&&!selPOI&&performance.now()-lastInput>4500)auto=true;
+  renderer.render(scene,camera); updateOverlay(); updateScale(); ensureTiles(); updateKeyplan();
+})();
+
+// ---------- layer panel ----------
+const list=document.getElementById('list');
+function renderStack(){
+  const top=stack.length?LAYERS.find(l=>l.id===stack[stack.length-1]):null;
+  setTexture(top||BASE); maybeUpgrade();
+  [...list.querySelectorAll('label.row')].forEach(r=>{const on=stack.includes(r.dataset.id);
+    r.classList.toggle('on',on); const cb=r.querySelector('input'); if(cb)cb.checked=on;});
+}
+LAYERS.forEach(item=>{
+  if(item.g){const d=document.createElement('div');d.className='grp';d.textContent=item.g;list.appendChild(d);return;}
+  const row=document.createElement('label');row.className='row';row.dataset.id=item.id;
+  row.innerHTML='<input type="checkbox"><span class="swatch"></span><span>'+item.t+'</span>';
+  row.querySelector('input').addEventListener('change',e=>{const id=item.id,i=stack.indexOf(id);
+    if(e.target.checked){if(i<0)stack.push(id);}else{if(i>=0)stack.splice(i,1);} renderStack();});
+  list.appendChild(row);
+});
+const panel=document.getElementById('panel'), btn=document.getElementById('btn');
+function openP(o){panel.classList.toggle('open',o);btn.style.display=o?'none':'flex';}
+btn.addEventListener('click',()=>openP(true));
+document.getElementById('close').addEventListener('click',()=>openP(false));
+
+// ---------- graticola toggle ----------
+const gbtn=document.getElementById('grid-btn');
+gbtn.addEventListener('click',()=>{grat.visible=!grat.visible;gbtn.classList.toggle('on',grat.visible);});
+const pbtn=document.getElementById('poi-btn');
+pbtn.addEventListener('click',()=>{poiOn=!poiOn;pbtn.classList.toggle('on',poiOn);});
+const rbtn=document.getElementById('reset-btn');
+rbtn.addEventListener('click',()=>{stack.length=0;renderStack();if(selPOI)deselectPOI();});
+</script>
+</body>
+</html>

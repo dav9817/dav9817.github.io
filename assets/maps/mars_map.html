@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Mars — Interactive Study Area</title>
+<style>
+  :root{ --glass:rgba(20,22,28,.62); --ink:#f4f6f8; --accent:#39d0ff; }
+  html,body{margin:0;background:transparent;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text",Segoe UI,Roboto,Helvetica,Arial,sans-serif;}
+  body{display:grid;place-items:center;min-height:100vh;box-sizing:border-box;}
+  #card{position:relative;width:min(100%,980px);height:min(100vh,560px);overflow:hidden;border-radius:16px;
+    background:#0c0a09;box-shadow:0 8px 30px rgba(0,0,0,.30);cursor:grab;user-select:none;}
+  #card.drag{cursor:grabbing;}
+  #base{position:absolute;left:0;top:0;transform-origin:0 0;pointer-events:none;}
+  #ovl{position:absolute;inset:0;pointer-events:none;}
+  /* futuristic markers */
+  .dot{position:absolute;width:7px;height:7px;border-radius:50%;background:#fff;pointer-events:auto;cursor:pointer;
+    transform:translate(-50%,-50%);transition:transform .12s ease;}
+  .dot::after{content:"";position:absolute;inset:-4px;border-radius:50%;border:1.5px solid rgba(255,255,255,.72);opacity:.7;}
+  .dot:hover{transform:translate(-50%,-50%) scale(1.35);}
+  .cdot{position:absolute;width:6px;height:6px;border-radius:50%;background:#3cd0ff;
+    box-shadow:0 0 6px 1px rgba(60,208,255,.8);opacity:.85;transform:translate(-50%,-50%);}
+  .lab{position:absolute;color:#fff;font-size:10.5px;font-weight:600;letter-spacing:1.3px;text-transform:uppercase;
+    white-space:nowrap;transform:translate(11px,-50%);pointer-events:auto;cursor:pointer;
+    text-shadow:0 0 4px rgba(0,0,0,.95),0 0 8px currentColor;transition:font-size .13s ease,letter-spacing .13s ease;}
+  .lab:hover{color:#fff;filter:brightness(1.15);}
+  .dot.sel{transform:translate(-50%,-50%) scale(1.75);z-index:3;}
+  .dot.sel::after{opacity:.95;inset:-6px;border-width:2px;}
+  .lab.sel{font-size:14px;font-weight:700;letter-spacing:1.8px;filter:brightness(1.25);z-index:3;}
+  /* dark frosted controls */
+  .ctl{position:absolute;background:var(--glass);-webkit-backdrop-filter:blur(22px) saturate(180%);
+    backdrop-filter:blur(22px) saturate(180%);border:.5px solid rgba(255,255,255,.14);
+    box-shadow:0 4px 16px rgba(0,0,0,.35);color:var(--ink);border-radius:12px;}
+  #zc{top:12px;right:12px;display:flex;flex-direction:column;overflow:hidden;}
+  #zc button{width:38px;height:38px;border:0;background:transparent;color:var(--ink);font-size:21px;cursor:pointer;
+    line-height:1;display:flex;align-items:center;justify-content:center;}
+  #zc button:active{background:rgba(255,255,255,.10);}
+  #zc .sep{height:.5px;background:rgba(255,255,255,.14);}
+  #gridbtn{top:98px;right:12px;width:38px;height:38px;display:flex;align-items:center;justify-content:center;cursor:pointer;}
+  #gridbtn.on{background:rgba(255,255,255,.94);color:#1c1c1e;border-color:rgba(255,255,255,.9);}
+  #gridbtn svg{stroke:currentColor;}
+  #infobtn{top:12px;left:12px;width:38px;height:38px;display:flex;align-items:center;justify-content:center;cursor:pointer;}
+  #infobtn svg{stroke:currentColor;}
+  #help{top:12px;left:12px;padding:13px 15px 14px;max-width:264px;display:none;color:var(--ink);}
+  #help.open{display:block;}
+  #help h4{margin:0 0 3px;font-size:13.5px;font-weight:650;}
+  #help .sub{font-size:11px;opacity:.7;margin-bottom:9px;line-height:1.4;}
+  #help .row{display:flex;align-items:flex-start;gap:9px;margin-bottom:8px;font-size:11.5px;line-height:1.4;}
+  #help .sw{width:11px;height:11px;border-radius:50%;flex:0 0 auto;margin-top:2px;}
+  #help .ctrls{margin-top:6px;padding-top:9px;border-top:.5px solid rgba(255,255,255,.14);font-size:11px;line-height:1.55;opacity:.85;}
+  #help .x{position:absolute;top:9px;right:12px;cursor:pointer;opacity:.5;font-size:15px;}
+  #help .x:hover{opacity:.9;}
+  /* graticule */
+  #grid{position:absolute;inset:0;pointer-events:none;display:none;}
+  #grid.on{display:block;}
+  #grid line{stroke:rgba(255,255,255,.28);stroke-width:1;}
+  #grid text{fill:rgba(255,255,255,.85);font-size:10px;font-weight:600;
+    paint-order:stroke;stroke:rgba(0,0,0,.7);stroke-width:2.4px;letter-spacing:.3px;}
+  /* minimal scale */
+  #scale{position:absolute;left:14px;bottom:13px;color:#fff;pointer-events:none;
+    font-size:10.5px;font-weight:600;letter-spacing:.4px;text-shadow:0 1px 3px rgba(0,0,0,.9);}
+  #scaleBar{height:3px;margin-top:3px;border-radius:2px;background:rgba(255,255,255,.92);box-shadow:0 1px 3px rgba(0,0,0,.6);}
+  #src{position:absolute;right:12px;bottom:9px;color:#fff;opacity:.5;font-size:9px;font-weight:500;
+    text-shadow:0 1px 2px rgba(0,0,0,.9);pointer-events:none;letter-spacing:.2px;}
+  /* info popup */
+  #info{position:absolute;display:none;max-width:224px;padding:11px 13px 12px;border-radius:13px;pointer-events:auto;
+    background:#211d24;border:.5px solid rgba(255,255,255,.12);
+    box-shadow:0 10px 34px rgba(0,0,0,.5);color:#f4f6f8;z-index:20;transform:translate(-50%,0);}
+  #info.show{display:block;animation:pop .14s ease;}
+  #info::before{content:"";position:absolute;top:-8px;left:calc(50% + var(--cx,0px));transform:translateX(-50%);
+    width:0;height:0;border-left:9px solid transparent;border-right:9px solid transparent;border-bottom:9px solid #211d24;}
+  @keyframes pop{from{opacity:0;transform:translate(-50%,0) scale(.96)}to{opacity:1;transform:translate(-50%,0) scale(1)}}
+  #info .tag{font-size:9.5px;letter-spacing:1.4px;text-transform:uppercase;font-weight:700;color:var(--accent);}
+  #info h4{margin:3px 0 5px;font-size:14px;font-weight:650;letter-spacing:.2px;}
+  #info p{margin:0;font-size:11.5px;line-height:1.5;opacity:.86;}
+  #info .co{margin-top:7px;font-size:10px;opacity:.5;letter-spacing:.3px;}
+  #info .x{position:absolute;top:7px;right:10px;cursor:pointer;opacity:.5;font-size:15px;line-height:1;}
+  #info .x:hover{opacity:.9;}
+</style></head>
+<body>
+<div id="card">
+  <img id="base" src="viking_base.webp" draggable="false"/>
+  <svg id="grid"></svg>
+  <div id="ovl"></div>
+  <div class="ctl" id="zc">
+    <button id="zin" aria-label="Zoom in">+</button><div class="sep"></div><button id="zout" aria-label="Zoom out">&minus;</button>
+  </div>
+  <div class="ctl" id="gridbtn" title="Toggle lat/long grid">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round">
+      <rect x="3.5" y="3.5" width="17" height="17" rx="1.5"/>
+      <line x1="9.3" y1="3.5" x2="9.3" y2="20.5"/><line x1="14.7" y1="3.5" x2="14.7" y2="20.5"/>
+      <line x1="3.5" y1="9.3" x2="20.5" y2="9.3"/><line x1="3.5" y1="14.7" x2="20.5" y2="14.7"/>
+    </svg>
+  </div>
+  <div class="ctl" id="infobtn" title="About this map">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round">
+      <circle cx="12" cy="12" r="9"/><line x1="12" y1="11" x2="12" y2="16.5"/>
+      <circle cx="12" cy="7.7" r="1.05" fill="currentColor" stroke="none"/>
+    </svg>
+  </div>
+  <div class="ctl" id="help">
+    <span class="x" id="helpX">&times;</span>
+    <h4>Study Area — Mars</h4>
+    <div class="sub">Global Viking colorized mosaic with hillshade relief.</div>
+    <div class="row"><span class="sw" style="background:#fff;box-shadow:0 0 0 1.5px rgba(255,255,255,.55)"></span>
+      <span><b>White points</b> — named Mars features. Tap one for a short description.</span></div>
+    <div class="row"><span class="sw" style="background:#3cd0ff;box-shadow:0 0 6px 1px rgba(60,208,255,.8)"></span>
+      <span><b>Blue points</b> — candidate base sites identified by the suitability analysis (MCDA).</span></div>
+    <div class="ctrls">Scroll or pinch to zoom · drag to pan · tap a point for details · grid button toggles the lat/long graticule.</div>
+  </div>
+  <div id="info"></div>
+  <div id="scale"><span id="scaleTxt"></span><div id="scaleBar"></div></div>
+  <div id="src">Viking colorized mosaic · USGS/NASA · IAU nomenclature</div>
+</div>
+<script>
+var FEAT=[{"n": "Olympus Mons", "lo": -134.0, "la": 18.4, "t": "volcano", "z": 1.0, "d": "Largest volcano in the Solar System (~22 km high, ~600 km wide), a shield volcano on the Tharsis rise.", "tl": "Volcano"}, {"n": "Alba Mons", "lo": -109.6, "la": 40.5, "t": "volcano", "z": 1.8, "d": "Vast low-relief volcano north of Tharsis, among the largest on Mars by area.", "tl": "Volcano"}, {"n": "Ascraeus Mons", "lo": -104.5, "la": 11.9, "t": "volcano", "z": 1.8, "d": "Northernmost of the three Tharsis Montes shield volcanoes (~18 km high).", "tl": "Volcano"}, {"n": "Pavonis Mons", "lo": -113.0, "la": 1.0, "t": "volcano", "z": 1.8, "d": "Central Tharsis Montes shield volcano, sitting almost on the equator.", "tl": "Volcano"}, {"n": "Arsia Mons", "lo": -120.5, "la": -8.3, "t": "volcano", "z": 1.8, "d": "Southernmost Tharsis Montes volcano, with a huge summit caldera.", "tl": "Volcano"}, {"n": "Elysium Mons", "lo": 147.2, "la": 25.0, "t": "volcano", "z": 1.0, "d": "Main volcano of the Elysium rise, the second-largest volcanic province on Mars.", "tl": "Volcano"}, {"n": "Hecates Tholus", "lo": 150.2, "la": 32.1, "t": "volcano", "z": 1.8, "d": "Shield volcano at the northern end of the Elysium volcanic province.", "tl": "Volcano"}, {"n": "Apollinaris Mons", "lo": 174.4, "la": -9.3, "t": "volcano", "z": 1.8, "d": "Isolated ancient volcano near the equator, south of Elysium.", "tl": "Volcano"}, {"n": "Arcadia Planitia", "lo": -175.0, "la": 47.2, "t": "lowland", "z": 1.0, "d": "Smooth northern lowland; a leading candidate region for a human base \u2014 buried water ice and flat terrain.", "tl": "Lowland plain"}, {"n": "Amazonis Planitia", "lo": -164.0, "la": 24.8, "t": "lowland", "z": 1.0, "d": "Very smooth, geologically young lowland plain west of Tharsis.", "tl": "Lowland plain"}, {"n": "Vastitas Borealis", "lo": 90.0, "la": 72.0, "t": "lowland", "z": 1.8, "d": "Vast lowland encircling the north pole, the broad low floor of the northern hemisphere.", "tl": "Lowland plain"}, {"n": "Acidalia Planitia", "lo": -22.0, "la": 50.0, "t": "lowland", "z": 1.0, "d": "Dark northern lowland between Tharsis and Arabia Terra.", "tl": "Lowland plain"}, {"n": "Chryse Planitia", "lo": -40.0, "la": 26.7, "t": "lowland", "z": 1.8, "d": "Circular lowland basin; Viking 1 and Mars Pathfinder landing area.", "tl": "Lowland plain"}, {"n": "Utopia Planitia", "lo": 117.0, "la": 46.7, "t": "lowland", "z": 1.0, "d": "Largest recognized impact basin; Viking 2 site; extensive buried water ice.", "tl": "Lowland plain"}, {"n": "Isidis Planitia", "lo": 87.0, "la": 12.9, "t": "lowland", "z": 1.8, "d": "Large impact basin on the highland\u2013lowland dichotomy boundary.", "tl": "Lowland plain"}, {"n": "Elysium Planitia", "lo": 154.7, "la": 3.0, "t": "lowland", "z": 1.8, "d": "Flat equatorial plain; InSight lander site (marsquake monitoring).", "tl": "Lowland plain"}, {"n": "Hellas Planitia", "lo": 70.5, "la": -42.4, "t": "lowland", "z": 1.0, "d": "Largest visible impact basin (~2,300 km, ~7 km deep); highest surface pressure on Mars.", "tl": "Lowland plain"}, {"n": "Argyre Planitia", "lo": -43.0, "la": -49.7, "t": "lowland", "z": 1.0, "d": "Major southern impact basin, ringed by rugged mountains.", "tl": "Lowland plain"}, {"n": "Arabia Terra", "lo": 6.0, "la": 21.0, "t": "highland", "z": 1.0, "d": "Heavily cratered, dust-mantled highland transition region.", "tl": "Highland"}, {"n": "Terra Sabaea", "lo": 42.0, "la": -2.0, "t": "highland", "z": 1.8, "d": "Ancient cratered highland east of Arabia Terra.", "tl": "Highland"}, {"n": "Noachis Terra", "lo": 5.0, "la": -45.0, "t": "highland", "z": 1.8, "d": "Densely cratered southern highland; type area of the Noachian period.", "tl": "Highland"}, {"n": "Terra Cimmeria", "lo": 145.0, "la": -33.0, "t": "highland", "z": 1.8, "d": "Rugged southern highland with strong remnant crustal magnetism.", "tl": "Highland"}, {"n": "Terra Sirenum", "lo": -150.0, "la": -40.0, "t": "highland", "z": 1.8, "d": "Southern highland region with ancient valley networks.", "tl": "Highland"}, {"n": "Tempe Terra", "lo": -71.0, "la": 40.0, "t": "highland", "z": 1.8, "d": "Fractured highland block on the northern lowland margin.", "tl": "Highland"}, {"n": "Xanthe Terra", "lo": -48.0, "la": 2.0, "t": "highland", "z": 1.8, "d": "Cratered highland dissected by outflow channels near Valles Marineris.", "tl": "Highland"}, {"n": "Margaritifer Terra", "lo": -25.0, "la": -5.0, "t": "highland", "z": 1.8, "d": "Highland rich in outflow channels and clay/sulfate deposits.", "tl": "Highland"}, {"n": "Syrtis Major Planum", "lo": 69.5, "la": 8.4, "t": "highland", "z": 1.0, "d": "Low shield volcano forming a prominent dark albedo feature.", "tl": "Highland"}, {"n": "Lunae Planum", "lo": -65.0, "la": 10.0, "t": "highland", "z": 1.8, "d": "Elevated plateau east of Tharsis, source region of Kasei Valles.", "tl": "Highland"}, {"n": "Solis Planum", "lo": -90.0, "la": -26.0, "t": "highland", "z": 1.8, "d": "High volcanic plain south of Valles Marineris (the 'eye of Mars').", "tl": "Highland"}, {"n": "Syria Planum", "lo": -103.0, "la": -13.0, "t": "highland", "z": 1.8, "d": "Elevated volcanic plateau near the center of the Tharsis rise.", "tl": "Highland"}, {"n": "Meridiani Planum", "lo": -2.0, "la": 0.0, "t": "highland", "z": 1.8, "d": "Hematite-bearing plain; Opportunity rover landing site.", "tl": "Highland"}, {"n": "Hesperia Planum", "lo": 111.0, "la": -22.0, "t": "highland", "z": 1.8, "d": "Ridged volcanic plain; type area of the Hesperian period.", "tl": "Highland"}, {"n": "Valles Marineris", "lo": -59.0, "la": -13.0, "t": "vallis", "z": 1.0, "d": "Canyon system over 4,000 km long and up to 7 km deep.", "tl": "Valley / fossae"}, {"n": "Kasei Valles", "lo": -73.0, "la": 25.0, "t": "vallis", "z": 1.8, "d": "One of the largest outflow-channel systems, draining north from Lunae Planum.", "tl": "Valley / fossae"}, {"n": "Ares Vallis", "lo": -25.0, "la": 10.0, "t": "vallis", "z": 1.8, "d": "Outflow channel; Mars Pathfinder landed near its mouth.", "tl": "Valley / fossae"}, {"n": "Cerberus Fossae", "lo": 160.0, "la": 11.0, "t": "vallis", "z": 1.8, "d": "Young volcanic/tectonic fissures; source of recent lava and marsquakes.", "tl": "Valley / fossae"}, {"n": "Planum Boreum", "lo": 0.0, "la": 88.0, "t": "polar", "z": 2.6, "d": "North polar plateau capped by layered water ice.", "tl": "Polar plain"}, {"n": "Planum Australe", "lo": 0.0, "la": -87.0, "t": "polar", "z": 2.6, "d": "South polar plateau, with permanent CO2 and water ice.", "tl": "Polar plain"}, {"n": "Gale (Curiosity)", "lo": 137.8, "la": -5.4, "t": "crater", "z": 3.0, "d": "Crater with a central mound (Aeolis Mons); Curiosity rover site since 2012.", "tl": "Crater"}, {"n": "Jezero (Perseverance)", "lo": 77.6, "la": 18.4, "t": "crater", "z": 3.0, "d": "Ancient crater lake with a preserved delta; Perseverance rover site since 2021.", "tl": "Crater"}, {"n": "Gusev", "lo": 175.6, "la": -14.6, "t": "crater", "z": 3.0, "d": "Crater that once hosted a lake; Spirit rover landing site.", "tl": "Crater"}, {"n": "Schiaparelli", "lo": 16.8, "la": -3.0, "t": "crater", "z": 3.0, "d": "Large ancient impact crater in the equatorial highlands.", "tl": "Crater"}, {"n": "Huygens", "lo": 55.6, "la": -14.0, "t": "crater", "z": 3.0, "d": "Large degraded impact basin in the southern highlands.", "tl": "Crater"}], CAND=[[-178.9, -6.35], [-172.75, 46.975], [-179.175, -3.225], [-177.15, 53.1], [-176.925, 59.075], [-176.25, -4.1], [-171.725, 58.575], [-163.35, 48.7], [-127.35, 50.0], [-160.875, 49.75], [-120.075, 50.3], [-98.4, 52.875], [-96.3, 54.475], [-86.725, 56.225], [-80.025, 59.225], [-7.8, 38.2], [-6.025, 36.825], [58.525, 23.95], [58.575, 22.2], [71.375, 24.325], [74.625, 40.625], [81.3, 40.0], [86.325, 41.075], [86.9, -49.625], [85.85, -7.975], [88.55, -49.975], [94.325, -49.5], [96.45, 35.175], [103.775, 33.025], [105.8, -50.7], [116.25, -47.1], [111.075, 32.95], [113.825, -40.95], [120.85, -50.5], [139.425, 53.25], [144.075, 47.925], [145.525, 53.55], [150.15, 52.95], [151.85, 58.875], [156.2, 57.8], [157.9, 53.8], [160.05, 56.9], [164.1, 21.925], [162.5, 54.0], [163.6, 58.725], [167.175, 55.525], [167.175, 58.55], [169.7, 21.575], [174.175, 57.125], [174.375, 54.275], [175.25, 41.05], [178.7, 56.35], [115.275, -50.575], [85.95, -50.675], [110.925, -52.5], [125.425, -52.975], [96.85, -52.625], [100.85, -50.225], [61.525, -51.675], [97.175, -55.6], [59.5, -56.45], [64.225, -56.675], [103.05, -57.425], [99.8, -56.9], [86.35, -55.05]], COL={"volcano": "#ff9a5a", "lowland": "#78d2ff", "highland": "#ffe18c", "vallis": "#c8aaff", "polar": "#e6e6ff", "crater": "#ff7878"};
+var IMGW=6000, IMGH=3000, R=3396190;
+var card=document.getElementById('card'), base=document.getElementById('base'), ovl=document.getElementById('ovl');
+var info=document.getElementById('info');
+var z=1, ox=0, oy=0, ZMAX=8, openF=null;
+function cw(){return card.clientWidth;} function ch(){return card.clientHeight;}
+function dispW(){return cw()*z;} function dispH(){return dispW()*IMGH/IMGW;}
+function clamp(){ var dw=dispW(),dh=dispH();
+  ox = dw<=cw() ? (cw()-dw)/2 : Math.min(0,Math.max(cw()-dw,ox));
+  oy = dh<=ch() ? (ch()-dh)/2 : Math.min(0,Math.max(ch()-dh,oy)); }
+function sx(lo){return ox+((lo+180)/360)*dispW();}
+function sy(la){return oy+((90-la)/180)*dispH();}
+var els=FEAT.map(function(d){
+  var dot=document.createElement('div'); dot.className='dot'; dot.style.color=COL[d.t]||'#fff';
+  var lab=document.createElement('div'); lab.className='lab'; lab.textContent=d.n; lab.style.color='#fff';
+  lab.style.textShadow='0 0 4px rgba(0,0,0,.95),0 0 9px '+(COL[d.t]||'#fff');
+  ovl.appendChild(dot); ovl.appendChild(lab);
+  function open(e){ e.stopPropagation(); if(dragMoved)return; showInfo(d); }
+  dot.addEventListener('click',open); lab.addEventListener('click',open);
+  return {d:d,dot:dot,lab:lab};
+});
+var cels=CAND.map(function(c){ var e=document.createElement('div'); e.className='cdot'; ovl.appendChild(e); return {c:c,el:e}; });
+
+function niceScale(mpp){ var raw=mpp*118,e=Math.floor(Math.log10(raw)),f=raw/Math.pow(10,e);
+  var nf=f<1.5?1:f<3.5?2:f<7.5?5:10,D=nf*Math.pow(10,e); return {D:D,px:D/mpp}; }
+function updateScale(){ var latC=90-((ch()/2-oy)/dispH())*180; latC=Math.max(-85,Math.min(85,latC));
+  var mpp=(2*Math.PI*R*Math.cos(latC*Math.PI/180))/dispW(), s=niceScale(mpp);
+  document.getElementById('scaleTxt').textContent=s.D>=1000?Math.round(s.D/1000)+' km':Math.round(s.D)+' m';
+  document.getElementById('scaleBar').style.width=Math.round(s.px)+'px'; }
+function positionInfo(){ if(!openF)return;
+  var mx=sx(openF.lo), my=sy(openF.la);
+  var cx=Math.max(120,Math.min(cw()-120,mx)), top=Math.min(ch()-14, my+32);
+  info.style.left=cx+'px'; info.style.top=top+'px'; info.style.transform='translate(-50%,0)';
+  var w=info.offsetWidth||220, off=Math.max(-w/2+18,Math.min(w/2-18, mx-cx));
+  info.style.setProperty('--cx', off+'px'); }
+function render(){ clamp(); var dw=dispW(),dh=dispH();
+  base.style.width=dw+'px'; base.style.height=dh+'px'; base.style.transform='translate('+ox+'px,'+oy+'px)';
+  els.forEach(function(o){ var X=sx(o.d.lo),Y=sy(o.d.la);
+    var vis=z>=o.d.z && X>-60 && X<cw()+60 && Y>-20 && Y<ch()+20;
+    o.dot.style.display=o.lab.style.display=vis?'block':'none';
+    if(vis){o.dot.style.left=o.lab.style.left=X+'px'; o.dot.style.top=o.lab.style.top=Y+'px';} });
+  cels.forEach(function(o){ var X=sx(o.c[0]),Y=sy(o.c[1]);
+    var vis=X>-10&&X<cw()+10&&Y>-10&&Y<ch()+10; o.el.style.display=vis?'block':'none';
+    if(vis){o.el.style.left=X+'px'; o.el.style.top=Y+'px';} });
+  positionInfo(); updateScale(); if(gridOn)drawGrid(); }
+var grid=document.getElementById('grid'), gridOn=false;
+function lonLab(l){ l=((l+180)%360+360)%360-180; return l===0?'0°':l>0?l+'°E':(-l)+'°W'; }
+function latLab(b){ return b===0?'0°':b>0?b+'°N':(-b)+'°S'; }
+function drawGrid(){ var W=cw(),H=ch(),dw=dispW(),dh=dispH(),s='';
+  grid.setAttribute('width',W); grid.setAttribute('height',H);
+  for(var l=-180;l<=180;l+=30){ var x=ox+((l+180)/360)*dw; if(x<-1||x>W+1)continue;
+    s+='<line x1="'+x+'" y1="0" x2="'+x+'" y2="'+H+'"/>';
+    if(l>-180&&l<180) s+='<text x="'+(x+3)+'" y="14">'+lonLab(l)+'</text>'; }
+  for(var b=-90;b<=90;b+=30){ var y=oy+((90-b)/180)*dh; if(y<-1||y>H+1)continue;
+    s+='<line x1="0" y1="'+y+'" x2="'+W+'" y2="'+y+'"/>';
+    if(b>-90&&b<90) s+='<text x="4" y="'+(y-4)+'">'+latLab(b)+'</text>'; }
+  grid.innerHTML=s; }
+function clearSel(){ els.forEach(function(o){o.dot.classList.remove('sel');o.lab.classList.remove('sel');}); }
+function showInfo(d){ openF=d; clearSel();
+  els.forEach(function(o){ if(o.d===d){o.dot.classList.add('sel');o.lab.classList.add('sel');} });
+  info.innerHTML='<span class="x" id="ix">&times;</span><div class="tag">'+d.tl+'</div><h4>'+d.n+'</h4>'+
+    '<p>'+(d.d||'')+'</p><div class="co">'+fmtCoord(d.lo,d.la)+'</div>';
+  info.classList.add('show'); document.getElementById('ix').onclick=function(e){e.stopPropagation();hideInfo();};
+  positionInfo(); }
+function hideInfo(){ openF=null; clearSel(); info.classList.remove('show'); }
+info.addEventListener('click',function(e){e.stopPropagation();});
+card.addEventListener('click',function(){ if(openF)hideInfo(); });
+function fmtCoord(lo,la){ var ns=la>=0?'N':'S', ew=lo>=0?'E':'W';
+  return Math.abs(la).toFixed(1)+'°'+ns+'  '+Math.abs(lo).toFixed(1)+'°'+ew; }
+function zoomAt(cx,cy,f){ var nz=Math.min(ZMAX,Math.max(1,z*f)); if(nz===z)return;
+  var dw=dispW(),dh=dispH(),fx=(cx-ox)/dw,fy=(cy-oy)/dh; z=nz; var dw2=dispW(),dh2=dispH();
+  ox=cx-fx*dw2; oy=cy-fy*dh2; render(); }
+card.addEventListener('wheel',function(e){e.preventDefault();var r=card.getBoundingClientRect();
+  zoomAt(e.clientX-r.left,e.clientY-r.top,Math.exp(-e.deltaY*0.0015));},{passive:false});
+var drag=false,px,py,dragMoved=false;
+card.addEventListener('mousedown',function(e){drag=true;dragMoved=false;px=e.clientX;py=e.clientY;card.classList.add('drag');});
+window.addEventListener('mousemove',function(e){if(!drag)return; if(Math.abs(e.clientX-px)+Math.abs(e.clientY-py)>3)dragMoved=true;
+  ox+=e.clientX-px; oy+=e.clientY-py; px=e.clientX;py=e.clientY; render();});
+window.addEventListener('mouseup',function(){drag=false;card.classList.remove('drag');});
+card.addEventListener('dblclick',function(e){var r=card.getBoundingClientRect();zoomAt(e.clientX-r.left,e.clientY-r.top,1.8);});
+var tp=null,pd=0;
+card.addEventListener('touchstart',function(e){ if(e.touches.length===1)tp={x:e.touches[0].clientX,y:e.touches[0].clientY};
+  else if(e.touches.length===2)pd=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);},{passive:true});
+card.addEventListener('touchmove',function(e){e.preventDefault();
+  if(e.touches.length===1&&tp){ox+=e.touches[0].clientX-tp.x;oy+=e.touches[0].clientY-tp.y;tp={x:e.touches[0].clientX,y:e.touches[0].clientY};render();}
+  else if(e.touches.length===2){var nd=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);
+    var r=card.getBoundingClientRect(),mx=(e.touches[0].clientX+e.touches[1].clientX)/2-r.left,my=(e.touches[0].clientY+e.touches[1].clientY)/2-r.top;
+    if(pd)zoomAt(mx,my,nd/pd);pd=nd;}},{passive:false});
+card.addEventListener('touchend',function(e){if(e.touches.length===0){tp=null;pd=0;}});
+document.getElementById('zin').onclick=function(){zoomAt(cw()/2,ch()/2,1.5);};
+document.getElementById('zout').onclick=function(){zoomAt(cw()/2,ch()/2,1/1.5);};
+// graticule toggle
+var gridbtn=document.getElementById('gridbtn');
+gridbtn.onclick=function(){ gridOn=!gridOn; gridbtn.classList.toggle('on',gridOn);
+  grid.classList.toggle('on',gridOn); if(gridOn)drawGrid(); };
+// info / help panel
+var infobtn=document.getElementById('infobtn'), help=document.getElementById('help');
+function toggleHelp(o){ if(o){help.classList.add('open');infobtn.style.display='none';} else {help.classList.remove('open');infobtn.style.display='flex';} }
+infobtn.onclick=function(){toggleHelp(true);}; document.getElementById('helpX').onclick=function(){toggleHelp(false);};
+function boot(){z=1;ox=0;oy=0;render();}
+if(base.complete)boot(); else base.onload=boot;
+window.addEventListener('resize',render);
+</script>
+</body></html>
