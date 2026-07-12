@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -20,6 +20,16 @@ body{margin:0;background:var(--bg);color:var(--text);
 a{color:var(--accent);text-decoration:none}
 .back{display:inline-block;color:var(--muted);font-size:.88rem;margin-bottom:34px}
 .back:hover{color:#fff}
+
+/* ---- selettore lingua ---- */
+#lang{position:fixed;top:16px;right:16px;z-index:100;display:flex;background:var(--panel);
+  border:1px solid var(--line);border-radius:999px;overflow:hidden;box-shadow:0 6px 20px rgba(0,0,0,.35)}
+#lang button{border:0;background:transparent;color:var(--muted);font:inherit;font-size:.76rem;font-weight:700;
+  padding:6px 13px;cursor:pointer;letter-spacing:.06em}
+#lang button:hover{color:#fff}
+[data-lang="it"] #lang button[data-set="it"],[data-lang="en"] #lang button[data-set="en"]{background:var(--accent);color:#111}
+[data-lang="it"] .en{display:none}
+[data-lang="en"] .it{display:none}
 
 .subtitle{color:var(--accent);font-size:.95rem;font-style:italic;margin:0 0 8px}
 h1{color:#fff;font-size:clamp(1.8rem,4.2vw,2.5rem);line-height:1.25;font-weight:700;
@@ -109,8 +119,18 @@ details.why .wb p:last-child{margin-bottom:2px}
 #toc a.active .lbl,#toc a:hover .lbl{color:var(--accent)}
 @media(max-width:1024px){#toc{display:none}}
 </style>
+<script>
+(function(){try{var l=localStorage.getItem('lang');}catch(e){}
+  if(l!=='it'&&l!=='en'){l=((navigator.language||navigator.userLanguage||'en').toLowerCase().indexOf('it')===0)?'it':'en';}
+  document.documentElement.setAttribute('data-lang',l);})();
+</script>
 </head>
 <body>
+
+<div id="lang" aria-label="Language / Lingua">
+  <button data-set="it" type="button">IT</button><button data-set="en" type="button">EN</button>
+</div>
+
 <div class="wrap">
 
   <a class="back" href="../index.html">← GIS Portfolio</a>
@@ -118,102 +138,102 @@ details.why .wb p:last-child{margin-bottom:2px}
   <div class="hero">
     <img src="../assets/img/no2/cover.webp" alt="Night-time lights over Northern Italy">
     <div class="hero-txt">
-      <h1>Air Quality vs. Urbanisation — NO₂ &amp; Night-time Lights in the Po Valley</h1>
-      <p class="hero-sub">A satellite analysis of nitrogen-dioxide pollution and its link with urbanisation in the Po Valley — Sentinel-5P × VIIRS, 2025</p>
+      <h1><span class="en">Air Quality vs. Urbanisation — NO₂ &amp; Night-time Lights in the Po Valley</span><span class="it">Qualità dell'aria vs. urbanizzazione — NO₂ &amp; luci notturne nella Pianura Padana</span></h1>
+      <p class="hero-sub"><span class="en">A satellite analysis of nitrogen-dioxide pollution and its link with urbanisation in the Po Valley — Sentinel-5P × VIIRS, 2025</span><span class="it">Un'analisi satellitare dell'inquinamento da biossido di azoto e del suo legame con l'urbanizzazione nella Pianura Padana — Sentinel-5P × VIIRS, 2025</span></p>
     </div>
   </div>
 
-  <h2><span class="n">1.</span>Project Overview</h2>
-  <p class="lead">Il progetto studia la relazione tra inquinamento da biossido di azoto (NO₂) e urbanizzazione nel Bacino Padano, una delle aree più inquinate d'Europa. Combinando dati satellitari di Sentinel-5P/TROPOMI (NO₂) e Suomi-NPP/VIIRS (luci notturne, usate come proxy della densità urbana), è stata costruita una pipeline riproducibile — dall'estrazione cloud su Google Earth Engine, all'analisi statistica in Python, fino alla cartografia in QGIS. Il risultato chiave: le luci notturne spiegano circa il 41% della variabilità spaziale dell'NO₂, ma il restante 59% è guidato dalla geografia — la conca padana intrappola l'aria anche lontano dalle città.</p>
+  <h2><span class="n">1.</span><span class="en">Project Overview</span><span class="it">Panoramica del progetto</span></h2>
+  <p class="lead"><span class="en">The project studies the relationship between nitrogen-dioxide (NO₂) pollution and urbanisation in the Po Valley, one of the most polluted areas in Europe. Combining satellite data from Sentinel-5P/TROPOMI (NO₂) and Suomi-NPP/VIIRS (night-time lights, used as a proxy for urban density), a reproducible pipeline was built — from cloud extraction on Google Earth Engine, to statistical analysis in Python, through to cartography in QGIS. The key result: night-time lights explain about 41% of the spatial variability of NO₂, but the remaining 59% is driven by geography — the Po Valley basin traps the air even far from the cities.</span><span class="it">Il progetto studia la relazione tra inquinamento da biossido di azoto (NO₂) e urbanizzazione nel Bacino Padano, una delle aree più inquinate d'Europa. Combinando dati satellitari di Sentinel-5P/TROPOMI (NO₂) e Suomi-NPP/VIIRS (luci notturne, usate come proxy della densità urbana), è stata costruita una pipeline riproducibile — dall'estrazione cloud su Google Earth Engine, all'analisi statistica in Python, fino alla cartografia in QGIS. Il risultato chiave: le luci notturne spiegano circa il 41% della variabilità spaziale dell'NO₂, ma il restante 59% è guidato dalla geografia — la conca padana intrappola l'aria anche lontano dalle città.</span></p>
 
-  <h2><span class="n">2.</span>Strategic Value &amp; Output</h2>
-  <p>La qualità dell'aria nel Bacino Padano è un tema sanitario e normativo di primo piano: l'area supera con frequenza i limiti europei di NO₂ e particolato, e le centraline a terra (ARPA) coprono solo punti isolati. Un approccio satellitare offre una copertura continua e omogenea su tutta la pianura. Il progetto produce tre output operativi: mappe stagionali dell'inquinamento, un modello statistico che quantifica quanto l'urbanizzazione spieghi l'NO₂, e una mappa delle anomalie che individua le zone <em>buie ma inquinate</em> — utili per indirizzare monitoraggio e politiche là dove la rete di centraline, concentrata nei centri urbani, è più rada.</p>
+  <h2><span class="n">2.</span><span class="en">Strategic Value &amp; Output</span><span class="it">Valore strategico &amp; output</span></h2>
+  <p><span class="en">Air quality in the Po Valley is a leading health and regulatory issue: the area frequently exceeds the European limits for NO₂ and particulate matter, and ground stations (ARPA) cover only isolated points. A satellite approach offers continuous, homogeneous coverage across the whole plain. The project produces three operational outputs: seasonal pollution maps, a statistical model that quantifies how much urbanisation explains NO₂, and an anomaly map that identifies the <em>dark-but-polluted</em> zones — useful for directing monitoring and policy where the network of stations, concentrated in urban centres, is sparsest.</span><span class="it">La qualità dell'aria nel Bacino Padano è un tema sanitario e normativo di primo piano: l'area supera con frequenza i limiti europei di NO₂ e particolato, e le centraline a terra (ARPA) coprono solo punti isolati. Un approccio satellitare offre una copertura continua e omogenea su tutta la pianura. Il progetto produce tre output operativi: mappe stagionali dell'inquinamento, un modello statistico che quantifica quanto l'urbanizzazione spieghi l'NO₂, e una mappa delle anomalie che individua le zone <em>buie ma inquinate</em> — utili per indirizzare monitoraggio e politiche là dove la rete di centraline, concentrata nei centri urbani, è più rada.</span></p>
 
-  <h2><span class="n">3.</span>Study Area</h2>
-  <p>L'area di studio è il Bacino Padano centro-occidentale (Piemonte, Lombardia, Veneto ed Emilia-Romagna), il grande catino chiuso tra l'arco alpino a nord-ovest e l'Appennino a sud. La conformazione a "conca", unita alle frequenti inversioni termiche invernali, limita il rimescolamento dell'aria e favorisce l'accumulo degli inquinanti al suolo: è una delle ragioni per cui la pianura è tra le aree più inquinate d'Europa. L'AOI è definita dai confini amministrativi ISTAT; il CRS di lavoro è EPSG:32632 (WGS 84 / UTM 32N) e il periodo analizzato è l'anno 2025, con composit stagionali per inverno (gen–feb) ed estate (giu–ago).</p>
+  <h2><span class="n">3.</span><span class="en">Study Area</span><span class="it">Area di studio</span></h2>
+  <p><span class="en">The study area is the central-western Po Valley (Piedmont, Lombardy, Veneto and Emilia-Romagna), the large basin enclosed between the Alpine arc to the north-west and the Apennines to the south. The "bowl" shape, together with the frequent winter thermal inversions, limits the mixing of the air and favours the accumulation of pollutants at ground level: it is one of the reasons the plain is among the most polluted areas in Europe. The AOI is defined by the ISTAT administrative boundaries; the working CRS is EPSG:32632 (WGS 84 / UTM 32N) and the analysed period is the year 2025, with seasonal composites for winter (Jan–Feb) and summer (Jun–Aug).</span><span class="it">L'area di studio è il Bacino Padano centro-occidentale (Piemonte, Lombardia, Veneto ed Emilia-Romagna), il grande catino chiuso tra l'arco alpino a nord-ovest e l'Appennino a sud. La conformazione a "conca", unita alle frequenti inversioni termiche invernali, limita il rimescolamento dell'aria e favorisce l'accumulo degli inquinanti al suolo: è una delle ragioni per cui la pianura è tra le aree più inquinate d'Europa. L'AOI è definita dai confini amministrativi ISTAT; il CRS di lavoro è EPSG:32632 (WGS 84 / UTM 32N) e il periodo analizzato è l'anno 2025, con composit stagionali per inverno (gen–feb) ed estate (giu–ago).</span></p>
   <figure>
-    <img src="../assets/img/no2/map_bowl.webp" alt="Modello 3D della conca padana">
-    <figcaption>La "conca" padana: rilievo ombreggiato che evidenzia il catino chiuso tra Alpi e Appennino.</figcaption>
+    <img src="../assets/img/no2/map_bowl.webp" alt="3D model of the Po Valley basin">
+    <figcaption><span class="en">The Po Valley "bowl": shaded relief highlighting the basin enclosed between the Alps and the Apennines.</span><span class="it">La "conca" padana: rilievo ombreggiato che evidenzia il catino chiuso tra Alpi e Appennino.</span></figcaption>
   </figure>
 
-  <h2><span class="n">4.</span>Data Source</h2>
+  <h2><span class="n">4.</span><span class="en">Data Source</span><span class="it">Fonti dei dati</span></h2>
   <table>
-    <tr><th>Dataset</th><th>Source</th><th>Type</th></tr>
-    <tr><td>Administrative boundaries</td><td>ISTAT</td><td>Vector (polygon)</td></tr>
-    <tr><td>Tropospheric NO₂ column</td><td>Sentinel-5P / TROPOMI — Copernicus (OFFL L3)</td><td>Raster ~1 km</td></tr>
-    <tr><td>Night-time lights</td><td>Suomi-NPP / VIIRS DNB (stray-light corrected)</td><td>Raster ~500 m</td></tr>
+    <tr><th>Dataset</th><th><span class="en">Source</span><span class="it">Fonte</span></th><th><span class="en">Type</span><span class="it">Tipo</span></th></tr>
+    <tr><td><span class="en">Administrative boundaries</span><span class="it">Confini amministrativi</span></td><td>ISTAT</td><td><span class="en">Vector (polygon)</span><span class="it">Vettoriale (poligono)</span></td></tr>
+    <tr><td><span class="en">Tropospheric NO₂ column</span><span class="it">Colonna troposferica di NO₂</span></td><td>Sentinel-5P / TROPOMI — Copernicus (OFFL L3)</td><td>Raster ~1 km</td></tr>
+    <tr><td><span class="en">Night-time lights</span><span class="it">Luci notturne</span></td><td>Suomi-NPP / VIIRS DNB (stray-light corrected)</td><td>Raster ~500 m</td></tr>
     <tr><td>DTM</td><td>NASA SRTM 90 DEM (via GEE)</td><td>Raster ~90 m</td></tr>
-    <tr><td>Built-up areas</td><td>ESA WorldCover (via GEE)</td><td>Raster ~10 m</td></tr>
-    <tr><td>Road network</td><td>Geofabrik OSM</td><td>Vector (line)</td></tr>
+    <tr><td><span class="en">Built-up areas</span><span class="it">Aree edificate</span></td><td>ESA WorldCover (via GEE)</td><td>Raster ~10 m</td></tr>
+    <tr><td><span class="en">Road network</span><span class="it">Rete stradale</span></td><td>Geofabrik OSM</td><td><span class="en">Vector (line)</span><span class="it">Vettoriale (linea)</span></td></tr>
   </table>
 
-  <h2><span class="n">5.</span>Methodology</h2>
+  <h2><span class="n">5.</span><span class="en">Methodology</span><span class="it">Metodologia</span></h2>
   <figure>
-    <img src="../assets/img/no2/workflow_code_black.webp" alt="Workflow della pipeline in stile pseudo-codice">
-    <figcaption>La pipeline completa in stile pseudo-codice: Extraction → Analysis → Cartography → Output.</figcaption>
+    <img src="../assets/img/no2/workflow_code_black.webp" alt="Pipeline workflow in pseudo-code style">
+    <figcaption><span class="en">The full pipeline in pseudo-code style: Extraction → Analysis → Cartography → Output.</span><span class="it">La pipeline completa in stile pseudo-codice: Extraction → Analysis → Cartography → Output.</span></figcaption>
   </figure>
-  <h3>#1 Cloud extraction (Google Earth Engine)</h3>
-  <p>L'estrazione avviene sui server di Google, senza scaricare dati grezzi. Uno script calcola i composit medi di NO₂ — con filtro nuvole (<code>cloud_fraction &lt; 0.3</code>) — per inverno, estate e media annua 2025, più la media annua delle luci VIIRS, ritagliati sull'AOI ed esportati come GeoTIFF.</p>
-  <h3>#2 Spatial analysis (Python)</h3>
-  <p>Le luci (~500 m) vengono allineate alla griglia dell'NO₂ (~1 km), gestendo esplicitamente il <em>mismatch di risoluzione</em> tra i due sensori. Sulle luci si applica una trasformazione logaritmica; si calcolano correlazione di Pearson e Spearman, regressione OLS e i residui (osservato − previsto). Una maschera dedicata isola i pixel nel terzo più buio e nel terzo più inquinato.</p>
+  <h3><span class="en">#1 Cloud extraction (Google Earth Engine)</span><span class="it">#1 Estrazione cloud (Google Earth Engine)</span></h3>
+  <p><span class="en">Extraction happens on Google's servers, without downloading raw data. A script computes the mean NO₂ composites — with a cloud filter (<code>cloud_fraction &lt; 0.3</code>) — for winter, summer and the 2025 annual mean, plus the annual mean of the VIIRS lights, clipped to the AOI and exported as GeoTIFF.</span><span class="it">L'estrazione avviene sui server di Google, senza scaricare dati grezzi. Uno script calcola i composit medi di NO₂ — con filtro nuvole (<code>cloud_fraction &lt; 0.3</code>) — per inverno, estate e media annua 2025, più la media annua delle luci VIIRS, ritagliati sull'AOI ed esportati come GeoTIFF.</span></p>
+  <h3><span class="en">#2 Spatial analysis (Python)</span><span class="it">#2 Analisi spaziale (Python)</span></h3>
+  <p><span class="en">The lights (~500 m) are aligned to the NO₂ grid (~1 km), explicitly handling the <em>resolution mismatch</em> between the two sensors. A logarithmic transformation is applied to the lights; Pearson and Spearman correlation, OLS regression and the residuals (observed − predicted) are computed. A dedicated mask isolates the pixels in the darkest third and in the most polluted third.</span><span class="it">Le luci (~500 m) vengono allineate alla griglia dell'NO₂ (~1 km), gestendo esplicitamente il <em>mismatch di risoluzione</em> tra i due sensori. Sulle luci si applica una trasformazione logaritmica; si calcolano correlazione di Pearson e Spearman, regressione OLS e i residui (osservato − previsto). Una maschera dedicata isola i pixel nel terzo più buio e nel terzo più inquinato.</span></p>
   <details class="why">
-    <summary>Perché queste scelte? — logaritmo, OLS, terzili</summary>
+    <summary><span class="en">Why these choices? — logarithm, OLS, terciles</span><span class="it">Perché queste scelte? — logaritmo, OLS, terzili</span></summary>
     <div class="wb">
-      <p>Trasformazione logaritmica sulle luci — la radianza notturna è molto sbilanciata: pochissimi pixel (i centri città) hanno valori altissimi, la gran parte è bassa. Il logaritmo comprime i valori estremi e distende quelli bassi, linearizzando la relazione con l'NO₂ (che cresce con rendimenti decrescenti rispetto all'urbanizzazione): così correlazione e regressione, che assumono una relazione lineare, restano valide.</p>
-      <p>Regressione OLS — è il modo più semplice e trasparente per quantificare la relazione. Fornisce l'R² (la quota di variabilità dell'NO₂ spiegata dalle luci, cioè il 41%), la pendenza e, soprattutto, i residui (osservato − previsto): sono questi a generare la mappa delle anomalie, cioè i punti in cui l'inquinamento reale devia da quello atteso dall'urbanizzazione.</p>
-      <p>Terzo più buio / terzo più inquinato — per isolare le zone <em>buie ma inquinate</em> servono due soglie. Usare i percentili (33° per il buio, 66° per l'NO₂) invece di valori assoluti è una scelta relativa e robusta: si auto-adatta alla distribuzione dei dati ed evita cutoff arbitrari (in quali unità?). L'intersezione dei due estremi opposti — terzo più scuro e terzo più sporco — restituisce l'anomalia più netta, circa l'1% dell'area.</p>
+      <p><span class="en">Logarithmic transformation on the lights — night-time radiance is highly skewed: very few pixels (the city centres) have very high values, most are low. The logarithm compresses the extreme values and stretches out the low ones, linearising the relationship with NO₂ (which grows with diminishing returns relative to urbanisation): this way correlation and regression, which assume a linear relationship, remain valid.</span><span class="it">Trasformazione logaritmica sulle luci — la radianza notturna è molto sbilanciata: pochissimi pixel (i centri città) hanno valori altissimi, la gran parte è bassa. Il logaritmo comprime i valori estremi e distende quelli bassi, linearizzando la relazione con l'NO₂ (che cresce con rendimenti decrescenti rispetto all'urbanizzazione): così correlazione e regressione, che assumono una relazione lineare, restano valide.</span></p>
+      <p><span class="en">OLS regression — it is the simplest, most transparent way to quantify the relationship. It provides the R² (the share of NO₂ variability explained by the lights, i.e. 41%), the slope and, above all, the residuals (observed − predicted): it is these that generate the anomaly map, i.e. the points where the real pollution deviates from that expected from urbanisation.</span><span class="it">Regressione OLS — è il modo più semplice e trasparente per quantificare la relazione. Fornisce l'R² (la quota di variabilità dell'NO₂ spiegata dalle luci, cioè il 41%), la pendenza e, soprattutto, i residui (osservato − previsto): sono questi a generare la mappa delle anomalie, cioè i punti in cui l'inquinamento reale devia da quello atteso dall'urbanizzazione.</span></p>
+      <p><span class="en">Darkest third / most polluted third — to isolate the <em>dark-but-polluted</em> zones two thresholds are needed. Using percentiles (33rd for darkness, 66th for NO₂) instead of absolute values is a relative and robust choice: it self-adapts to the data distribution and avoids arbitrary cutoffs (in which units?). The intersection of the two opposite extremes — darkest third and dirtiest third — returns the sharpest anomaly, about 1% of the area.</span><span class="it">Terzo più buio / terzo più inquinato — per isolare le zone <em>buie ma inquinate</em> servono due soglie. Usare i percentili (33° per il buio, 66° per l'NO₂) invece di valori assoluti è una scelta relativa e robusta: si auto-adatta alla distribuzione dei dati ed evita cutoff arbitrari (in quali unità?). L'intersezione dei due estremi opposti — terzo più scuro e terzo più sporco — restituisce l'anomalia più netta, circa l'1% dell'area.</span></p>
     </div>
   </details>
-  <h3>#3 Cartography (QGIS)</h3>
-  <p>Layout di stampa su fondo scuro: scala <em>diverging</em> per i residui, <em>map themes</em> per il confronto stagionale, poligonizzazione e smoothing per le zone buie.</p>
-  <p class="callout"><em>Lo schema riproduce l'intera pipeline in stile pseudo-codice: le tre fasi #1–#3 descritte sopra, e i risultati chiave — luci 41% / geografia 59%, inverno ≈ 2,3× estate, ~900 km² buio-ma-inquinato.</em></p>
+  <h3><span class="en">#3 Cartography (QGIS)</span><span class="it">#3 Cartografia (QGIS)</span></h3>
+  <p><span class="en">Print layout on a dark background: a <em>diverging</em> scale for the residuals, <em>map themes</em> for the seasonal comparison, polygonisation and smoothing for the dark zones.</span><span class="it">Layout di stampa su fondo scuro: scala <em>diverging</em> per i residui, <em>map themes</em> per il confronto stagionale, poligonizzazione e smoothing per le zone buie.</span></p>
+  <p class="callout"><em><span class="en">The diagram reproduces the entire pipeline in pseudo-code style: the three phases #1–#3 described above, and the key results — lights 41% / geography 59%, winter ≈ 2.3× summer, ~900 km² dark-but-polluted.</span><span class="it">Lo schema riproduce l'intera pipeline in stile pseudo-codice: le tre fasi #1–#3 descritte sopra, e i risultati chiave — luci 41% / geografia 59%, inverno ≈ 2,3× estate, ~900 km² buio-ma-inquinato.</span></em></p>
 
-  <h2><span class="n">6.</span>Intermediate Maps</h2>
+  <h2><span class="n">6.</span><span class="en">Intermediate Maps</span><span class="it">Mappe intermedie</span></h2>
   <div class="revealcard spread">
-    <figure><img src="../assets/img/no2/map_seasonal.webp" alt="NO₂ stagionale inverno vs estate"></figure>
-    <div class="reveal"><h4>6.1 Seasonal NO₂ (winter vs. summer)</h4><p>I composit stagionali mostrano il crollo estivo dell'NO₂ — dovuto al maggiore rimescolamento atmosferico e all'assenza di riscaldamento — e il nucleo intenso invernale sul centro pianura. In media l'NO₂ invernale è circa 2,3× quello estivo (77,6 vs 34,2 µmol/m² su 91.707 pixel; l'estate è il 56% più bassa).</p></div>
+    <figure><img src="../assets/img/no2/map_seasonal.webp" alt="Seasonal NO₂ winter vs summer"></figure>
+    <div class="reveal"><h4><span class="en">6.1 Seasonal NO₂ (winter vs. summer)</span><span class="it">6.1 NO₂ stagionale (inverno vs. estate)</span></h4><p><span class="en">The seasonal composites show the summer collapse of NO₂ — due to greater atmospheric mixing and the absence of heating — and the intense winter core over the central plain. On average, winter NO₂ is about 2.3× that of summer (77.6 vs 34.2 µmol/m² over 91,707 pixels; summer is 56% lower).</span><span class="it">I composit stagionali mostrano il crollo estivo dell'NO₂ — dovuto al maggiore rimescolamento atmosferico e all'assenza di riscaldamento — e il nucleo intenso invernale sul centro pianura. In media l'NO₂ invernale è circa 2,3× quello estivo (77,6 vs 34,2 µmol/m² su 91.707 pixel; l'estate è il 56% più bassa).</span></p></div>
   </div>
   <div class="revealcard">
-    <figure><img src="../assets/img/no2/seasonal_distribution.webp" alt="Distribuzione stagionale dell'NO₂"></figure>
-    <div class="reveal"><h4>Distribuzione stagionale dell'NO₂</h4><p>Il grafico della distribuzione mostra non solo <em>quanto</em> ma <em>come</em> cambia la stagione: d'estate i valori sono compatti su livelli bassi e simili (atmosfera ben rimescolata), mentre d'inverno la distribuzione si allarga e scivola verso destra, con una lunga coda di concentrazioni elevate. Non è solo un aumento della media, ma una popolazione di valori più alta <em>e</em> più disuguale — la firma del ristagno atmosferico padano dovuto alle inversioni termiche invernali.</p></div>
-  </div>
-
-  <div class="revealcard">
-    <figure><img src="../assets/img/no2/map_lights.webp" alt="Luci notturne VIIRS"></figure>
-    <div class="reveal"><h4>6.2 Night-time lights (VIIRS)</h4><p>La radianza notturna media è il proxy quantitativo dell'urbanizzazione usato nel modello di correlazione: evidenzia l'asse Torino–Milano–Verona e la via Emilia. La mappa è mostrata a risoluzione nativa (~500 m); per l'analisi di correlazione il dato è stato poi ricampionato sulla griglia dell'NO₂ (~1 km) — vedi § 5.</p></div>
+    <figure><img src="../assets/img/no2/seasonal_distribution.webp" alt="Seasonal distribution of NO₂"></figure>
+    <div class="reveal"><h4><span class="en">Seasonal distribution of NO₂</span><span class="it">Distribuzione stagionale dell'NO₂</span></h4><p><span class="en">The distribution chart shows not only <em>how much</em> but <em>how</em> the season changes: in summer the values are compact at low, similar levels (well-mixed atmosphere), whereas in winter the distribution widens and slides to the right, with a long tail of high concentrations. It is not only an increase in the mean, but a higher <em>and</em> more unequal population of values — the signature of the Po Valley atmospheric stagnation caused by the winter thermal inversions.</span><span class="it">Il grafico della distribuzione mostra non solo <em>quanto</em> ma <em>come</em> cambia la stagione: d'estate i valori sono compatti su livelli bassi e simili (atmosfera ben rimescolata), mentre d'inverno la distribuzione si allarga e scivola verso destra, con una lunga coda di concentrazioni elevate. Non è solo un aumento della media, ma una popolazione di valori più alta <em>e</em> più disuguale — la firma del ristagno atmosferico padano dovuto alle inversioni termiche invernali.</span></p></div>
   </div>
 
   <div class="revealcard">
-    <figure><img src="../assets/img/no2/map_urban.webp" alt="Edificato e rete stradale"></figure>
-    <div class="reveal"><h4>6.3 Infrastructure footprint</h4><p>L'edificato (ESA WorldCover 10 m) e la rete stradale (OpenStreetMap / Geofabrik) mostrano le <em>sorgenti reali</em> dell'NO₂: città e corridoi infrastrutturali. È il contesto fisico dietro al proxy luminoso, e introduce due chiavi di lettura usate più avanti — le autostrade come corridoi di inquinamento e le zone <em>buie ma inquinate</em> (campagne e poli industriali lontani dai centri urbani).</p></div>
+    <figure><img src="../assets/img/no2/map_lights.webp" alt="VIIRS night-time lights"></figure>
+    <div class="reveal"><h4><span class="en">6.2 Night-time lights (VIIRS)</span><span class="it">6.2 Luci notturne (VIIRS)</span></h4><p><span class="en">The mean night-time radiance is the quantitative proxy for urbanisation used in the correlation model: it highlights the Turin–Milan–Verona axis and the Via Emilia. The map is shown at native resolution (~500 m); for the correlation analysis the data were then resampled onto the NO₂ grid (~1 km) — see § 5.</span><span class="it">La radianza notturna media è il proxy quantitativo dell'urbanizzazione usato nel modello di correlazione: evidenzia l'asse Torino–Milano–Verona e la via Emilia. La mappa è mostrata a risoluzione nativa (~500 m); per l'analisi di correlazione il dato è stato poi ricampionato sulla griglia dell'NO₂ (~1 km) — vedi § 5.</span></p></div>
   </div>
 
-  <h2><span class="n">7.</span>Correlation &amp; Regression Model</h2>
-  <p>La relazione tra urbanizzazione (log della radianza notturna) e NO₂ viene quantificata con correlazione di Pearson e Spearman e una regressione OLS. La trasformazione logaritmica linearizza la relazione; l'R² misura la quota di variabilità dell'NO₂ spiegata dalle luci. Lo scatter plot (densità dei pixel + retta di regressione) sintetizza il modello.</p>
-  <figure><img src="../assets/img/no2/scatter_no2_lights.webp" alt="Scatter plot NO₂ vs luci"></figure>
+  <div class="revealcard">
+    <figure><img src="../assets/img/no2/map_urban.webp" alt="Built-up areas and road network"></figure>
+    <div class="reveal"><h4><span class="en">6.3 Infrastructure footprint</span><span class="it">6.3 Impronta infrastrutturale</span></h4><p><span class="en">The built-up areas (ESA WorldCover 10 m) and the road network (OpenStreetMap / Geofabrik) show the <em>real sources</em> of NO₂: cities and infrastructure corridors. It is the physical context behind the luminous proxy, and it introduces two reading keys used later on — motorways as pollution corridors and the <em>dark-but-polluted</em> zones (countryside and industrial hubs far from urban centres).</span><span class="it">L'edificato (ESA WorldCover 10 m) e la rete stradale (OpenStreetMap / Geofabrik) mostrano le <em>sorgenti reali</em> dell'NO₂: città e corridoi infrastrutturali. È il contesto fisico dietro al proxy luminoso, e introduce due chiavi di lettura usate più avanti — le autostrade come corridoi di inquinamento e le zone <em>buie ma inquinate</em> (campagne e poli industriali lontani dai centri urbani).</span></p></div>
+  </div>
 
-  <h2><span class="n">8.</span>Anomaly Mapping</h2>
-  <p>Il modello prevede, per ogni pixel, l'NO₂ atteso dalle luci; il residuo (osservato − previsto) misura lo scarto. La mappa dei residui rivela un nucleo rosso esteso sulla bassa pianura — più inquinato del previsto — firma del ristagno atmosferico padano, mentre i rilievi risultano più puliti del previsto. Una maschera dedicata isola poi le zone nel terzo più buio <em>e</em> nel terzo più inquinato: le aree <em>buie ma inquinate</em>.</p>
-  <figure><img src="../assets/img/no2/map_residual.webp" alt="Mappa dei residui"></figure>
-  <figure><img src="../assets/img/no2/map_dark_polluted.webp" alt="Zone buie ma inquinate"></figure>
+  <h2><span class="n">7.</span><span class="en">Correlation &amp; Regression Model</span><span class="it">Modello di correlazione &amp; regressione</span></h2>
+  <p><span class="en">The relationship between urbanisation (log of night-time radiance) and NO₂ is quantified with Pearson and Spearman correlation and an OLS regression. The logarithmic transformation linearises the relationship; the R² measures the share of NO₂ variability explained by the lights. The scatter plot (pixel density + regression line) summarises the model.</span><span class="it">La relazione tra urbanizzazione (log della radianza notturna) e NO₂ viene quantificata con correlazione di Pearson e Spearman e una regressione OLS. La trasformazione logaritmica linearizza la relazione; l'R² misura la quota di variabilità dell'NO₂ spiegata dalle luci. Lo scatter plot (densità dei pixel + retta di regressione) sintetizza il modello.</span></p>
+  <figure><img src="../assets/img/no2/scatter_no2_lights.webp" alt="Scatter plot NO₂ vs lights"></figure>
 
-  <h2><span class="n">9.</span>Results &amp; Comparison</h2>
+  <h2><span class="n">8.</span><span class="en">Anomaly Mapping</span><span class="it">Mappatura delle anomalie</span></h2>
+  <p><span class="en">The model predicts, for each pixel, the NO₂ expected from the lights; the residual (observed − predicted) measures the gap. The residual map reveals an extensive red core over the lower plain — more polluted than predicted — the signature of the Po Valley atmospheric stagnation, while the reliefs turn out cleaner than predicted. A dedicated mask then isolates the zones in the darkest third <em>and</em> in the most polluted third: the <em>dark-but-polluted</em> areas.</span><span class="it">Il modello prevede, per ogni pixel, l'NO₂ atteso dalle luci; il residuo (osservato − previsto) misura lo scarto. La mappa dei residui rivela un nucleo rosso esteso sulla bassa pianura — più inquinato del previsto — firma del ristagno atmosferico padano, mentre i rilievi risultano più puliti del previsto. Una maschera dedicata isola poi le zone nel terzo più buio <em>e</em> nel terzo più inquinato: le aree <em>buie ma inquinate</em>.</span></p>
+  <figure><img src="../assets/img/no2/map_residual.webp" alt="Residual map"></figure>
+  <figure><img src="../assets/img/no2/map_dark_polluted.webp" alt="Dark-but-polluted zones"></figure>
+
+  <h2><span class="n">9.</span><span class="en">Results &amp; Comparison</span><span class="it">Risultati &amp; confronto</span></h2>
   <div class="kpis">
     <div class="kpi"><b>r = 0.64</b><span>Pearson · ρ = 0.72</span></div>
-    <div class="kpi"><b>41%</b><span>varianza spiegata (R²=0.41)</span></div>
-    <div class="kpi"><b>~900 km²</b><span>buio ma inquinato (≈1%)</span></div>
+    <div class="kpi"><b>41%</b><span><span class="en">variance explained (R²=0.41)</span><span class="it">varianza spiegata (R²=0.41)</span></span></div>
+    <div class="kpi"><b>~900 km²</b><span><span class="en">dark but polluted (≈1%)</span><span class="it">buio ma inquinato (≈1%)</span></span></div>
   </div>
-  <p>L'analisi su 90.977 pixel mostra una correlazione positiva e robusta tra luci notturne e NO₂ — Pearson r = 0.64, Spearman ρ = 0.72 — con una regressione che spiega il 41% della varianza (R² = 0.41). Il restante 59% è guidato dalla geografia: la mappa dei residui mostra che la bassa pianura è inquinata oltre quanto la sua urbanizzazione prevederebbe. Circa l'1% dell'area (~900 km²) risulta <em>buio ma inquinato</em> — pianure agricole e corridoi infrastrutturali lontani dai centri urbani. Il confronto stagionale conferma la forte stagionalità: l'estate è nettamente più pulita dell'inverno.</p>
-  <p>In conclusione, l'NO₂ del Bacino Padano è prodotto dall'uomo ma governato dalla geografia: le luci notturne dicono <em>dove</em> viene generato, la conca padana <em>dove</em> si accumula. Ristagnando e diffondendosi, l'inquinamento diventa un fenomeno d'area che raggiunge anche le campagne lontane dai centri urbani — ed è proprio questa quota "geografica", fatta di trasporto atmosferico e di sorgenti (strade, industrie, agricoltura) invisibili alle luci, che l'urbanizzazione da sola non può spiegare.</p>
+  <p><span class="en">The analysis over 90,977 pixels shows a positive and robust correlation between night-time lights and NO₂ — Pearson r = 0.64, Spearman ρ = 0.72 — with a regression that explains 41% of the variance (R² = 0.41). The remaining 59% is driven by geography: the residual map shows that the lower plain is polluted beyond what its urbanisation would predict. About 1% of the area (~900 km²) turns out <em>dark but polluted</em> — agricultural plains and infrastructure corridors far from urban centres. The seasonal comparison confirms the strong seasonality: summer is markedly cleaner than winter.</span><span class="it">L'analisi su 90.977 pixel mostra una correlazione positiva e robusta tra luci notturne e NO₂ — Pearson r = 0.64, Spearman ρ = 0.72 — con una regressione che spiega il 41% della varianza (R² = 0.41). Il restante 59% è guidato dalla geografia: la mappa dei residui mostra che la bassa pianura è inquinata oltre quanto la sua urbanizzazione prevederebbe. Circa l'1% dell'area (~900 km²) risulta <em>buio ma inquinato</em> — pianure agricole e corridoi infrastrutturali lontani dai centri urbani. Il confronto stagionale conferma la forte stagionalità: l'estate è nettamente più pulita dell'inverno.</span></p>
+  <p><span class="en">In conclusion, the NO₂ of the Po Valley is produced by humans but governed by geography: the night-time lights tell <em>where</em> it is generated, the Po Valley basin <em>where</em> it accumulates. By stagnating and spreading, the pollution becomes an area-wide phenomenon that reaches even the countryside far from urban centres — and it is precisely this "geographic" share, made of atmospheric transport and of sources (roads, industries, agriculture) invisible to the lights, that urbanisation alone cannot explain.</span><span class="it">In conclusione, l'NO₂ del Bacino Padano è prodotto dall'uomo ma governato dalla geografia: le luci notturne dicono <em>dove</em> viene generato, la conca padana <em>dove</em> si accumula. Ristagnando e diffondendosi, l'inquinamento diventa un fenomeno d'area che raggiunge anche le campagne lontane dai centri urbani — ed è proprio questa quota "geografica", fatta di trasporto atmosferico e di sorgenti (strade, industrie, agricoltura) invisibili alle luci, che l'urbanizzazione da sola non può spiegare.</span></p>
 
-  <h2><span class="n">10.</span>Limitations &amp; Future Development</h2>
+  <h2><span class="n">10.</span><span class="en">Limitations &amp; Future Development</span><span class="it">Limiti &amp; sviluppi futuri</span></h2>
   <ul>
-    <li>Risoluzione. Il footprint nativo di TROPOMI è grossolano (~5,5 km), molto più grande di VIIRS (~500 m): il confronto va letto a scala d'area, non di singolo pixel.</li>
-    <li>MAUP. I risultati di correlazione dipendono dalla scala di aggregazione (<em>Modifiable Areal Unit Problem</em>).</li>
-    <li>Autocorrelazione spaziale. I pixel vicini non sono indipendenti: la significatività "naive" è sovrastimata. Uno sviluppo previsto è il test di Moran's I.</li>
-    <li>Correlazione ≠ causalità. Le luci sono un proxy dell'urbanizzazione, non la causa diretta dell'NO₂.</li>
-    <li>Artefatto del modello. Sui pixel iper-luminosi il fit logaritmico sovrastima l'NO₂.</li>
-    <li>Sviluppi futuri: analisi multi-anno dei trend, confronto pre/post blocchi del traffico, e validazione con le centraline ARPA a terra.</li>
+    <li><span class="en">Resolution. The native footprint of TROPOMI is coarse (~5.5 km), much larger than VIIRS (~500 m): the comparison must be read at area scale, not single-pixel.</span><span class="it">Risoluzione. Il footprint nativo di TROPOMI è grossolano (~5,5 km), molto più grande di VIIRS (~500 m): il confronto va letto a scala d'area, non di singolo pixel.</span></li>
+    <li><span class="en">MAUP. The correlation results depend on the aggregation scale (<em>Modifiable Areal Unit Problem</em>).</span><span class="it">MAUP. I risultati di correlazione dipendono dalla scala di aggregazione (<em>Modifiable Areal Unit Problem</em>).</span></li>
+    <li><span class="en">Spatial autocorrelation. Neighbouring pixels are not independent: the "naive" significance is overestimated. A planned development is the Moran's I test.</span><span class="it">Autocorrelazione spaziale. I pixel vicini non sono indipendenti: la significatività "naive" è sovrastimata. Uno sviluppo previsto è il test di Moran's I.</span></li>
+    <li><span class="en">Correlation ≠ causation. The lights are a proxy for urbanisation, not the direct cause of NO₂.</span><span class="it">Correlazione ≠ causalità. Le luci sono un proxy dell'urbanizzazione, non la causa diretta dell'NO₂.</span></li>
+    <li><span class="en">Model artefact. On the hyper-bright pixels the logarithmic fit overestimates NO₂.</span><span class="it">Artefatto del modello. Sui pixel iper-luminosi il fit logaritmico sovrastima l'NO₂.</span></li>
+    <li><span class="en">Future developments: multi-year trend analysis, pre/post traffic-restriction comparison, and validation against the ARPA ground stations.</span><span class="it">Sviluppi futuri: analisi multi-anno dei trend, confronto pre/post blocchi del traffico, e validazione con le centraline ARPA a terra.</span></li>
   </ul>
 
   <hr>
@@ -231,21 +251,34 @@ details.why .wb p:last-child{margin-bottom:2px}
 
   <a class="back" href="../index.html" style="margin-top:40px">← GIS Portfolio</a>
 </div>
+
 <script>
+document.getElementById('lang').addEventListener('click',function(e){
+  var b=e.target.closest('button'); if(!b)return;
+  var l=b.getAttribute('data-set');
+  document.documentElement.setAttribute('data-lang',l);
+  try{localStorage.setItem('lang',l);}catch(err){}
+});
+</script>
+<script>
+/* TOC bilingue */
 (function(){
   var heads=[].slice.call(document.querySelectorAll('.wrap h2'));
   if(heads.length<2) return;
-  var nav=document.createElement('nav'); nav.id='toc'; nav.setAttribute('aria-label','Indice');
+  var nav=document.createElement('nav'); nav.id='toc'; nav.setAttribute('aria-label','Index');
   var items=[], num=0;
+  function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;');}
   heads.forEach(function(h,i){
     if(!h.id) h.id='sec-'+(i+1);
-    var c=h.cloneNode(true), n=c.querySelector('.n'); if(n) n.remove();
-    var title=c.textContent.trim().replace(/\s+/g,' ');
-    var label=title;
-    if(h.querySelector('.n')){ num++; label=('0'+num).slice(-2)+'  '+title; }
+    var en=h.querySelector('.en'), it=h.querySelector('.it');
+    var enT=(en?en.textContent:h.textContent).trim().replace(/\s+/g,' ');
+    var itT=(it?it.textContent:h.textContent).trim().replace(/\s+/g,' ');
+    var pre='';
+    if(h.querySelector('.n')){ num++; pre=('0'+num).slice(-2)+'  '; }
     var a=document.createElement('a'); a.href='#'+h.id;
     var d=document.createElement('span'); d.className='dash';
-    var l=document.createElement('span'); l.className='lbl'; l.textContent=label;
+    var l=document.createElement('span'); l.className='lbl';
+    l.innerHTML='<span class="en">'+pre+esc(enT)+'</span><span class="it">'+pre+esc(itT)+'</span>';
     a.appendChild(d); a.appendChild(l);
     a.addEventListener('click',function(e){e.preventDefault();h.scrollIntoView({behavior:'smooth',block:'start'});history.replaceState(null,'','#'+h.id);});
     nav.appendChild(a); items.push({a:a,h:h});

@@ -20,6 +20,17 @@ body{margin:0;background:var(--bg);color:var(--text);
 a{text-decoration:none;color:inherit}
 .wrap{max-width:1000px;margin:0 auto;padding:72px 28px 90px}
 
+/* ---- selettore lingua ---- */
+#lang{position:fixed;top:16px;right:16px;z-index:100;display:flex;background:#1b1e2a;
+  border:1px solid var(--line);border-radius:999px;overflow:hidden;box-shadow:0 6px 20px rgba(0,0,0,.35)}
+#lang button{border:0;background:transparent;color:var(--muted);font:inherit;font-size:.76rem;font-weight:700;
+  padding:6px 13px;cursor:pointer;letter-spacing:.06em;transition:color .2s}
+#lang button:hover{color:#e7e9f0}
+[data-lang="it"] #lang button[data-set="it"],[data-lang="en"] #lang button[data-set="en"]{background:var(--accent);color:#0a0b10}
+/* mostra solo la lingua attiva */
+[data-lang="it"] .en{display:none}
+[data-lang="en"] .it{display:none}
+
 /* ---- header / bio ---- */
 .kick{font-size:.78rem;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);font-weight:600}
 h1{color:#fff;font-size:clamp(2.1rem,5.2vw,3.1rem);margin:.28em 0 .1em;font-weight:700;letter-spacing:-.015em}
@@ -41,9 +52,6 @@ h1{color:#fff;font-size:clamp(2.1rem,5.2vw,3.1rem);margin:.28em 0 .1em;font-weig
 .card{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;
   transition:transform .18s,filter .25s;display:flex;flex-direction:column}
 .card:hover{transform:translateY(-4px);filter:invert(1)}
-.card-soon{cursor:default}
-.card-soon:hover{transform:none;filter:none}
-.card-soon:hover .thumb .ph,.card-soon:hover .thumb img{transform:none}
 .thumb{aspect-ratio:16/10;overflow:hidden;position:relative}
 .thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
 .ph{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:2.6rem}
@@ -52,55 +60,71 @@ h1{color:#fff;font-size:clamp(2.1rem,5.2vw,3.1rem);margin:.28em 0 .1em;font-weig
 .p-solar{background:linear-gradient(135deg,#5a3d12,#26200f)}
 .p-lidar{background:linear-gradient(135deg,#16321f,#0e1a12)}
 .p-mars{background:linear-gradient(135deg,#4a1c14,#1c0f0c)}
-.badge{position:absolute;top:12px;left:12px;font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;
-  font-weight:700;color:#0a0b10;background:var(--accent);border-radius:6px;padding:3px 8px}
-.badge.soon{background:#3a3d4c;color:#c4c7d2}
 .body{padding:18px 20px 20px}
 .body h3{color:#fff;font-size:1.12rem;margin:0 0 .3em;font-weight:650;line-height:1.35}
 .body p{color:var(--muted);font-size:.92rem;margin:.2em 0 .9em}
 .tags{display:flex;flex-wrap:wrap;gap:7px}
 .tag{font-size:.73rem;color:#cdd0db;background:#1b1e2a;border:1px solid var(--line);
   border-radius:999px;padding:4px 10px}
-.soon-txt{color:var(--muted);font-style:italic}
 
 footer{color:var(--muted);font-size:.84rem;text-align:center;padding:44px 20px 0;margin-top:60px;
   border-top:1px solid var(--line)}
 @media(max-width:640px){.grid{grid-template-columns:1fr}.wrap{padding:52px 20px 70px}}
 </style>
+<script>
+/* lingua: memoria della scelta, altrimenti dal browser (default automatico) */
+(function(){try{var l=localStorage.getItem('lang');}catch(e){}
+  if(l!=='it'&&l!=='en'){l=((navigator.language||navigator.userLanguage||'en').toLowerCase().indexOf('it')===0)?'it':'en';}
+  document.documentElement.setAttribute('data-lang',l);})();
+</script>
 </head>
 <body>
+
+<div id="lang" aria-label="Language / Lingua">
+  <button data-set="it" type="button">IT</button><button data-set="en" type="button">EN</button>
+</div>
+
 <div class="wrap">
 
   <header>
-    <div class="kick">GIS Portfolio</div>
+    <div class="kick"><span class="en">GIS Portfolio</span><span class="it">Portfolio GIS</span></div>
     <h1>Davide Bortoletto</h1>
-    <p class="role">GIS Analyst · Spatial Planning &amp; Remote Sensing</p>
-    <p class="bio">GIS Analyst with a Master's in Urban and Regional Planning
+    <p class="role"><span class="en">GIS Analyst · Spatial Planning &amp; Remote Sensing</span><span class="it">Analista GIS · Pianificazione territoriale e Telerilevamento</span></p>
+    <p class="bio"><span class="en">GIS Analyst with a Master's in Urban and Regional Planning
       (<a href="https://www.iuav.it" target="_blank" rel="noopener">Università IUAV di Venezia</a>).
       I bridge spatial planning and geospatial analysis — turning LiDAR, satellite imagery and
       multi-criteria datasets into decision-ready maps and models. My projects span renewable-energy
       siting (MCDA), infrastructure &amp; vegetation risk (LiDAR), and land-use suitability, built on
-      reproducible QGIS, GDAL and Python workflows. I'm currently
-      extending my work into Google Earth Engine for environmental
-      monitoring and urban-growth analysis.</p>
-    <p class="avail">Disponibile per ruoli GIS (analyst/specialist) in Italia e da remoto.</p>
+      reproducible QGIS, GDAL and Python workflows. I'm currently extending my work into Google Earth
+      Engine for environmental monitoring and urban-growth analysis.</span><span class="it">Analista GIS
+      con una laurea magistrale in Urbanistica e pianificazione del territorio
+      (<a href="https://www.iuav.it" target="_blank" rel="noopener">Università IUAV di Venezia</a>).
+      Metto in connessione pianificazione territoriale e analisi geospaziale, convertendo dati LiDAR,
+      immagini satellitari e analisi multicriterio in soluzioni cartografiche e modelli per supportare
+      decisioni basate sui dati. I miei
+      progetti spaziano dalla localizzazione di impianti rinnovabili (MCDA), al rischio su infrastrutture
+      e vegetazione (LiDAR), fino all'idoneità d'uso del suolo, costruiti su workflow riproducibili in
+      QGIS, GDAL e Python. Attualmente sto estendendo il mio lavoro a Google Earth Engine per il
+      monitoraggio ambientale e l'analisi della crescita urbana.</span></p>
+    <p class="avail"><span class="en">Available for GIS roles (analyst/specialist) in Italy and remotely.</span><span class="it">Disponibile per ruoli GIS (analyst/specialist) in Italia e da remoto.</span></p>
     <div class="contacts">
       <a href="mailto:d.bortoletto17@gmail.com">✉ Email</a>
       <a href="https://www.linkedin.com/in/davide-bortoletto-889a36301" target="_blank" rel="noopener">in LinkedIn</a>
       <a href="https://github.com/dav9817" target="_blank" rel="noopener">◆ GitHub</a>
-      <a href="assets/cv/Davide-Bortoletto-CV.pdf" download>↓ CV</a>
+      <a class="en" href="assets/cv/Davide-Bortoletto-CV-EN.pdf" download="Davide-Bortoletto-CV.pdf">↓ CV</a>
+      <a class="it" href="assets/cv/Davide-Bortoletto-CV-IT.pdf" download="Davide-Bortoletto-CV.pdf">↓ CV</a>
     </div>
   </header>
 
-  <div class="sec">Projects</div>
+  <div class="sec"><span class="en">Projects</span><span class="it">Progetti</span></div>
   <div class="grid">
 
     <!-- 1 · Solar PV siting -->
     <a class="card" href="projects/solar-pv-verona.html">
       <div class="thumb"><div class="ph p-solar">☀️</div><img src="assets/img/solar/overview.webp" alt="" onerror="this.remove()"></div>
       <div class="body">
-        <h3>Utility-Scale Solar PV Siting &amp; Strategic Zoning — Verona</h3>
-        <p>GIS multi-criteria decision analysis (MCDA) to locate hotspots and strategic districts for utility-scale solar.</p>
+        <h3><span class="en">Utility-Scale Solar PV Siting &amp; Strategic Zoning — Verona</span><span class="it">Localizzazione di impianti fotovoltaici utility-scale &amp; zonizzazione strategica — Verona</span></h3>
+        <p><span class="en">GIS multi-criteria decision analysis (MCDA) to locate hotspots and strategic districts for utility-scale solar.</span><span class="it">Analisi multicriterio (MCDA) in GIS per individuare gli hotspot e i distretti strategici per il fotovoltaico utility-scale.</span></p>
         <div class="tags"><span class="tag">MCDA</span><span class="tag">QGIS</span><span class="tag">Weighted Overlay</span></div>
       </div>
     </a>
@@ -109,8 +133,8 @@ footer{color:var(--muted);font-size:.84rem;text-align:center;padding:44px 20px 0
     <a class="card" href="projects/powerline-lidar.html">
       <div class="thumb"><div class="ph p-lidar">🌲⚡</div><img src="assets/img/lidar/chm.webp" alt="" onerror="this.remove()"></div>
       <div class="body">
-        <h3>Powerline Vegetation Risk — LiDAR Analysis &amp; Management Scenarios</h3>
-        <p>LiDAR-based tree-fall risk model along an HV line, with a 5-year management-scenario comparison.</p>
+        <h3><span class="en">Powerline Vegetation Risk — LiDAR Analysis &amp; Management Scenarios</span><span class="it">Dove intervenire? Analisi LiDAR del rischio vegetazione su linee AT</span></h3>
+        <p><span class="en">LiDAR-based tree-fall risk model along an HV line, with a 5-year management-scenario comparison.</span><span class="it">Modello di rischio di caduta alberi lungo una linea AT basato su LiDAR, con confronto di scenari di gestione a 5 anni.</span></p>
         <div class="tags"><span class="tag">LiDAR</span><span class="tag">CHM</span><span class="tag">QGIS</span></div>
       </div>
     </a>
@@ -119,8 +143,8 @@ footer{color:var(--muted);font-size:.84rem;text-align:center;padding:44px 20px 0
     <a class="card" href="projects/no2-nightlights.html">
       <div class="thumb"><img src="assets/img/home/thumb_no2.webp" alt="Night-time lights of Northern Italy"></div>
       <div class="body">
-        <h3>Air Quality vs. Urbanisation — NO₂ &amp; Night-time Lights in the Po Valley</h3>
-        <p>Satellite analysis of NO₂ pollution vs. night-time lights. Sentinel-5P × VIIRS, 2025.</p>
+        <h3><span class="en">Air Quality vs. Urbanisation — NO₂ &amp; Night-time Lights in the Po Valley</span><span class="it">Qualità dell'aria vs. urbanizzazione — NO₂ &amp; luci notturne nel Bacino Padano</span></h3>
+        <p><span class="en">Satellite analysis of NO₂ pollution vs. night-time lights. Sentinel-5P × VIIRS, 2025.</span><span class="it">Analisi satellitare dell'inquinamento da NO₂ rispetto alle luci notturne. Sentinel-5P × VIIRS, 2025.</span></p>
         <div class="tags"><span class="tag">Earth Engine</span><span class="tag">Python</span><span class="tag">QGIS</span></div>
       </div>
     </a>
@@ -129,15 +153,24 @@ footer{color:var(--muted);font-size:.84rem;text-align:center;padding:44px 20px 0
     <a class="card" href="projects/mars-suitability.html">
       <div class="thumb"><div class="ph p-mars">🔴</div><img src="assets/img/mars/hero.webp" alt="Mars — Viking globe" onerror="this.remove()"></div>
       <div class="body">
-        <h3>Human Base Site Suitability on Mars — GIS Multi-Criteria Analysis</h3>
-        <p>MCDA on open NASA/USGS planetary data (MOLA/HRSC, SWIM ice, TES, MCD) with an interactive 3D Mars globe.</p>
+        <h3><span class="en">Human Base Site Suitability on Mars — GIS Multi-Criteria Analysis</span><span class="it">Dove costruire una base su Marte?</span></h3>
+        <p><span class="en">MCDA on open NASA/USGS planetary data (MOLA/HRSC, SWIM ice, TES, MCD) with an interactive 3D Mars globe.</span><span class="it">MCDA su dati planetari aperti NASA/USGS (MOLA/HRSC, ghiaccio SWIM, TES, MCD) con un globo 3D interattivo di Marte.</span></p>
         <div class="tags"><span class="tag">MCDA</span><span class="tag">QGIS</span><span class="tag">Three.js</span></div>
       </div>
     </a>
 
   </div>
 
-  <footer>© 2026 Davide Bortoletto — built with QGIS, Python &amp; Google Earth Engine</footer>
+  <footer><span class="en">© 2026 Davide Bortoletto — built with QGIS, Python &amp; Google Earth Engine</span><span class="it">© 2026 Davide Bortoletto — realizzato con QGIS, Python e Google Earth Engine</span></footer>
 </div>
+
+<script>
+document.getElementById('lang').addEventListener('click',function(e){
+  var b=e.target.closest('button'); if(!b)return;
+  var l=b.getAttribute('data-set');
+  document.documentElement.setAttribute('data-lang',l);
+  try{localStorage.setItem('lang',l);}catch(err){}
+});
+</script>
 </body>
 </html>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -20,6 +20,16 @@ body{margin:0;background:var(--bg);color:var(--text);
 a{color:var(--accent);text-decoration:none}
 .back{display:inline-block;color:var(--muted);font-size:.88rem;margin-bottom:34px}
 .back:hover{color:var(--head)}
+
+/* ---- selettore lingua ---- */
+#lang{position:fixed;top:16px;right:16px;z-index:100;display:flex;background:var(--panel);
+  border:1px solid var(--line);border-radius:999px;overflow:hidden;box-shadow:0 6px 20px rgba(0,0,0,.12)}
+#lang button{border:0;background:transparent;color:var(--muted);font:inherit;font-size:.76rem;font-weight:700;
+  padding:6px 13px;cursor:pointer;letter-spacing:.06em}
+#lang button:hover{color:var(--head)}
+[data-lang="it"] #lang button[data-set="it"],[data-lang="en"] #lang button[data-set="en"]{background:var(--accent);color:#fff}
+[data-lang="it"] .en{display:none}
+[data-lang="en"] .it{display:none}
 
 .subtitle{color:var(--accent);font-size:.95rem;font-style:italic;margin:0 0 8px}
 h1{color:var(--head);font-size:clamp(1.8rem,4.2vw,2.5rem);line-height:1.25;font-weight:700;
@@ -111,8 +121,18 @@ details.why .wb p:last-child{margin-bottom:2px}
 #toc a.active .lbl,#toc a:hover .lbl{color:var(--accent)}
 @media(max-width:1024px){#toc{display:none}}
 </style>
+<script>
+(function(){try{var l=localStorage.getItem('lang');}catch(e){}
+  if(l!=='it'&&l!=='en'){l=((navigator.language||navigator.userLanguage||'en').toLowerCase().indexOf('it')===0)?'it':'en';}
+  document.documentElement.setAttribute('data-lang',l);})();
+</script>
 </head>
 <body>
+
+<div id="lang" aria-label="Language / Lingua">
+  <button data-set="it" type="button">IT</button><button data-set="en" type="button">EN</button>
+</div>
+
 <div class="wrap">
 
   <a class="back" href="../index.html">← GIS Portfolio</a>
@@ -120,135 +140,135 @@ details.why .wb p:last-child{margin-bottom:2px}
   <div class="hero">
     <img src="../assets/img/lidar/chm_hero.webp" alt="Canopy Height Model (CHM)">
     <div class="hero-txt">
-      <h1>Powerline Vegetation Risk — LiDAR Analysis &amp; Management Scenarios</h1>
-      <p class="hero-sub">A LiDAR-based geometric model of tree-fall interference with an HV overhead line — 5-year management scenario comparison</p>
+      <h1><span class="en">Powerline Vegetation Risk — LiDAR Analysis &amp; Management Scenarios</span><span class="it">Dove intervenire? Analisi LiDAR del rischio vegetazione su linee AT</span></h1>
+      <p class="hero-sub"><span class="en">A LiDAR-based geometric model of tree-fall interference with an HV overhead line — 5-year management scenario comparison</span><span class="it">Un modello geometrico su base LiDAR dell'interferenza da caduta alberi su una linea aerea AT — confronto di scenari di gestione a 5 anni</span></p>
     </div>
   </div>
 
-  <h2><span class="n">1.</span>Project Overview</h2>
-  <p class="lead">Lo studio simula la progettazione di una nuova linea aerea ad alta tensione e ne valuta l'interferenza con la vegetazione forestale circostante. A partire da dati LiDAR viene costruito un modello geometrico del rischio di caduta degli alberi sui conduttori e vengono confrontate tre strategie di gestione (potatura/abbattimento), misurandone il rischio residuo a 5 anni.</p>
+  <h2><span class="n">1.</span><span class="en">Project Overview</span><span class="it">Panoramica del progetto</span></h2>
+  <p class="lead"><span class="en">The study simulates the design of a new high-voltage overhead line and assesses its interference with the surrounding forest vegetation. From LiDAR data, a geometric model of the risk of trees falling onto the conductors is built, and three management strategies (pruning/felling) are compared, measuring their 5-year residual risk.</span><span class="it">Lo studio simula la progettazione di una nuova linea aerea ad alta tensione e ne valuta l'interferenza con la vegetazione forestale circostante. A partire da dati LiDAR viene costruito un modello geometrico del rischio di caduta degli alberi sui conduttori e vengono confrontate tre strategie di gestione (potatura/abbattimento), misurandone il rischio residuo a 5 anni.</span></p>
 
-  <h2><span class="n">2.</span>Strategic Value &amp; Output</h2>
-  <p>La gestione della vegetazione lungo le linee ad alta tensione è una voce di costo rilevante per i gestori di rete e un fattore critico nella prevenzione di guasti e incendi. Il modello produce una mappa di rischio basata sulla geometria reale (altezza della pianta rispetto alla distanza dalla linea), stabilisce la priorità degli interventi e fornisce un confronto quantitativo tra una strategia "a soglia di altezza", una geometrica ed una geometrica previsionale, in termini di rischio residuo e di bosco effettivamente rimosso.</p>
+  <h2><span class="n">2.</span><span class="en">Strategic Value &amp; Output</span><span class="it">Valore strategico &amp; output</span></h2>
+  <p><span class="en">Managing vegetation along high-voltage lines is a significant cost item for grid operators and a critical factor in preventing outages and fires. The model produces a risk map based on real geometry (tree height vs. distance from the line), sets intervention priority and provides a quantitative comparison between a "height-threshold" strategy, a geometric one and a predictive geometric one, in terms of residual risk and of forest actually removed.</span><span class="it">La gestione della vegetazione lungo le linee ad alta tensione è una voce di costo rilevante per i gestori di rete e un fattore critico nella prevenzione di guasti e incendi. Il modello produce una mappa di rischio basata sulla geometria reale (altezza della pianta rispetto alla distanza dalla linea), stabilisce la priorità degli interventi e fornisce un confronto quantitativo tra una strategia "a soglia di altezza", una geometrica ed una geometrica previsionale, in termini di rischio residuo e di bosco effettivamente rimosso.</span></p>
 
-  <h2><span class="n">3.</span>Study Area</h2>
-  <p>L'area di studio è un versante boscato di montagna a Padergnone, frazione del Comune di Vallelaghi (Provincia Autonoma di Trento), nella Valle dei Laghi — l'antico solco di origine glaciale, orientato NNE–SSW, che collega la conca di Trento al basso Sarca e al Lago di Garda. Il sito si affaccia sui laghi di Toblino e Santa Massenza, in un contesto a spiccata impronta sub-mediterranea, caratterizzato da boschi misti di carpino nero, leccio e pino. L'area si sviluppa su un dislivello di circa 870–1.260 m s.l.m., condizione che rende la distanza albero–conduttore fortemente variabile e quindi adatta a un modello di rischio basato sulla geometria locale.</p>
-  <p>Il dato LiDAR utilizzato risale al 2007 (volo della Provincia Autonoma di Trento), il sistema di riferimento è EPSG:32632 (WGS 84 / UTM 32N) e i raster derivati hanno risoluzione di 1 m.</p>
-  <figure><img src="../assets/img/lidar/inquadramento.webp" alt="Inquadramento area di studio"><figcaption>Inquadramento dell'area di studio.</figcaption></figure>
-  <figure><img src="../assets/img/lidar/lidar_3d.webp" alt="Render 3D nuvola LiDAR"><figcaption>Render 3D della nuvola di punti LiDAR.</figcaption></figure>
+  <h2><span class="n">3.</span><span class="en">Study Area</span><span class="it">Area di studio</span></h2>
+  <p><span class="en">The study area is a forested mountain slope at Padergnone, a hamlet of the Municipality of Vallelaghi (Autonomous Province of Trento), in the Valle dei Laghi — the ancient glacial trough, NNE–SSW oriented, that connects the Trento basin to the lower Sarca and Lake Garda. The site overlooks the lakes of Toblino and Santa Massenza, in a strongly sub-Mediterranean context with mixed woods of hop-hornbeam, holm oak and pine. The area spans an elevation range of about 870–1,260 m a.s.l., which makes the tree–conductor distance highly variable and therefore well suited to a risk model based on local geometry.</span><span class="it">L'area di studio è un versante boscato di montagna a Padergnone, frazione del Comune di Vallelaghi (Provincia Autonoma di Trento), nella Valle dei Laghi — l'antico solco di origine glaciale, orientato NNE–SSW, che collega la conca di Trento al basso Sarca e al Lago di Garda. Il sito si affaccia sui laghi di Toblino e Santa Massenza, in un contesto a spiccata impronta sub-mediterranea, caratterizzato da boschi misti di carpino nero, leccio e pino. L'area si sviluppa su un dislivello di circa 870–1.260 m s.l.m., condizione che rende la distanza albero–conduttore fortemente variabile e quindi adatta a un modello di rischio basato sulla geometria locale.</span></p>
+  <p><span class="en">The LiDAR data used dates back to 2007 (Autonomous Province of Trento survey), the reference system is EPSG:32632 (WGS 84 / UTM 32N) and the derived rasters have a 1 m resolution.</span><span class="it">Il dato LiDAR utilizzato risale al 2007 (volo della Provincia Autonoma di Trento), il sistema di riferimento è EPSG:32632 (WGS 84 / UTM 32N) e i raster derivati hanno risoluzione di 1 m.</span></p>
+  <figure><img src="../assets/img/lidar/inquadramento.webp" alt="Study-area overview"><figcaption><span class="en">Study-area overview.</span><span class="it">Inquadramento dell'area di studio.</span></figcaption></figure>
+  <figure><img src="../assets/img/lidar/lidar_3d.webp" alt="3D render of the LiDAR point cloud"><figcaption><span class="en">3D render of the LiDAR point cloud.</span><span class="it">Render 3D della nuvola di punti LiDAR.</span></figcaption></figure>
 
-  <h2><span class="n">4.</span>Data Source</h2>
+  <h2><span class="n">4.</span><span class="en">Data Source</span><span class="it">Fonti dei dati</span></h2>
   <table>
-    <tr><th>Dataset</th><th>Source</th><th>Type</th></tr>
-    <tr><td>Administrative boundaries</td><td>ISTAT</td><td>Vector (polygon)</td></tr>
-    <tr><td>LiDAR point cloud</td><td>Autonomous Province of Trento (Padergnone)</td><td>.las</td></tr>
-    <tr><td>HV line</td><td>Manual digitalization from orthophoto interpretation</td><td>Vector (line)</td></tr>
-    <tr><td>DTM / DSM</td><td>Derived from LiDAR (ground / canopy)</td><td>Raster 1 m</td></tr>
+    <tr><th>Dataset</th><th><span class="en">Source</span><span class="it">Fonte</span></th><th><span class="en">Type</span><span class="it">Tipo</span></th></tr>
+    <tr><td><span class="en">Administrative boundaries</span><span class="it">Confini amministrativi</span></td><td>ISTAT</td><td><span class="en">Vector (polygon)</span><span class="it">Vettoriale (poligono)</span></td></tr>
+    <tr><td><span class="en">LiDAR point cloud</span><span class="it">Nuvola di punti LiDAR</span></td><td><span class="en">Autonomous Province of Trento (Padergnone)</span><span class="it">Provincia Autonoma di Trento (Padergnone)</span></td><td>.las</td></tr>
+    <tr><td><span class="en">HV line</span><span class="it">Linea AT</span></td><td><span class="en">Manual digitalization from orthophoto interpretation</span><span class="it">Digitalizzazione manuale per fotointerpretazione</span></td><td><span class="en">Vector (line)</span><span class="it">Vettoriale (linea)</span></td></tr>
+    <tr><td>DTM / DSM</td><td><span class="en">Derived from LiDAR (ground / canopy)</span><span class="it">Derivati dal LiDAR (terreno / chiome)</span></td><td>Raster 1 m</td></tr>
     <tr><td>CHM</td><td>DSM − DTM</td><td>Raster 1 m</td></tr>
   </table>
 
-  <h2><span class="n">5.</span>Methodology</h2>
-  <figure><img src="../assets/img/lidar/methodology.webp" alt="Schema metodologico (workflow)"><figcaption>Schema metodologico (workflow)</figcaption></figure>
-  <p>Dalla nuvola di punti si ricavano il DTM (terreno) e il DSM (chiome); la loro differenza genera il CHM, l'altezza pura della vegetazione. I valori NoData vengono riempiti per evitarne la propagazione nell'algebra raster. La linea, digitalizzata per fotointerpretazione, viene rasterizzata e si calcola la distanza euclidea di ogni cella dai conduttori. Il rischio è espresso dall'indice geometrico Δ = altezza chioma − distanza dalla linea (indica di quanto un albero, cadendo, supererebbe i cavi). Un filtro ad altezza ≥ 12 m esclude arbusti e vegetazione bassa (falsi positivi), e i valori di Δ vengono riclassificati in cinque classi di rischio (0–4).</p>
+  <h2><span class="n">5.</span><span class="en">Methodology</span><span class="it">Metodologia</span></h2>
+  <figure><img src="../assets/img/lidar/methodology.webp" alt="Methodological workflow"><figcaption><span class="en">Methodological workflow.</span><span class="it">Schema metodologico (workflow).</span></figcaption></figure>
+  <p><span class="en">From the point cloud, the DTM (ground) and DSM (canopy) are derived; their difference generates the CHM, the pure vegetation height. NoData values are filled to prevent their propagation in raster algebra. The line, digitised by photo-interpretation, is rasterised and the Euclidean distance of each cell from the conductors is computed. Risk is expressed by the geometric index Δ = canopy height − distance from the line (it indicates by how much a falling tree would overshoot the cables). A height filter ≥ 12 m excludes shrubs and low vegetation (false positives), and the Δ values are reclassified into five risk classes (0–4).</span><span class="it">Dalla nuvola di punti si ricavano il DTM (terreno) e il DSM (chiome); la loro differenza genera il CHM, l'altezza pura della vegetazione. I valori NoData vengono riempiti per evitarne la propagazione nell'algebra raster. La linea, digitalizzata per fotointerpretazione, viene rasterizzata e si calcola la distanza euclidea di ogni cella dai conduttori. Il rischio è espresso dall'indice geometrico Δ = altezza chioma − distanza dalla linea (indica di quanto un albero, cadendo, supererebbe i cavi). Un filtro ad altezza ≥ 12 m esclude arbusti e vegetazione bassa (falsi positivi), e i valori di Δ vengono riclassificati in cinque classi di rischio (0–4).</span></p>
   <details class="why">
-    <summary>Perché queste scelte? — l'indice Δ, il filtro 12 m, i NoData</summary>
+    <summary><span class="en">Why these choices? — the Δ index, the 12 m filter, NoData</span><span class="it">Perché queste scelte? — l'indice Δ, il filtro 12 m, i NoData</span></summary>
     <div class="wb">
-      <p>L'indice geometrico Δ = altezza − distanza — modella l'albero come un'asta rigida che, cadendo, ruota attorno alla base: la sua cima raggiunge in orizzontale una distanza pari alla propria altezza. Quindi se l'altezza supera la distanza dalla linea (Δ &gt; 0), l'albero cadendo arriva a — o scavalca — i conduttori; Δ misura proprio di quanto. È un modo semplice e trasparente per trasformare la geometria altezza/distanza in un indice di rischio continuo.</p>
-      <p>Il filtro ad altezza ≥ 12 m — sotto una certa altezza un albero non può fisicamente raggiungere i cavi (data la quota dei conduttori e le distanze in gioco): includerlo produrrebbe solo falsi positivi. La soglia elimina arbusti e vegetazione bassa, concentrando l'analisi sugli alberi realmente pericolosi.</p>
-      <p>Il riempimento dei NoData — nell'algebra raster il NoData è "contagioso": qualsiasi operazione che coinvolge una cella vuota restituisce una cella vuota, aprendo buchi nella mappa. Riempire i NoData prima dei calcoli evita che questi buchi si propaghino nel modello di rischio.</p>
+      <p><span class="en">The geometric index Δ = height − distance — it models the tree as a rigid rod that, when falling, rotates around its base: its top reaches horizontally a distance equal to its own height. So if the height exceeds the distance from the line (Δ &gt; 0), the falling tree reaches — or overshoots — the conductors; Δ measures exactly by how much. It's a simple, transparent way to turn the height/distance geometry into a continuous risk index.</span><span class="it">L'indice geometrico Δ = altezza − distanza — modella l'albero come un'asta rigida che, cadendo, ruota attorno alla base: la sua cima raggiunge in orizzontale una distanza pari alla propria altezza. Quindi se l'altezza supera la distanza dalla linea (Δ &gt; 0), l'albero cadendo arriva a — o scavalca — i conduttori; Δ misura proprio di quanto. È un modo semplice e trasparente per trasformare la geometria altezza/distanza in un indice di rischio continuo.</span></p>
+      <p><span class="en">The ≥ 12 m height filter — below a certain height a tree physically cannot reach the cables (given the conductor height and the distances involved): including it would only produce false positives. The threshold removes shrubs and low vegetation, focusing the analysis on the genuinely dangerous trees.</span><span class="it">Il filtro ad altezza ≥ 12 m — sotto una certa altezza un albero non può fisicamente raggiungere i cavi (data la quota dei conduttori e le distanze in gioco): includerlo produrrebbe solo falsi positivi. La soglia elimina arbusti e vegetazione bassa, concentrando l'analisi sugli alberi realmente pericolosi.</span></p>
+      <p><span class="en">Filling NoData — in raster algebra NoData is "contagious": any operation involving an empty cell returns an empty cell, opening holes in the map. Filling NoData before the calculations prevents these holes from propagating into the risk model.</span><span class="it">Il riempimento dei NoData — nell'algebra raster il NoData è "contagioso": qualsiasi operazione che coinvolge una cella vuota restituisce una cella vuota, aprendo buchi nella mappa. Riempire i NoData prima dei calcoli evita che questi buchi si propaghino nel modello di rischio.</span></p>
     </div>
   </details>
-  <p>Su questa base si innestano le strategie di gestione: il taglio viene simulato in raster — abbattimento (altezza → 0) per le celle troppo vicine ai conduttori, potatura ad altezza di sicurezza per quelle più lontane — e si stima la crescita futura della vegetazione (+2 m su 5 anni, a 0,4 m/anno). Riapplicando la stessa formula al bosco "post-intervento e cresciuto" si ottiene il rischio residuo, che consente di confrontare gli scenari in modo quantitativo.</p>
+  <p><span class="en">On this basis the management strategies are grafted: the cut is simulated in raster — felling (height → 0) for cells too close to the conductors, pruning to a safety height for the farther ones — and the future growth of the vegetation is estimated (+2 m over 5 years, at 0.4 m/year). Re-applying the same formula to the "post-intervention and grown" forest yields the residual risk, which allows the scenarios to be compared quantitatively.</span><span class="it">Su questa base si innestano le strategie di gestione: il taglio viene simulato in raster — abbattimento (altezza → 0) per le celle troppo vicine ai conduttori, potatura ad altezza di sicurezza per quelle più lontane — e si stima la crescita futura della vegetazione (+2 m su 5 anni, a 0,4 m/anno). Riapplicando la stessa formula al bosco "post-intervento e cresciuto" si ottiene il rischio residuo, che consente di confrontare gli scenari in modo quantitativo.</span></p>
 
-  <h2><span class="n">6.</span>Intermediate Maps</h2>
+  <h2><span class="n">6.</span><span class="en">Intermediate Maps</span><span class="it">Mappe intermedie</span></h2>
   <div class="two">
     <div class="revealcard">
       <figure><img src="../assets/img/lidar/dtm.webp" alt="DTM"></figure>
-      <div class="reveal"><h4>6.1 DTM</h4><p>Modello digitale del terreno: la quota del suolo nudo, ricostruita dai soli ritorni LiDAR classificati come terreno. Descrive la morfologia del versante ed è la superficie di base da cui si misura l'altezza della vegetazione.</p></div>
+      <div class="reveal"><h4>6.1 DTM</h4><p><span class="en">Digital Terrain Model: the bare-ground elevation, reconstructed from the LiDAR returns classified as ground only. It describes the slope morphology and is the base surface from which vegetation height is measured.</span><span class="it">Modello digitale del terreno: la quota del suolo nudo, ricostruita dai soli ritorni LiDAR classificati come terreno. Descrive la morfologia del versante ed è la superficie di base da cui si misura l'altezza della vegetazione.</span></p></div>
     </div>
     <div class="revealcard">
       <figure><img src="../assets/img/lidar/dsm.webp" alt="DSM"></figure>
-      <div class="reveal"><h4>6.2 DSM</h4><p>Modello digitale della superficie: la quota del primo elemento intercettato dal laser, chiome comprese. Rappresenta il «tetto» del bosco; sottratto al DTM restituisce lo spessore della vegetazione.</p></div>
+      <div class="reveal"><h4>6.2 DSM</h4><p><span class="en">Digital Surface Model: the elevation of the first element intercepted by the laser, canopies included. It represents the "roof" of the forest; subtracted from the DTM it returns the thickness of the vegetation.</span><span class="it">Modello digitale della superficie: la quota del primo elemento intercettato dal laser, chiome comprese. Rappresenta il «tetto» del bosco; sottratto al DTM restituisce lo spessore della vegetazione.</span></p></div>
     </div>
   </div>
   <div class="two">
     <div class="revealcard">
       <figure><img src="../assets/img/lidar/chm.webp" alt="CHM"></figure>
-      <div class="reveal"><h4>6.3 CHM</h4><p>Modello di altezza delle chiome (DSM − DTM): l'altezza pura della vegetazione, depurata dalla pendenza del terreno. I toni gialli indicano gli alberi più alti (fino a ~30 m), i viola il suolo e la vegetazione bassa. È l'input principale del modello di rischio.</p></div>
+      <div class="reveal"><h4>6.3 CHM</h4><p><span class="en">Canopy Height Model (DSM − DTM): the pure vegetation height, cleaned of terrain slope. Yellow tones indicate the tallest trees (up to ~30 m), purple the ground and low vegetation. It is the main input of the risk model.</span><span class="it">Modello di altezza delle chiome (DSM − DTM): l'altezza pura della vegetazione, depurata dalla pendenza del terreno. I toni gialli indicano gli alberi più alti (fino a ~30 m), i viola il suolo e la vegetazione bassa. È l'input principale del modello di rischio.</span></p></div>
     </div>
     <div class="revealcard">
       <figure><img src="../assets/img/lidar/proximity.webp" alt="Proximity Map"></figure>
-      <div class="reveal"><h4>6.4 Proximity Map</h4><p>Mappa di prossimità dall'infrastruttura elettrica (linea AT e piloni). Il raster è suddiviso in fasce costanti di 20 m; i toni scuri indicano la vicinanza ai cavi, i chiari l'allontanamento progressivo. È un input fondamentale per il calcolo del rischio.</p></div>
+      <div class="reveal"><h4><span class="en">6.4 Proximity Map</span><span class="it">6.4 Mappa di prossimità</span></h4><p><span class="en">Proximity map from the electrical infrastructure (HV line and pylons). The raster is divided into constant 20 m bands; dark tones indicate closeness to the cables, light tones the progressive move away. It is a fundamental input for the risk calculation.</span><span class="it">Mappa di prossimità dall'infrastruttura elettrica (linea AT e piloni). Il raster è suddiviso in fasce costanti di 20 m; i toni scuri indicano la vicinanza ai cavi, i chiari l'allontanamento progressivo. È un input fondamentale per il calcolo del rischio.</span></p></div>
     </div>
   </div>
-  <figure><img src="../assets/img/lidar/chm_classes.webp" alt="Classi di altezza del CHM"><figcaption>Riclassificazione del CHM in classi di altezza della vegetazione.</figcaption></figure>
+  <figure><img src="../assets/img/lidar/chm_classes.webp" alt="CHM height classes"><figcaption><span class="en">Reclassification of the CHM into vegetation-height classes.</span><span class="it">Riclassificazione del CHM in classi di altezza della vegetazione.</span></figcaption></figure>
 
-  <h2><span class="n">7.</span>Risk Model &amp; Classification</h2>
+  <h2><span class="n">7.</span><span class="en">Risk Model &amp; Classification</span><span class="it">Modello di rischio &amp; classificazione</span></h2>
   <table>
-    <tr><th>Value</th><th>Risk class</th><th>Condition (Δ)</th><th>Physical meaning</th></tr>
-    <tr><td>0</td><td>No risk</td><td>Δ &lt; 0 or H &lt; 12 m</td><td>Tree too short or too far to reach the conductors</td></tr>
-    <tr><td>1</td><td>Moderate</td><td>0 ≤ Δ &lt; 2 m</td><td>Reaches the line only with the canopy tip</td></tr>
-    <tr><td>2</td><td>High</td><td>2 ≤ Δ &lt; 5 m</td><td>Overtops the line when falling: impact likely</td></tr>
-    <tr><td>3</td><td>Very High</td><td>5 ≤ Δ ≤ 10 m</td><td>Large overshoot beyond the conductors</td></tr>
-    <tr><td>4</td><td>Critical</td><td>Δ &gt; 10 m</td><td>Tall stem right next to the line: immediate hazard</td></tr>
+    <tr><th><span class="en">Value</span><span class="it">Valore</span></th><th><span class="en">Risk class</span><span class="it">Classe di rischio</span></th><th><span class="en">Condition (Δ)</span><span class="it">Condizione (Δ)</span></th><th><span class="en">Physical meaning</span><span class="it">Significato fisico</span></th></tr>
+    <tr><td>0</td><td><span class="en">No risk</span><span class="it">Nessun rischio</span></td><td><span class="en">Δ &lt; 0 or H &lt; 12 m</span><span class="it">Δ &lt; 0 oppure H &lt; 12 m</span></td><td><span class="en">Tree too short or too far to reach the conductors</span><span class="it">Albero troppo basso o troppo lontano per raggiungere i conduttori</span></td></tr>
+    <tr><td>1</td><td><span class="en">Moderate</span><span class="it">Moderato</span></td><td>0 ≤ Δ &lt; 2 m</td><td><span class="en">Reaches the line only with the canopy tip</span><span class="it">Raggiunge la linea solo con la cima della chioma</span></td></tr>
+    <tr><td>2</td><td><span class="en">High</span><span class="it">Alto</span></td><td>2 ≤ Δ &lt; 5 m</td><td><span class="en">Overtops the line when falling: impact likely</span><span class="it">Scavalca la linea cadendo: impatto probabile</span></td></tr>
+    <tr><td>3</td><td><span class="en">Very High</span><span class="it">Molto alto</span></td><td>5 ≤ Δ ≤ 10 m</td><td><span class="en">Large overshoot beyond the conductors</span><span class="it">Ampio scavalcamento oltre i conduttori</span></td></tr>
+    <tr><td>4</td><td><span class="en">Critical</span><span class="it">Critico</span></td><td>Δ &gt; 10 m</td><td><span class="en">Tall stem right next to the line: immediate hazard</span><span class="it">Fusto alto a ridosso della linea: pericolo immediato</span></td></tr>
   </table>
 
-  <h2><span class="n">8.</span>Management Scenarios</h2>
-  <p>Su un orizzonte di 5 anni (crescita +2 m, a 0,4 m/anno) si confrontano tre strategie, applicando la stessa formula di rischio:</p>
+  <h2><span class="n">8.</span><span class="en">Management Scenarios</span><span class="it">Scenari di gestione</span></h2>
+  <p><span class="en">Over a 5-year horizon (+2 m growth, at 0.4 m/year) three strategies are compared, applying the same risk formula:</span><span class="it">Su un orizzonte di 5 anni (crescita +2 m, a 0,4 m/anno) si confrontano tre strategie, applicando la stessa formula di rischio:</span></p>
   <ul>
-    <li>Scenario A — a soglia: abbattimento di tutti gli alberi ≥ 20 m, a prescindere dalla distanza dalla linea (logica speditiva).</li>
-    <li>Scenario B — geometrico: taglio mirato delle sole celle attualmente a rischio.</li>
-    <li>Scenario C — geometrico previsionale: taglio delle celle che saranno a rischio entro l'orizzonte temporale, con un margine di crescita.</li>
+    <li><span class="en">Scenario A — threshold: felling of all trees ≥ 20 m, regardless of the distance from the line (quick-and-dirty logic).</span><span class="it">Scenario A — a soglia: abbattimento di tutti gli alberi ≥ 20 m, a prescindere dalla distanza dalla linea (logica speditiva).</span></li>
+    <li><span class="en">Scenario B — geometric: targeted cutting of only the cells currently at risk.</span><span class="it">Scenario B — geometrico: taglio mirato delle sole celle attualmente a rischio.</span></li>
+    <li><span class="en">Scenario C — predictive geometric: cutting of the cells that will be at risk within the time horizon, with a growth margin.</span><span class="it">Scenario C — geometrico previsionale: taglio delle celle che saranno a rischio entro l'orizzonte temporale, con un margine di crescita.</span></li>
   </ul>
-  <p class="callout">Perché +2 m in 5 anni? Un tasso medio di 0,4 m/anno è una scelta cautelativa: in un popolamento maturo la chioma dominante cresce lentamente, mentre la crescita più rapida riguarda sottobosco e margini — proprio ciò che genera <em>nuovo</em> rischio. Sottostimare il rischio futuro è l'errore più costoso per un gestore di rete.</p>
+  <p class="callout"><span class="en">Why +2 m in 5 years? An average rate of 0.4 m/year is a conservative choice: in a mature stand the dominant canopy grows slowly, while the faster growth concerns the understory and edges — exactly what generates <em>new</em> risk. Underestimating future risk is the most expensive mistake for a grid operator.</span><span class="it">Perché +2 m in 5 anni? Un tasso medio di 0,4 m/anno è una scelta cautelativa: in un popolamento maturo la chioma dominante cresce lentamente, mentre la crescita più rapida riguarda sottobosco e margini — proprio ciò che genera <em>nuovo</em> rischio. Sottostimare il rischio futuro è l'errore più costoso per un gestore di rete.</span></p>
 
-  <h2><span class="n">9.</span>Results &amp; Comparison</h2>
+  <h2><span class="n">9.</span><span class="en">Results &amp; Comparison</span><span class="it">Risultati &amp; confronto</span></h2>
   <div class="kpis">
-    <div class="kpi"><b>−3%</b><span>Scenario A (a soglia)</span></div>
-    <div class="kpi"><b>−60%</b><span>Scenario B (geometrico)</span></div>
-    <div class="kpi"><b>−100%</b><span>Scenario C (previsionale)</span></div>
+    <div class="kpi"><b>−3%</b><span><span class="en">Scenario A (threshold)</span><span class="it">Scenario A (a soglia)</span></span></div>
+    <div class="kpi"><b>−60%</b><span><span class="en">Scenario B (geometric)</span><span class="it">Scenario B (geometrico)</span></span></div>
+    <div class="kpi"><b>−100%</b><span><span class="en">Scenario C (predictive)</span><span class="it">Scenario C (previsionale)</span></span></div>
   </div>
-  <p>Il confronto tra i tre approcci racconta una progressione chiara. La gestione a soglia (Scenario A), che abbatte gli alberi oltre i 20 m a prescindere dalla distanza dalla linea, riduce il rischio complessivo di appena il 3% circa: gran parte del pericolo, infatti, proviene da alberi di 12–20 m vicini ai conduttori, che un criterio basato sulla sola altezza non riesce a intercettare — in sostanza colpisce il bersaglio sbagliato. La gestione geometrica sul presente (Scenario B) centra invece il bersaglio giusto e azzera il rischio attuale; intervenendo però solo sulle celle a rischio oggi, lascia che la crescita della vegetazione (+2 m in cinque anni) faccia ricomparire circa 9.555 m² di rischio residuo a 5 anni — un valore comunque inferiore di circa il 60% rispetto al bosco non trattato (~23.937 m²). Solo la gestione geometrica previsionale (Scenario C) anticipa questa crescita e mantiene il rischio residuo a zero per l'intero orizzonte temporale: è proprio la capacità di prevedere, più che di tagliare di più, a distinguere lo Scenario C dallo Scenario B.</p>
-  <h3>Scenario A — gestione a soglia (≥ 20 m)</h3>
+  <p><span class="en">The comparison between the three approaches tells a clear progression. Threshold management (Scenario A), which fells trees over 20 m regardless of the distance from the line, cuts the overall risk by just about 3%: much of the danger, in fact, comes from 12–20 m trees close to the conductors, which a height-only criterion cannot intercept — in short, it hits the wrong target. Geometric management on the present (Scenario B) instead hits the right target and zeroes the current risk; but by acting only on the cells at risk today, it lets vegetation growth (+2 m in five years) bring back about 9,555 m² of residual risk at 5 years — a value still around 60% lower than the untreated forest (~23,937 m²). Only predictive geometric management (Scenario C) anticipates this growth and keeps the residual risk at zero for the whole horizon: it is precisely the ability to predict, more than to cut more, that distinguishes Scenario C from Scenario B.</span><span class="it">Il confronto tra i tre approcci racconta una progressione chiara. La gestione a soglia (Scenario A), che abbatte gli alberi oltre i 20 m a prescindere dalla distanza dalla linea, riduce il rischio complessivo di appena il 3% circa: gran parte del pericolo, infatti, proviene da alberi di 12–20 m vicini ai conduttori, che un criterio basato sulla sola altezza non riesce a intercettare — in sostanza colpisce il bersaglio sbagliato. La gestione geometrica sul presente (Scenario B) centra invece il bersaglio giusto e azzera il rischio attuale; intervenendo però solo sulle celle a rischio oggi, lascia che la crescita della vegetazione (+2 m in cinque anni) faccia ricomparire circa 9.555 m² di rischio residuo a 5 anni — un valore comunque inferiore di circa il 60% rispetto al bosco non trattato (~23.937 m²). Solo la gestione geometrica previsionale (Scenario C) anticipa questa crescita e mantiene il rischio residuo a zero per l'intero orizzonte temporale: è proprio la capacità di prevedere, più che di tagliare di più, a distinguere lo Scenario C dallo Scenario B.</span></p>
+  <h3><span class="en">Scenario A — threshold management (≥ 20 m)</span><span class="it">Scenario A — gestione a soglia (≥ 20 m)</span></h3>
   <div class="two">
-    <figure><img src="../assets/img/lidar/scenario_a_today.webp" alt="Scenario A — rischio oggi"><figcaption>9.1.1 Rischio oggi (gestione a soglia).</figcaption></figure>
-    <figure><img src="../assets/img/lidar/scenario_a_residual.webp" alt="Scenario A — rischio residuo 5 anni"><figcaption>9.1.2 Rischio residuo a 5 anni.</figcaption></figure>
+    <figure><img src="../assets/img/lidar/scenario_a_today.webp" alt="Scenario A — risk today"><figcaption><span class="en">9.1.1 Risk today (threshold management).</span><span class="it">9.1.1 Rischio oggi (gestione a soglia).</span></figcaption></figure>
+    <figure><img src="../assets/img/lidar/scenario_a_residual.webp" alt="Scenario A — 5-year residual risk"><figcaption><span class="en">9.1.2 Residual risk at 5 years.</span><span class="it">9.1.2 Rischio residuo a 5 anni.</span></figcaption></figure>
   </div>
-  <h3>Scenario B — gestione geometrica (sul presente)</h3>
+  <h3><span class="en">Scenario B — geometric management (on the present)</span><span class="it">Scenario B — gestione geometrica (sul presente)</span></h3>
   <div class="two">
-    <figure><img src="../assets/img/lidar/scenario_b_today.webp" alt="Scenario B — rischio oggi"><figcaption>9.2.1 Rischio oggi (geometrico).</figcaption></figure>
-    <figure><img src="../assets/img/lidar/scenario_b_residual.webp" alt="Scenario B — rischio residuo 5 anni"><figcaption>9.2.2 Rischio residuo a 5 anni (senza previsione).</figcaption></figure>
+    <figure><img src="../assets/img/lidar/scenario_b_today.webp" alt="Scenario B — risk today"><figcaption><span class="en">9.2.1 Risk today (geometric).</span><span class="it">9.2.1 Rischio oggi (geometrico).</span></figcaption></figure>
+    <figure><img src="../assets/img/lidar/scenario_b_residual.webp" alt="Scenario B — 5-year residual risk"><figcaption><span class="en">9.2.2 Residual risk at 5 years (without prediction).</span><span class="it">9.2.2 Rischio residuo a 5 anni (senza previsione).</span></figcaption></figure>
   </div>
-  <h3>Scenario C — gestione geometrica previsionale</h3>
+  <h3><span class="en">Scenario C — predictive geometric management</span><span class="it">Scenario C — gestione geometrica previsionale</span></h3>
   <div class="two">
-    <figure><img src="../assets/img/lidar/scenario_c_base.webp" alt="Scenario C — rischio previsto a 5 anni"><figcaption>9.3.1 Rischio previsto a 5 anni (nessun intervento).</figcaption></figure>
-    <figure><img src="../assets/img/lidar/scenario_c_residual.webp" alt="Scenario C — rischio residuo pari a 0"><figcaption>9.3.2 Rischio residuo a 5 anni: pari a 0 grazie alla gestione sulla previsione.</figcaption></figure>
+    <figure><img src="../assets/img/lidar/scenario_c_base.webp" alt="Scenario C — predicted risk at 5 years"><figcaption><span class="en">9.3.1 Predicted risk at 5 years (no intervention).</span><span class="it">9.3.1 Rischio previsto a 5 anni (nessun intervento).</span></figcaption></figure>
+    <figure><img src="../assets/img/lidar/scenario_c_residual.webp" alt="Scenario C — residual risk equal to 0"><figcaption><span class="en">9.3.2 Residual risk at 5 years: equal to 0 thanks to prediction-based management.</span><span class="it">9.3.2 Rischio residuo a 5 anni: pari a 0 grazie alla gestione sulla previsione.</span></figcaption></figure>
   </div>
-  <figure><img src="../assets/img/lidar/risk_chart.webp" alt="Grafico di confronto del rischio tra scenari"><figcaption>Confronto quantitativo del rischio residuo tra i tre scenari.</figcaption></figure>
-  <figure><img src="../assets/img/lidar/risk_table.webp" alt="Tabella di confronto del rischio tra scenari"><figcaption>Tabella di sintesi del confronto tra gli scenari.</figcaption></figure>
+  <figure><img src="../assets/img/lidar/risk_chart.webp" alt="Risk comparison chart across scenarios"><figcaption><span class="en">Quantitative comparison of the residual risk across the three scenarios.</span><span class="it">Confronto quantitativo del rischio residuo tra i tre scenari.</span></figcaption></figure>
+  <figure><img src="../assets/img/lidar/risk_table.webp" alt="Risk comparison table across scenarios"><figcaption><span class="en">Summary table of the comparison across scenarios.</span><span class="it">Tabella di sintesi del confronto tra gli scenari.</span></figcaption></figure>
 
-  <h2><span class="n">10.</span>Intervention Magnitude &amp; Cut Type</h2>
+  <h2><span class="n">10.</span><span class="en">Intervention Magnitude &amp; Cut Type</span><span class="it">Entità dell'intervento &amp; tipo di taglio</span></h2>
   <div class="three">
-    <figure><img src="../assets/img/lidar/cut_type_a.webp" alt="Tipo di taglio — Scenario A"><figcaption>Scenario A — tipo di taglio.</figcaption></figure>
-    <figure><img src="../assets/img/lidar/cut_type_b.webp" alt="Tipo di taglio — Scenario B"><figcaption>Scenario B — tipo di taglio.</figcaption></figure>
-    <figure><img src="../assets/img/lidar/cut_type_c.webp" alt="Tipo di taglio — Scenario C"><figcaption>Scenario C — tipo di taglio.</figcaption></figure>
+    <figure><img src="../assets/img/lidar/cut_type_a.webp" alt="Cut type — Scenario A"><figcaption><span class="en">Scenario A — cut type.</span><span class="it">Scenario A — tipo di taglio.</span></figcaption></figure>
+    <figure><img src="../assets/img/lidar/cut_type_b.webp" alt="Cut type — Scenario B"><figcaption><span class="en">Scenario B — cut type.</span><span class="it">Scenario B — tipo di taglio.</span></figcaption></figure>
+    <figure><img src="../assets/img/lidar/cut_type_c.webp" alt="Cut type — Scenario C"><figcaption><span class="en">Scenario C — cut type.</span><span class="it">Scenario C — tipo di taglio.</span></figcaption></figure>
   </div>
-  <figure><img src="../assets/img/lidar/cut_type_chart.webp" alt="Superficie trattata per tipo di intervento, per scenario"><figcaption>Superficie trattata per tipo — potatura (giallo) vs abbattimento (rosso), per scenario.</figcaption></figure>
+  <figure><img src="../assets/img/lidar/cut_type_chart.webp" alt="Treated area by intervention type, per scenario"><figcaption><span class="en">Treated area by type — pruning (yellow) vs. felling (red), per scenario.</span><span class="it">Superficie trattata per tipo — potatura (giallo) vs abbattimento (rosso), per scenario.</span></figcaption></figure>
   <table>
-    <tr><th>Strategy</th><th>Cut area</th><th>Volume removed</th><th>Pruning</th><th>Felling</th><th>Residual risk</th></tr>
-    <tr><td>A — Threshold (≥ 20 m)</td><td>732 m²</td><td>15.413 m³</td><td>0</td><td>732 m²</td><td>23.205 m²</td></tr>
-    <tr><td>B — Geometric (current)</td><td>18.644 m²</td><td>189.235 m³</td><td>12.669 m²</td><td>5.975 m²</td><td>9.555 m²</td></tr>
-    <tr><td>C — Geometric previsional</td><td>23.937 m²</td><td>245.868 m³</td><td>16.985 m²</td><td>6.952 m²</td><td>0 m²</td></tr>
+    <tr><th><span class="en">Strategy</span><span class="it">Strategia</span></th><th><span class="en">Cut area</span><span class="it">Superficie tagliata</span></th><th><span class="en">Volume removed</span><span class="it">Volume asportato</span></th><th><span class="en">Pruning</span><span class="it">Potatura</span></th><th><span class="en">Felling</span><span class="it">Abbattimento</span></th><th><span class="en">Residual risk</span><span class="it">Rischio residuo</span></th></tr>
+    <tr><td><span class="en">A — Threshold (≥ 20 m)</span><span class="it">A — A soglia (≥ 20 m)</span></td><td>732 m²</td><td>15.413 m³</td><td>0</td><td>732 m²</td><td>23.205 m²</td></tr>
+    <tr><td><span class="en">B — Geometric (current)</span><span class="it">B — Geometrico (sul presente)</span></td><td>18.644 m²</td><td>189.235 m³</td><td>12.669 m²</td><td>5.975 m²</td><td>9.555 m²</td></tr>
+    <tr><td><span class="en">C — Predictive geometric</span><span class="it">C — Geometrico previsionale</span></td><td>23.937 m²</td><td>245.868 m³</td><td>16.985 m²</td><td>6.952 m²</td><td>0 m²</td></tr>
   </table>
-  <p>A prima vista la gestione geometrica sembra penalizzante: rimuove molto più bosco del taglio a soglia, con un volume asportato circa 16 volte superiore. È però un confronto ingannevole, per tre ragioni. Conta innanzitutto <em>cosa</em> si rimuove: la maggior parte dell'intervento geometrico è potatura — circa il 71% della superficie trattata — che abbassa la pianta lasciandola in vita, mentre l'abbattimento vero e proprio è riservato alla sola fascia a ridosso dei conduttori, dove un fusto intero, cadendo, colpirebbe comunque la linea. Conta poi l'<em>efficienza</em>: intervenendo dove la geometria altezza-distanza lo richiede, il metodo geometrico elimina circa il doppio del rischio per ogni metro cubo tagliato. E conta infine la <em>durata nel tempo</em>: grazie alla potatura calibrata sulla crescita futura, lo scenario previsionale (C) mantiene il rischio residuo a zero per l'intero orizzonte di cinque anni ed evita interventi d'urgenza, mentre il taglio a soglia lascia rientrare il rischio quasi inalterato già a breve termine. In sintesi, il metodo geometrico non "taglia di meno": taglia meglio — più mirato, più graduato e più duraturo.</p>
-  <p>Questa differenza si riflette anche sul piano economico, dove ciò che conta è il costo <em>totale</em> sul ciclo pluriennale, non quello del singolo intervento. Su un versante impervio la voce più pesante non è il taglio in sé, ma la <em>mobilitazione</em> della squadra — accesso, mezzi, eventuale disalimentazione della linea — un costo fisso per ogni uscita: la gestione a soglia, riducendo il rischio solo del 3%, obbliga a tornare più volte, mentre il previsionale concentra tutto in un'unica uscita che tiene per cinque anni. A ciò si somma il costo dei <em>guasti evitati</em>, spesso la voce dominante: con oltre 23.000 m² lasciati a rischio, il taglio a soglia espone a disservizi, penali di continuità e — nel caso peggiore — inneschi d'incendio, mentre azzerare il rischio elimina questo costo atteso. Infine la <em>programmabilità</em>: un rischio residuo nullo per un orizzonte noto permette un ciclo di manutenzione ordinario e pianificato, ben più economico degli interventi d'urgenza reattivi. In quest'ottica la spesa maggiore del giorno del taglio non è un costo ma un investimento, che il metodo geometrico ammortizza sull'intero quinquennio — fermo restando che qui si ragiona per ordini di grandezza: tradurre superfici e volumi in euro richiede un modello di costo dedicato (cfr. sviluppi futuri).</p>
+  <p><span class="en">At first glance geometric management seems penalising: it removes far more forest than the threshold cut, with a removed volume about 16 times greater. But it is a misleading comparison, for three reasons. First, <em>what</em> is removed matters: most of the geometric intervention is pruning — about 71% of the treated area — which lowers the tree while leaving it alive, whereas actual felling is reserved for the strip right next to the conductors, where a whole falling stem would hit the line anyway. Then <em>efficiency</em> matters: by acting where the height-distance geometry requires, the geometric method removes about twice the risk per cubic metre cut. And finally <em>durability</em> matters: thanks to pruning calibrated on future growth, the predictive scenario (C) keeps the residual risk at zero for the whole five-year horizon and avoids emergency interventions, while the threshold cut lets the risk return almost unchanged in the short term. In short, the geometric method does not "cut less": it cuts better — more targeted, more graduated and more durable.</span><span class="it">A prima vista la gestione geometrica sembra penalizzante: rimuove molto più bosco del taglio a soglia, con un volume asportato circa 16 volte superiore. È però un confronto ingannevole, per tre ragioni. Conta innanzitutto <em>cosa</em> si rimuove: la maggior parte dell'intervento geometrico è potatura — circa il 71% della superficie trattata — che abbassa la pianta lasciandola in vita, mentre l'abbattimento vero e proprio è riservato alla sola fascia a ridosso dei conduttori, dove un fusto intero, cadendo, colpirebbe comunque la linea. Conta poi l'<em>efficienza</em>: intervenendo dove la geometria altezza-distanza lo richiede, il metodo geometrico elimina circa il doppio del rischio per ogni metro cubo tagliato. E conta infine la <em>durata nel tempo</em>: grazie alla potatura calibrata sulla crescita futura, lo scenario previsionale (C) mantiene il rischio residuo a zero per l'intero orizzonte di cinque anni ed evita interventi d'urgenza, mentre il taglio a soglia lascia rientrare il rischio quasi inalterato già a breve termine. In sintesi, il metodo geometrico non "taglia di meno": taglia meglio — più mirato, più graduato e più duraturo.</span></p>
+  <p><span class="en">This difference is also reflected on the economic side, where what counts is the <em>total</em> cost over the multi-year cycle, not that of a single intervention. On a steep slope the heaviest item is not the cut itself, but the <em>mobilisation</em> of the crew — access, equipment, possible de-energising of the line — a fixed cost for every outing: threshold management, cutting risk by only 3%, forces repeated returns, whereas the predictive one concentrates everything into a single outing that holds for five years. To this is added the cost of the <em>avoided outages</em>, often the dominant item: with over 23,000 m² left at risk, the threshold cut exposes to disruptions, continuity penalties and — in the worst case — fire ignitions, while zeroing the risk eliminates this expected cost. Finally, <em>plannability</em>: a null residual risk over a known horizon allows an ordinary, planned maintenance cycle, far cheaper than reactive emergency interventions. From this perspective the greater expense on cutting day is not a cost but an investment, which the geometric method amortises over the whole five years — bearing in mind that here we reason by orders of magnitude: translating areas and volumes into euros requires a dedicated cost model (see future developments).</span><span class="it">Questa differenza si riflette anche sul piano economico, dove ciò che conta è il costo <em>totale</em> sul ciclo pluriennale, non quello del singolo intervento. Su un versante impervio la voce più pesante non è il taglio in sé, ma la <em>mobilitazione</em> della squadra — accesso, mezzi, eventuale disalimentazione della linea — un costo fisso per ogni uscita: la gestione a soglia, riducendo il rischio solo del 3%, obbliga a tornare più volte, mentre il previsionale concentra tutto in un'unica uscita che tiene per cinque anni. A ciò si somma il costo dei <em>guasti evitati</em>, spesso la voce dominante: con oltre 23.000 m² lasciati a rischio, il taglio a soglia espone a disservizi, penali di continuità e — nel caso peggiore — inneschi d'incendio, mentre azzerare il rischio elimina questo costo atteso. Infine la <em>programmabilità</em>: un rischio residuo nullo per un orizzonte noto permette un ciclo di manutenzione ordinario e pianificato, ben più economico degli interventi d'urgenza reattivi. In quest'ottica la spesa maggiore del giorno del taglio non è un costo ma un investimento, che il metodo geometrico ammortizza sull'intero quinquennio — fermo restando che qui si ragiona per ordini di grandezza: tradurre superfici e volumi in euro richiede un modello di costo dedicato (cfr. sviluppi futuri).</span></p>
 
-  <h2><span class="n">11.</span>Limitations &amp; Future Development</h2>
+  <h2><span class="n">11.</span><span class="en">Limitations &amp; Future Development</span><span class="it">Limiti &amp; sviluppi futuri</span></h2>
   <ul>
-    <li>Modello pixel-based: il rischio di caduta è in realtà un fenomeno per-albero; l'estensione naturale è l'analisi object-based (individual tree crown detection).</li>
-    <li>Linea modellata come tracciato 2D; sviluppo successivo: quota reale dei conduttori (catenaria con abbassamento termico).</li>
-    <li>Crescita uniforme (+2 m): in realtà varia per specie; integrazione di tassi di crescita specie-specifici e del concetto di <em>danger tree</em> secondo le distanze di sicurezza normate.</li>
-    <li>Analisi economica: uno sviluppo naturale è un modello di costo (€) che traduca superfici trattate, volumi e rischio residuo in un confronto costo-beneficio / TCO tra gli scenari, integrando costi di mobilitazione, guasti evitati e ciclo di manutenzione.</li>
+    <li><span class="en">Pixel-based model: tree-fall risk is actually a per-tree phenomenon; the natural extension is object-based analysis (individual tree crown detection).</span><span class="it">Modello pixel-based: il rischio di caduta è in realtà un fenomeno per-albero; l'estensione naturale è l'analisi object-based (individual tree crown detection).</span></li>
+    <li><span class="en">The line is modelled as a 2D track; a subsequent development: the real conductor elevation (catenary with thermal sag).</span><span class="it">Linea modellata come tracciato 2D; sviluppo successivo: quota reale dei conduttori (catenaria con abbassamento termico).</span></li>
+    <li><span class="en">Uniform growth (+2 m): in reality it varies by species; integration of species-specific growth rates and of the <em>danger tree</em> concept following the regulated safety distances.</span><span class="it">Crescita uniforme (+2 m): in realtà varia per specie; integrazione di tassi di crescita specie-specifici e del concetto di <em>danger tree</em> secondo le distanze di sicurezza normate.</span></li>
+    <li><span class="en">Economic analysis: a natural development is a cost model (€) translating treated areas, volumes and residual risk into a cost-benefit / TCO comparison between scenarios, integrating mobilisation costs, avoided outages and the maintenance cycle.</span><span class="it">Analisi economica: uno sviluppo naturale è un modello di costo (€) che traduca superfici trattate, volumi e rischio residuo in un confronto costo-beneficio / TCO tra gli scenari, integrando costi di mobilitazione, guasti evitati e ciclo di manutenzione.</span></li>
   </ul>
 
   <hr>
@@ -257,9 +277,9 @@ details.why .wb p:last-child{margin-bottom:2px}
 
   <h2>References</h2>
   <ul class="refs">
-    <li>Provincia Autonoma di Trento — Dati LiDAR e cartografia tecnica (Geoportale PAT).</li>
+    <li>Provincia Autonoma di Trento — <span class="en">LiDAR data and technical cartography (Geoportale PAT).</span><span class="it">Dati LiDAR e cartografia tecnica (Geoportale PAT).</span></li>
     <li>QGIS Development Team. <em>QGIS Geographic Information System.</em> OSGeo; GDAL/OGR contributors.</li>
-    <li>CEI EN 50341 — <em>Overhead electrical lines exceeding AC 1 kV</em> (clearance e distanze di sicurezza).</li>
+    <li>CEI EN 50341 — <em>Overhead electrical lines exceeding AC 1 kV</em> <span class="en">(clearance and safety distances).</span><span class="it">(clearance e distanze di sicurezza).</span></li>
     <li>Walker M., Dahle G.A., et al. (2023). <em>Literature Review of UAS and LiDAR with Application to Distribution Utility Vegetation Management.</em> Arboriculture &amp; Urban Forestry, 49(3).</li>
     <li>Li W., Guo Q., Jakubowski M.K., Kelly M. (2012). <em>A new method for segmenting individual trees from the LiDAR point cloud.</em> PE&amp;RS, 78(1): 75–84.</li>
   </ul>
@@ -268,13 +288,20 @@ details.why .wb p:last-child{margin-bottom:2px}
 </div>
 
 <script>
-/* Se un file immagine non è ancora presente, mostra un placeholder col nome-file atteso.
-   Appena copi la mappa in assets/img/... l'immagine compare da sola (nessuna modifica all'HTML). */
+document.getElementById('lang').addEventListener('click',function(e){
+  var b=e.target.closest('button'); if(!b)return;
+  var l=b.getAttribute('data-set');
+  document.documentElement.setAttribute('data-lang',l);
+  try{localStorage.setItem('lang',l);}catch(err){}
+});
+</script>
+<script>
+/* Placeholder automatico immagini mancanti */
 function _ph(img){
   var src=(img.getAttribute('src')||'').split('/').pop();
   var box=document.createElement('div');
   box.className='ph';
-  box.innerHTML='immagine mancante<b>'+src+'</b>';
+  box.innerHTML='<span class="en">missing image</span><span class="it">immagine mancante</span><b>'+src+'</b>';
   img.replaceWith(box);
 }
 document.querySelectorAll('figure img').forEach(function(img){
@@ -283,20 +310,24 @@ document.querySelectorAll('figure img').forEach(function(img){
 });
 </script>
 <script>
+/* TOC bilingue */
 (function(){
   var heads=[].slice.call(document.querySelectorAll('.wrap h2'));
   if(heads.length<2) return;
-  var nav=document.createElement('nav'); nav.id='toc'; nav.setAttribute('aria-label','Indice');
+  var nav=document.createElement('nav'); nav.id='toc'; nav.setAttribute('aria-label','Index');
   var items=[], num=0;
+  function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;');}
   heads.forEach(function(h,i){
     if(!h.id) h.id='sec-'+(i+1);
-    var c=h.cloneNode(true), n=c.querySelector('.n'); if(n) n.remove();
-    var title=c.textContent.trim().replace(/\s+/g,' ');
-    var label=title;
-    if(h.querySelector('.n')){ num++; label=('0'+num).slice(-2)+'  '+title; }
+    var en=h.querySelector('.en'), it=h.querySelector('.it');
+    var enT=(en?en.textContent:h.textContent).trim().replace(/\s+/g,' ');
+    var itT=(it?it.textContent:h.textContent).trim().replace(/\s+/g,' ');
+    var pre='';
+    if(h.querySelector('.n')){ num++; pre=('0'+num).slice(-2)+'  '; }
     var a=document.createElement('a'); a.href='#'+h.id;
     var d=document.createElement('span'); d.className='dash';
-    var l=document.createElement('span'); l.className='lbl'; l.textContent=label;
+    var l=document.createElement('span'); l.className='lbl';
+    l.innerHTML='<span class="en">'+pre+esc(enT)+'</span><span class="it">'+pre+esc(itT)+'</span>';
     a.appendChild(d); a.appendChild(l);
     a.addEventListener('click',function(e){e.preventDefault();h.scrollIntoView({behavior:'smooth',block:'start'});history.replaceState(null,'','#'+h.id);});
     nav.appendChild(a); items.push({a:a,h:h});
