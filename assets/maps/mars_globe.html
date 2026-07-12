@@ -210,7 +210,7 @@ function makeGraded(opts,gradeOn){
       'if(uG>0.5){ vec3 gC=gl_FragColor.rgb; float gL=dot(gC,vec3(0.299,0.587,0.114)); gC=mix(vec3(gL),gC,1.2); gC*=vec3(1.1,1.0,0.92); float blu=clamp((gC.b-gC.r)*2.5,0.0,1.0); gC*=mix(1.0,0.62,blu); gC*=1.07; gl_FragColor.rgb=clamp(gC,0.0,1.0); }\n#include <encodings_fragment>'); };
   return m;
 }
-const globeMat=makeGraded({color:0xffffff}, true);
+const globeMat=makeGraded({color:0x0c0806}, true);   // parte scura (= sfondo) per evitare il flash bianco
 const globe=new THREE.Mesh(new THREE.SphereGeometry(1,96,64),globeMat);
 group.add(globe); group.rotation.y=-1.4; group.rotation.x=0.15;
 const stack=[]; // layer attivi (ordine di attivazione)
@@ -265,7 +265,7 @@ const kpRenderer=new THREE.WebGLRenderer({canvas:document.getElementById('kpc'),
 kpRenderer.setPixelRatio(Math.min(devicePixelRatio,2)); kpRenderer.outputEncoding=THREE.sRGBEncoding;
 const kpScene=new THREE.Scene();
 const kpCam=new THREE.PerspectiveCamera(30,1,0.1,10); kpCam.position.set(0,0,5.6);
-const kpSphere=new THREE.Mesh(new THREE.SphereGeometry(1,48,32),new THREE.MeshBasicMaterial({color:0xffffff}));
+const kpSphere=new THREE.Mesh(new THREE.SphereGeometry(1,48,32),new THREE.MeshBasicMaterial({color:0x0c0806}));
 kpScene.add(kpSphere);
 function kpResize(){const w=kp.clientWidth,h=kp.clientHeight; if(w&&h){kpRenderer.setSize(w,h,false); kpCam.aspect=w/h; kpCam.updateProjectionMatrix();}}
 kpResize(); window.addEventListener('resize',kpResize);
@@ -313,10 +313,10 @@ function updateLegend(l){
   if(d.note) h+='<div class="ln">'+d.note+'</div>';
   legendEl.innerHTML=h; legendEl.style.display='block';
 }
-function apply(l,tex){globe.material.map=tex;globe.material.needsUpdate=true;
+function apply(l,tex){globe.material.map=tex;globe.material.color.setHex(0xffffff);globe.material.needsUpdate=true;
   globeMat.userData.g.value=(l.id==='base'||l.id==='l18_zoning')?1:0;
   document.getElementById('cap').innerHTML='<b>'+l.t+'</b> <span>'+l.c+'</span>'; updateLegend(l);
-  if(l.id==='base' && !kpSphere.material.map){kpSphere.material.map=tex;kpSphere.material.needsUpdate=true;}}
+  if(l.id==='base' && !kpSphere.material.map){kpSphere.material.map=tex;kpSphere.material.color.setHex(0xffffff);kpSphere.material.needsUpdate=true;}}
 function texFor(l){
   if(l.id!=='base' && wantHi() && window.TEXHI && window.TEXHI[l.id]) return {src:window.TEXHI[l.id],k:l.id+'#h'};
   return {src:(window.TEX&&window.TEX[l.id]),k:l.id+'#l'};
