@@ -521,13 +521,19 @@ document.querySelectorAll('figure img').forEach(function(img){
 (function(){
   try{ if(!window.matchMedia||!matchMedia('(hover: none)').matches) return; }catch(e){ return; }
   var rc=[].slice.call(document.querySelectorAll('.revealcard'));
+  function close(ex){ rc.forEach(function(o){ if(o!==ex) o.classList.remove('is-tap'); }); }
   rc.forEach(function(c){
-    c.addEventListener('click',function(){
+    var sx=0,sy=0,moved=false;
+    c.addEventListener('touchstart',function(e){var t=e.touches[0];sx=t.clientX;sy=t.clientY;moved=false;},{passive:true});
+    c.addEventListener('touchmove',function(e){var t=e.touches[0];if(Math.abs(t.clientX-sx)>8||Math.abs(t.clientY-sy)>8)moved=true;},{passive:true});
+    c.addEventListener('touchend',function(e){
+      if(moved) return;
       var open=c.classList.contains('is-tap');
-      rc.forEach(function(o){ o.classList.remove('is-tap'); });
+      close(open?null:c);
       if(!open) c.classList.add('is-tap');
-    });
+    },{passive:true});
   });
+  document.addEventListener('touchend',function(e){ if(!e.target.closest('.revealcard')) close(null); },{passive:true});
 })();
 </script>
 </body>

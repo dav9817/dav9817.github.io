@@ -327,18 +327,19 @@ document.querySelectorAll('.card').forEach(function(card){
 (function(){
   try{ if(!window.matchMedia||!matchMedia('(hover: none) and (min-width: 641px)').matches) return; }catch(e){ return; }
   var cards=[].slice.call(document.querySelectorAll('.grid .card'));
+  function close(ex){ cards.forEach(function(o){ if(o!==ex) o.classList.remove('is-tap'); }); }
   cards.forEach(function(c){
-    c.addEventListener('click',function(e){
-      if(!c.classList.contains('is-tap')){
-        e.preventDefault();
-        cards.forEach(function(o){ if(o!==c) o.classList.remove('is-tap'); });
-        c.classList.add('is-tap');
-      }
-    });
+    var sx=0,sy=0,moved=false;
+    c.addEventListener('touchstart',function(e){var t=e.touches[0];sx=t.clientX;sy=t.clientY;moved=false;},{passive:true});
+    c.addEventListener('touchmove',function(e){var t=e.touches[0];if(Math.abs(t.clientX-sx)>8||Math.abs(t.clientY-sy)>8)moved=true;},{passive:true});
+    c.addEventListener('touchend',function(e){
+      if(moved) return;
+      e.preventDefault();
+      if(c.classList.contains('is-tap')){ window.location.href=c.getAttribute('href'); }
+      else { close(c); c.classList.add('is-tap'); }
+    },{passive:false});
   });
-  document.addEventListener('click',function(e){
-    if(!e.target.closest('.grid .card')) cards.forEach(function(o){ o.classList.remove('is-tap'); });
-  });
+  document.addEventListener('touchend',function(e){ if(!e.target.closest('.grid .card')) close(null); },{passive:true});
 })();
 </script>
 </body>
