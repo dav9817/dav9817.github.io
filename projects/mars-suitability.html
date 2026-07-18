@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="dark">
 <title>Human Base Site Suitability on Mars — GIS MCDA · Davide Bortoletto</title>
 <link rel="icon" href="../assets/img/home/favicon.png">
@@ -162,6 +162,9 @@ tr:nth-child(odd) td{background:transparent}
 .revealcard.is-tap{border-color:var(--accent);box-shadow:0 16px 40px rgba(0,0,0,.45);transform:translateY(-3px)}
 .revealcard.is-tap img{transform:scale(1.06);filter:brightness(.5)}
 .revealcard.is-tap .reveal{clip-path:polygon(0 0,138% 0,100% 100%,0 100%);transition:clip-path .68s cubic-bezier(.16,1,.3,1)}
+/* safe-area: le curve coprono anche notch/barra Home */
+body{padding:env(safe-area-inset-top,0px) env(safe-area-inset-right,0px) env(safe-area-inset-bottom,0px) env(safe-area-inset-left,0px)}
+#lang{top:calc(14px + env(safe-area-inset-top,0px));right:calc(14px + env(safe-area-inset-right,0px))}
 </style>
 <script>
 (function(){try{var l=localStorage.getItem('lang');}catch(e){}
