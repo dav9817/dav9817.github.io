@@ -14,7 +14,7 @@
   --head:#f5e7dd; --accent:#e0663a; --line:#3a221a;
 }
 *{box-sizing:border-box}
-html{scroll-behavior:smooth}
+html{scroll-behavior:smooth;background:var(--bg)}
 body{margin:0;background:var(--bg);color:var(--text);
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Helvetica,Arial,sans-serif;
   line-height:1.75;-webkit-font-smoothing:antialiased}
@@ -133,7 +133,7 @@ details.why .wb p:last-child{margin-bottom:2px}
 #toc a:hover .dash{background:var(--accent);opacity:1}
 #toc a.active .lbl,#toc a:hover .lbl{color:var(--accent)}
 @media(max-width:1024px){#toc{display:none}}
-#terrain{position:fixed;inset:0;z-index:-1;pointer-events:none}
+#terrain{position:fixed;inset:0;z-index:0;pointer-events:none}
 @keyframes bandGrow{from{opacity:0;transform:scale(.45)}to{opacity:1;transform:scale(1)}}
 #terrain g path{opacity:0;transform-box:view-box;transform-origin:1015px -35px;animation:bandGrow 1s cubic-bezier(.16,1,.3,1) both}
 #terrain g path:nth-child(1){animation-delay:0s}
