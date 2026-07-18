@@ -14,7 +14,7 @@
   --head:#eceae6; --accent:#b8b7b2; --line:#2b2c33; --pill:#191a1f;
 }
 *{box-sizing:border-box}
-html{scroll-behavior:smooth;background:var(--bg)}
+html{scroll-behavior:smooth}
 body{margin:0;background:var(--bg);color:var(--text);
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Helvetica,Arial,sans-serif;
   line-height:1.7;-webkit-font-smoothing:antialiased}
@@ -127,7 +127,6 @@ footer{color:var(--muted);font-size:.84rem;text-align:center;padding:38px 20px 0
   .card{width:auto;margin:14px 0 0;flex-basis:auto;height:auto;padding:22px 22px 26px;transform:none;box-shadow:0 10px 26px rgba(0,0,0,.45)}
   .card:first-child{margin-top:0;margin-left:0}
   .card:hover,.card.is-tap{transform:none;width:auto;height:auto;box-shadow:0 10px 26px rgba(0,0,0,.45)}
-  .card .panel,.card:hover .panel,.card.is-tap .panel{display:none}
   .card .bigpic{position:relative;z-index:2;top:auto;left:auto;width:64px;height:58px;margin:0 0 12px}
   .short{display:none}
   .reveal{position:relative;z-index:2;left:auto;right:auto;top:auto;bottom:auto;opacity:1;transform:none}
@@ -330,7 +329,7 @@ document.querySelectorAll('.card').forEach(function(card){
 </script>
 <script>
 (function(){
-  try{ if(!window.matchMedia||!matchMedia('(hover: none) and (min-width: 641px)').matches) return; }catch(e){ return; }
+  try{ if(!window.matchMedia||!matchMedia('(hover: none)').matches) return; }catch(e){ return; }
   var cards=[].slice.call(document.querySelectorAll('.grid .card'));
   function close(ex){ cards.forEach(function(o){ if(o!==ex) o.classList.remove('is-tap'); }); }
   cards.forEach(function(c){
