@@ -14,7 +14,7 @@
   --head:#eceae6; --accent:#b8b7b2; --line:#2b2c33; --pill:#191a1f;
 }
 *{box-sizing:border-box}
-html{scroll-behavior:smooth}
+html{scroll-behavior:smooth;background:var(--bg)}
 body{margin:0;background:var(--bg);color:var(--text);
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Helvetica,Arial,sans-serif;
   line-height:1.7;-webkit-font-smoothing:antialiased}
@@ -124,11 +124,16 @@ footer{color:var(--muted);font-size:.84rem;text-align:center;padding:38px 20px 0
 .card.is-tap .reveal{opacity:1;transform:translateY(0)}
 @media(max-width:640px){
   .grid{flex-direction:column;align-items:stretch;min-height:auto;padding:0}
-  .card{width:auto;margin:14px 0 0;flex-basis:auto;height:auto;padding:20px 22px 24px;transform:none;box-shadow:0 10px 26px rgba(0,0,0,.45)}
-  .card:first-child{margin-top:0;margin-left:0}.card:hover{transform:none;width:auto}
-  .card .bigpic{position:static;width:66px;height:60px;margin:0 0 10px}
+  .card{width:auto;margin:14px 0 0;flex-basis:auto;height:auto;padding:22px 22px 26px;transform:none;box-shadow:0 10px 26px rgba(0,0,0,.45)}
+  .card:first-child{margin-top:0;margin-left:0}
+  .card:hover,.card.is-tap{transform:none;width:auto;height:auto;box-shadow:0 10px 26px rgba(0,0,0,.45)}
+  .card .panel,.card:hover .panel,.card.is-tap .panel{display:none}
+  .card .bigpic{position:relative;z-index:2;top:auto;left:auto;width:64px;height:58px;margin:0 0 12px}
   .short{display:none}
-  .reveal{position:static;opacity:1;transform:none}
+  .reveal{position:relative;z-index:2;left:auto;right:auto;top:auto;bottom:auto;opacity:1;transform:none}
+  .card:hover .reveal,.card.is-tap .reveal{opacity:1;transform:none}
+  .card .wm{width:150px;height:150px;opacity:.14;z-index:0}
+  .card:hover .wm,.card.is-tap .wm{transform:none;opacity:.16}
   .wrap{padding:52px 20px 70px}}
 #terrain{position:fixed;inset:0;z-index:-1;pointer-events:none}
 @keyframes bandGrow{from{opacity:0;transform:scale(.45)}to{opacity:1;transform:scale(1)}}
