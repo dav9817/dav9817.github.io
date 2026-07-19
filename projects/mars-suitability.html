@@ -171,6 +171,16 @@ tr:nth-child(odd) td{background:transparent}
     height:250px;
     background:linear-gradient(to bottom,transparent 0%,var(--bg) 44%,var(--bg) 100%)}
 }
+/* suggerimento immagini interattive + bollino */
+.hint{display:flex;align-items:flex-start;gap:9px;margin:16px 0 20px;font-size:.9rem;line-height:1.5;
+  color:var(--text);background:color-mix(in srgb,var(--accent) 10%,transparent);
+  border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:10px;padding:11px 15px}
+.hint b{display:inline-grid;place-items:center;width:19px;height:19px;border-radius:50%;background:var(--accent);
+  color:#fff;font-family:Georgia,serif;font-style:italic;font-size:.78rem;line-height:1;vertical-align:-3px}
+.revealcard::after{content:"i";position:absolute;top:10px;right:10px;z-index:3;width:23px;height:23px;border-radius:50%;
+  display:grid;place-items:center;font-family:Georgia,serif;font-style:italic;font-weight:700;font-size:.82rem;
+  background:var(--accent);color:#fff;opacity:.9;transition:opacity .3s ease}
+.revealcard:hover::after,.revealcard.is-tap::after{opacity:0}
 </style>
 <script>
 (function(){try{var l=localStorage.getItem('lang');}catch(e){}
@@ -269,6 +279,7 @@ tr:nth-child(odd) td{background:transparent}
   <h2><span class="n">6.</span><span class="en">Intermediate Maps</span><span class="it">Mappe intermedie</span></h2>
   <p><span class="en">Before the <em>Weighted Overlay</em>, the starting datasets were processed, standardised and homogenised to generate the intermediate cartographic layers — the informational pillars of the model, ready to be reclassified onto the common suitability scale.</span><span class="it">Prima del <em>Weighted Overlay</em>, i dataset di partenza sono stati elaborati, standardizzati e omogeneizzati per generare i layer cartografici intermedi — i pilastri informativi del modello, pronti per essere riclassificati sulla scala comune di idoneità.</span></p>
 
+  <p class="hint"><span class="en">Maps marked with <b>i</b> hide a description: hover over them (or tap, on phone and tablet) to reveal it.</span><span class="it">Le mappe contrassegnate con <b>i</b> nascondono una descrizione: passaci sopra il mouse (o toccale, da smartphone e tablet) per farla comparire.</span></p>
   <div class="revealcard">
     <figure><img src="../assets/img/mars/01_dem_geomorphology.webp" alt="Mars DEM and geomorphology"></figure>
     <div class="reveal"><h4>6.1 DEM &amp; <span class="en">Geomorphology</span><span class="it">geomorfologia</span></h4><p><span class="en">Based on the global MOLA/HRSC dataset (200 m), this layer and its <em>hillshade</em> define the base topography and orography. The map divides the surface into five geomorphological macro-units — northern plains (Vastitas Borealis), southern highlands, deep basins (Hellas), volcanic provinces (Tharsis, Elysium) and transition plateaus — highlighting the sharp north/south crustal dichotomy.</span><span class="it">Basato sul dataset globale MOLA/HRSC (200 m), questo livello e il relativo <em>hillshade</em> definiscono topografia e orografia di base. La carta suddivide la superficie in cinque macro-unità geomorfologiche — pianure settentrionali (Vastitas Borealis), terre alte meridionali, bacini profondi (Hellas), province vulcaniche (Tharsis, Elysium) e plateau di transizione — evidenziando la netta dicotomia crostale nord/sud.</span></p></div>

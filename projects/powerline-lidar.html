@@ -162,6 +162,16 @@ tr:nth-child(odd) td{background:transparent}
     height:250px;
     background:linear-gradient(to bottom,transparent 0%,var(--bg) 44%,var(--bg) 100%)}
 }
+/* suggerimento immagini interattive + bollino */
+.hint{display:flex;align-items:flex-start;gap:9px;margin:16px 0 20px;font-size:.9rem;line-height:1.5;
+  color:var(--text);background:color-mix(in srgb,var(--accent) 10%,transparent);
+  border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:10px;padding:11px 15px}
+.hint b{display:inline-grid;place-items:center;width:19px;height:19px;border-radius:50%;background:var(--accent);
+  color:#fff;font-family:Georgia,serif;font-style:italic;font-size:.78rem;line-height:1;vertical-align:-3px}
+.revealcard::after{content:"i";position:absolute;top:10px;right:10px;z-index:3;width:23px;height:23px;border-radius:50%;
+  display:grid;place-items:center;font-family:Georgia,serif;font-style:italic;font-weight:700;font-size:.82rem;
+  background:var(--accent);color:#fff;opacity:.9;transition:opacity .3s ease}
+.revealcard:hover::after,.revealcard.is-tap::after{opacity:0}
 </style>
 <script>
 (function(){try{var l=localStorage.getItem('lang');}catch(e){}
@@ -224,6 +234,7 @@ tr:nth-child(odd) td{background:transparent}
 
   <h2><span class="n">6.</span><span class="en">Intermediate Maps</span><span class="it">Mappe intermedie</span></h2>
   <div class="two">
+  <p class="hint"><span class="en">Maps marked with <b>i</b> hide a description: hover over them (or tap, on phone and tablet) to reveal it.</span><span class="it">Le mappe contrassegnate con <b>i</b> nascondono una descrizione: passaci sopra il mouse (o toccale, da smartphone e tablet) per farla comparire.</span></p>
     <div class="revealcard">
       <figure><img src="../assets/img/lidar/dtm.webp" alt="DTM"></figure>
       <div class="reveal"><h4>6.1 DTM</h4><p><span class="en">Digital Terrain Model: the bare-ground elevation, reconstructed from the LiDAR returns classified as ground only. It describes the slope morphology and is the base surface from which vegetation height is measured.</span><span class="it">Modello digitale del terreno: la quota del suolo nudo, ricostruita dai soli ritorni LiDAR classificati come terreno. Descrive la morfologia del versante ed è la superficie di base da cui si misura l'altezza della vegetazione.</span></p></div>
