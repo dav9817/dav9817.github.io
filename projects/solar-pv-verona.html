@@ -175,9 +175,9 @@ tr:nth-child(odd) td{background:transparent}
 @media(max-width:900px){body::after{content:"";display:block;height:calc(34px + env(safe-area-inset-bottom,0px))}}
 /* fascia in fondo: il testo sfuma nello sfondo e non traspare dentro la barra di Safari */
 @media(max-width:900px){
-  body::before{content:"";position:fixed;left:0;right:0;bottom:0;z-index:40;pointer-events:none;
-    height:calc(100px + env(safe-area-inset-bottom,0px));
-    background:linear-gradient(to bottom,transparent 0%,var(--bg) 52%,var(--bg) 100%)}
+  body::before{content:"";position:fixed;left:0;right:0;bottom:-140px;z-index:40;pointer-events:none;
+    height:250px;
+    background:linear-gradient(to bottom,transparent 0%,var(--bg) 44%,var(--bg) 100%)}
 }
 </style>
 <script>
