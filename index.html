@@ -136,7 +136,7 @@ footer{color:var(--muted);font-size:.84rem;text-align:center;padding:38px 20px 0
   .card:nth-child(1){z-index:1}.card:nth-child(2){z-index:2}
   .card:nth-child(3){z-index:3}.card:nth-child(4){z-index:4}
   .card:hover{width:auto;height:176px}
-  .card.is-tap{height:352px;z-index:30;border-color:#45464d;box-shadow:0 22px 46px rgba(0,0,0,.6)}
+  .card.is-tap{width:auto;height:352px;transform:none;z-index:30;opacity:1;border-color:#45464d;box-shadow:0 22px 46px rgba(0,0,0,.6)}
   .card .bigpic{position:relative;z-index:2;top:auto;left:auto;width:62px;height:56px;margin:0 0 10px}
   .short{display:block;position:relative;z-index:2;left:auto;right:auto;top:auto;bottom:auto;
     writing-mode:horizontal-tb;transform:none;font-size:1.02rem;white-space:normal;opacity:.92;
@@ -152,8 +152,7 @@ footer{color:var(--muted);font-size:.84rem;text-align:center;padding:38px 20px 0
   .card .wm{width:168px;height:168px;opacity:.16;z-index:0}
   .card.is-tap .wm{transform:scale(1.25) rotate(5deg);opacity:.42}
   .card.is-tap .wm[data-motif="pointcloud"]{transform:none;opacity:.95}
-  .grid:has(.card.is-tap) .card{opacity:.55}
-  .card.is-tap{opacity:1}
+  .grid:has(.card.is-tap) .card:not(.is-tap){opacity:.55}
   .wrap{padding:52px 20px 70px}}
 #terrain{position:fixed;inset:0;z-index:0;pointer-events:none}
 @keyframes bandGrow{from{opacity:0;transform:scale(.45)}to{opacity:1;transform:scale(1)}}
