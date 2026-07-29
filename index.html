@@ -125,17 +125,28 @@ footer{color:var(--muted);font-size:.84rem;text-align:center;padding:38px 20px 0
 .card.is-tap .short{opacity:0}
 .card.is-tap .reveal{opacity:1;transform:translateY(0)}
 @media(max-width:640px){
-  .grid{flex-direction:column;align-items:stretch;min-height:auto;padding:0}
-  .card{width:auto;margin:14px 0 0;flex-basis:auto;height:auto;padding:22px 22px 26px;transform:none;box-shadow:0 10px 26px rgba(0,0,0,.45)}
-  .card:first-child{margin-top:0;margin-left:0}
-  .card:hover,.card.is-tap{width:auto;height:auto}
-  .card.is-tap{transform:scale(1.035);border-color:#45464d;box-shadow:0 20px 44px rgba(0,0,0,.55)}
-  .card .bigpic{position:relative;z-index:2;top:auto;left:auto;width:64px;height:58px;margin:0 0 12px}
-  .short{display:none}
-  .reveal{position:relative;z-index:2;left:auto;right:auto;top:auto;bottom:auto;opacity:1;transform:none}
-  .card:hover .reveal,.card.is-tap .reveal{opacity:1;transform:none}
-  .card .wm{width:172px;height:172px;opacity:.16;z-index:0}
-  .card.is-tap .wm{transform:scale(1.3) rotate(5deg);opacity:.42}
+  .grid{flex-direction:column;align-items:stretch;min-height:auto;padding:0 0 10px}
+  .card{width:auto;flex-basis:auto;height:176px;margin:-38px 0 0;padding:20px 22px;overflow:hidden;
+    transform:none;box-shadow:0 -10px 30px rgba(0,0,0,.55)}
+  .card:first-child{margin-top:0;margin-left:0;box-shadow:0 12px 28px rgba(0,0,0,.45)}
+  .card:nth-child(1){z-index:1}.card:nth-child(2){z-index:2}
+  .card:nth-child(3){z-index:3}.card:nth-child(4){z-index:4}
+  .card:hover{width:auto;height:176px}
+  .card.is-tap{height:352px;z-index:30;border-color:#45464d;box-shadow:0 22px 46px rgba(0,0,0,.6)}
+  .card .bigpic{position:relative;z-index:2;top:auto;left:auto;width:62px;height:56px;margin:0 0 10px}
+  .short{display:block;position:relative;z-index:2;left:auto;right:auto;top:auto;bottom:auto;
+    writing-mode:horizontal-tb;transform:none;font-size:1.02rem;white-space:normal;opacity:.92;
+    transition:opacity .28s ease}
+  .card.is-tap .short{opacity:0}
+  .reveal{position:absolute;z-index:2;left:22px;right:22px;top:96px;bottom:20px;
+    opacity:0;transform:translateY(14px);
+    transition:opacity .4s ease .1s,transform .5s cubic-bezier(.16,1,.3,1) .1s}
+  .card:hover .reveal{opacity:0;transform:translateY(14px)}
+  .card.is-tap .reveal{opacity:1;transform:none}
+  .reveal h3{font-size:1rem;line-height:1.28;margin:0 0 .45em}
+  .reveal p{font-size:.86rem;line-height:1.45;margin:.2em 0 .8em}
+  .card .wm{width:168px;height:168px;opacity:.16;z-index:0}
+  .card.is-tap .wm{transform:scale(1.25) rotate(5deg);opacity:.42}
   .card.is-tap .wm[data-motif="pointcloud"]{transform:none;opacity:.95}
   .wrap{padding:52px 20px 70px}}
 #terrain{position:fixed;inset:0;z-index:0;pointer-events:none}
