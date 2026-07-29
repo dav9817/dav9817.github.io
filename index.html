@@ -96,6 +96,7 @@ h1{color:var(--head);font-family:'Space Grotesk',-apple-system,sans-serif;font-s
   .grid:hover .card{transform:scale(.94);opacity:.6}
   .grid:hover .card:hover{transform:translateY(-6px) scale(1.02);opacity:1}
 }
+.grid:has(.card.is-tap) .card:not(.is-tap){transform:scale(.94);opacity:.6}
 .reveal h3{color:var(--head);font-size:1.12rem;margin:0 0 .5em;font-weight:600;line-height:1.3}
 .reveal p{color:var(--muted);font-size:.92rem;line-height:1.55;margin:.2em 0 1em}
 .tags{display:flex;flex-wrap:wrap;gap:7px}
@@ -152,7 +153,7 @@ footer{color:var(--muted);font-size:.84rem;text-align:center;padding:38px 20px 0
   .card .wm{width:168px;height:168px;opacity:.16;z-index:0}
   .card.is-tap .wm{transform:scale(1.25) rotate(5deg);opacity:.42}
   .card.is-tap .wm[data-motif="pointcloud"]{transform:none;opacity:.95}
-  .grid:has(.card.is-tap) .card:not(.is-tap){opacity:.55}
+  .grid:has(.card.is-tap) .card:not(.is-tap){transform:none;opacity:.55}
   .wrap{padding:52px 20px 70px}}
 #terrain{position:fixed;inset:0;z-index:0;pointer-events:none}
 @keyframes bandGrow{from{opacity:0;transform:scale(.45)}to{opacity:1;transform:scale(1)}}
