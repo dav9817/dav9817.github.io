@@ -201,6 +201,10 @@ tr:nth-child(odd) td{background:transparent}
   table:has(th:nth-child(6)){font-size:.63rem}
   table:has(th:nth-child(6)) th,table:has(th:nth-child(6)) td{padding:5px 3px}
 }
+@supports (color: color(display-p3 1 1 1)){
+  :root{--accent:color(display-p3 0.753 0.373 0.118)}
+  .revealcard .reveal{background:linear-gradient(150deg,color(display-p3 0.647 0.275 0.102),color(display-p3 0.541 0.224 0.078))}
+}
 </style>
 <script>
 (function(){try{var l=localStorage.getItem('lang');}catch(e){}

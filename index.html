@@ -55,6 +55,10 @@ h1{color:var(--head);font-family:'Space Grotesk',-apple-system,sans-serif;font-s
 
 /* ---- project grid ---- */
 .grid{display:flex;justify-content:flex-start;align-items:center;min-height:424px;margin-top:38px}
+.card:nth-child(1){--pc:#e0913f}
+.card:nth-child(2){--pc:#74b06a}
+.card:nth-child(3){--pc:#7488d8}
+.card:nth-child(4){--pc:#cf7150}
 .card{position:relative;isolation:isolate;flex:0 0 auto;width:224px;height:382px;margin-left:-54px;overflow:hidden;
   background:var(--card);border:1px solid var(--line);border-radius:20px;
   box-shadow:-16px 0 34px rgba(0,0,0,.5);
@@ -174,6 +178,12 @@ footer{color:var(--muted);font-size:.84rem;text-align:center;padding:38px 20px 0
 .wrap{position:relative;z-index:1}
 /* spazio di sicurezza in fondo: il contenuto finale non resta sotto la barra di Safari */
 @media(max-width:900px){body::after{content:"";display:block;height:calc(34px + env(safe-area-inset-bottom,0px))}}
+@supports (color: color(display-p3 1 1 1)){
+  .card:nth-child(1){--pc:color(display-p3 0.878 0.569 0.247)}
+  .card:nth-child(2){--pc:color(display-p3 0.455 0.690 0.416)}
+  .card:nth-child(3){--pc:color(display-p3 0.455 0.533 0.847)}
+  .card:nth-child(4){--pc:color(display-p3 0.812 0.443 0.314)}
+}
 </style>
 <script>
 (function(){try{var l=localStorage.getItem('lang');}catch(e){}
@@ -225,7 +235,7 @@ footer{color:var(--muted);font-size:.84rem;text-align:center;padding:38px 20px 0
   <div class="sec"><span class="en">Projects</span><span class="it">Progetti</span></div>
   <div class="grid">
 
-    <a class="card" style="--pc:#e0913f" href="projects/solar-pv-verona.html">
+    <a class="card" href="projects/solar-pv-verona.html">
       <div class="panel"></div>
       <svg class="wm" data-motif="hex" viewBox="0 0 200 200" aria-hidden="true"></svg>
       <svg class="bigpic" viewBox="0 0 170 155" aria-hidden="true"><text x="85" y="124" text-anchor="middle" font-family="'Space Grotesk',sans-serif" font-weight="700" font-size="150" letter-spacing="-6">01</text></svg>
@@ -237,7 +247,7 @@ footer{color:var(--muted);font-size:.84rem;text-align:center;padding:38px 20px 0
       </div>
     </a>
 
-    <a class="card" style="--pc:#74b06a" href="projects/powerline-lidar.html">
+    <a class="card" href="projects/powerline-lidar.html">
       <div class="panel"></div>
       <svg class="wm" data-motif="pointcloud" viewBox="0 0 200 200" aria-hidden="true"></svg>
       <svg class="bigpic" viewBox="0 0 170 155" aria-hidden="true"><text x="85" y="124" text-anchor="middle" font-family="'Space Grotesk',sans-serif" font-weight="700" font-size="150" letter-spacing="-6">02</text></svg>
@@ -249,7 +259,7 @@ footer{color:var(--muted);font-size:.84rem;text-align:center;padding:38px 20px 0
       </div>
     </a>
 
-    <a class="card" style="--pc:#7488d8" href="projects/no2-nightlights.html">
+    <a class="card" href="projects/no2-nightlights.html">
       <div class="panel"></div>
       <svg class="wm" data-motif="dots" viewBox="0 0 200 200" aria-hidden="true"></svg>
       <svg class="bigpic" viewBox="0 0 170 155" aria-hidden="true"><text x="85" y="124" text-anchor="middle" font-family="'Space Grotesk',sans-serif" font-weight="700" font-size="150" letter-spacing="-6">03</text></svg>
@@ -261,7 +271,7 @@ footer{color:var(--muted);font-size:.84rem;text-align:center;padding:38px 20px 0
       </div>
     </a>
 
-    <a class="card" style="--pc:#cf7150" href="projects/mars-suitability.html">
+    <a class="card" href="projects/mars-suitability.html">
       <div class="panel"></div>
       <svg class="wm" data-motif="orbit" viewBox="0 0 200 200" aria-hidden="true"></svg>
       <svg class="bigpic" viewBox="0 0 170 155" aria-hidden="true"><text x="85" y="124" text-anchor="middle" font-family="'Space Grotesk',sans-serif" font-weight="700" font-size="150" letter-spacing="-6">04</text></svg>
