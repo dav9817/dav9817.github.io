@@ -167,6 +167,16 @@ tr:nth-child(odd) td{background:transparent}
   display:grid;place-items:center;font-family:Georgia,serif;font-style:italic;font-weight:700;font-size:.82rem;
   background:var(--accent);color:#fff;opacity:.9;transition:opacity .3s ease}
 .revealcard:hover::after,.revealcard.is-tap::after{opacity:0}
+/* --- mobile: titoli piu piccoli + testo tendine non tagliato --- */
+@media(max-width:600px){
+  h2{font-size:1.12rem;gap:10px;margin:40px 0 15px}
+  .phead h1{font-size:1.7rem;line-height:1.13}
+  .phead h1::first-letter{font-size:2.1em}
+  .phead .lede{font-size:.96rem}
+  .revealcard .reveal{justify-content:flex-start;overflow-y:auto;padding:16px 18px}
+  .revealcard .reveal h4{font-size:.9rem;margin:0 0 6px}
+  .revealcard .reveal p{font-size:.8rem;line-height:1.42}
+}
 </style>
 <script>
 (function(){try{var l=localStorage.getItem('lang');}catch(e){}
