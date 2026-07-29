@@ -186,6 +186,12 @@ tr:nth-child(odd) td{background:transparent}
   .revealcard .reveal h4{font-size:.97rem;margin:auto 0 7px;line-height:1.25}
   .revealcard .reveal p{font-size:.87rem;line-height:1.45;margin:0 0 auto}
 }
+/* mobile: tabelle larghe scorrevoli, non sforano il riquadro */
+@media(max-width:600px){
+  table{display:block;width:100%;max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;font-size:.8rem}
+  th,td{white-space:nowrap;padding:7px 9px}
+  .district table{margin:14px 0}
+}
 </style>
 <script>
 (function(){try{var l=localStorage.getItem('lang');}catch(e){}
