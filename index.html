@@ -128,13 +128,15 @@ footer{color:var(--muted);font-size:.84rem;text-align:center;padding:38px 20px 0
   .grid{flex-direction:column;align-items:stretch;min-height:auto;padding:0}
   .card{width:auto;margin:14px 0 0;flex-basis:auto;height:auto;padding:22px 22px 26px;transform:none;box-shadow:0 10px 26px rgba(0,0,0,.45)}
   .card:first-child{margin-top:0;margin-left:0}
-  .card:hover,.card.is-tap{transform:none;width:auto;height:auto;box-shadow:0 10px 26px rgba(0,0,0,.45)}
+  .card:hover,.card.is-tap{width:auto;height:auto}
+  .card.is-tap{transform:scale(1.035);border-color:#45464d;box-shadow:0 20px 44px rgba(0,0,0,.55)}
   .card .bigpic{position:relative;z-index:2;top:auto;left:auto;width:64px;height:58px;margin:0 0 12px}
   .short{display:none}
   .reveal{position:relative;z-index:2;left:auto;right:auto;top:auto;bottom:auto;opacity:1;transform:none}
   .card:hover .reveal,.card.is-tap .reveal{opacity:1;transform:none}
-  .card .wm{width:150px;height:150px;opacity:.14;z-index:0}
-  .card:hover .wm,.card.is-tap .wm{transform:none;opacity:.16}
+  .card .wm{width:172px;height:172px;opacity:.16;z-index:0}
+  .card.is-tap .wm{transform:scale(1.3) rotate(5deg);opacity:.42}
+  .card.is-tap .wm[data-motif="pointcloud"]{transform:none;opacity:.95}
   .wrap{padding:52px 20px 70px}}
 #terrain{position:fixed;inset:0;z-index:0;pointer-events:none}
 @keyframes bandGrow{from{opacity:0;transform:scale(.45)}to{opacity:1;transform:scale(1)}}
