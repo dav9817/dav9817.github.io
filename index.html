@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" media="(prefers-color-scheme: light)" content="#131417">
 <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#131417">
 <meta name="color-scheme" content="dark">
@@ -168,11 +168,6 @@ footer{color:var(--muted);font-size:.84rem;text-align:center;padding:38px 20px 0
 .wrap{position:relative;z-index:1}
 /* spazio di sicurezza in fondo: il contenuto finale non resta sotto la barra di Safari */
 @media(max-width:900px){body::after{content:"";display:block;height:calc(34px + env(safe-area-inset-bottom,0px))}}
-/* fascia piena dietro la barra di Safari: colore uniforme = barra che sembra opaca */
-@media(max-width:900px){
-  body::before{content:"";position:fixed;left:0;right:0;bottom:0;z-index:45;pointer-events:none;
-    height:calc(58px + env(safe-area-inset-bottom,0px));background:var(--bg)}
-}
 </style>
 <script>
 (function(){try{var l=localStorage.getItem('lang');}catch(e){}
