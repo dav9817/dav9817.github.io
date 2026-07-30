@@ -188,7 +188,8 @@ tr:nth-child(odd) td{background:transparent}
 .revealcard:hover::after,.revealcard.is-tap::after{opacity:0}
 /* --- mobile: titoli piu piccoli + testo tendine non tagliato --- */
 @media(max-width:600px){
-  h2{font-size:1.12rem;gap:10px;margin:40px 0 15px}
+  h2{font-size:1.12rem;gap:0;margin:40px 0 15px;display:block}
+  h2 .n::before{display:block;font-size:1.7rem;line-height:1;margin:0 0 2px}
   .phead h1{font-size:1.7rem;line-height:1.13}
   .phead h1::first-letter{font-size:2.6em;line-height:.72;margin:.02em .1em -.06em 0}
   .phead .lede{font-size:.96rem}
