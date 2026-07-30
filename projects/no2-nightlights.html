@@ -231,7 +231,7 @@ tr:nth-child(odd) td{background:transparent}
 .revealcard.is-tap .zoombtn.inpanel{opacity:1;pointer-events:auto}
 #lb{position:fixed;inset:0;z-index:200;background:rgba(12,9,5,.96);display:none}
 #lb.on{display:block}
-#lb .stage img{background:#1b1838}
+#lb .stage img,#lb .mini img{background:#1b1838}
 #lb .stage{position:absolute;inset:56px 20px 24px;overflow:hidden;touch-action:none;
   display:flex;align-items:center;justify-content:center;cursor:grab}
 #lb .stage.panning{cursor:grabbing}
@@ -347,7 +347,7 @@ tr:nth-child(odd) td{background:transparent}
 
   <h2><span class="n">5.</span><span class="en">Methodology</span><span class="it">Metodologia</span></h2>
   <figure>
-    <img loading="lazy" decoding="async" width="1093" height="1014" src="../assets/img/no2/workflow_code_black.webp" alt="Pipeline workflow in pseudo-code style">
+    <img loading="lazy" decoding="async" width="1093" height="1014" src="../assets/img/no2/workflow_code_black.webp" data-hi="workflow_code_black-hi.webp" alt="Pipeline workflow in pseudo-code style">
     <figcaption><span class="en">The full pipeline in pseudo-code style: Extraction → Analysis → Cartography → Output.</span><span class="it">La pipeline completa in stile pseudo-codice: Extraction → Analysis → Cartography → Output.</span></figcaption>
   </figure>
   <h3><span class="en">#1 Cloud extraction (Google Earth Engine)</span><span class="it">#1 Estrazione cloud (Google Earth Engine)</span></h3>
@@ -373,7 +373,7 @@ tr:nth-child(odd) td{background:transparent}
     <div class="reveal"><h4><span class="en">6.1 Seasonal NO₂ (winter vs. summer)</span><span class="it">6.1 NO₂ stagionale (inverno vs. estate)</span></h4><p><span class="en">The seasonal composites show the summer collapse of NO₂ — due to greater atmospheric mixing and the absence of heating — and the intense winter core over the central plain. On average, winter NO₂ is about 2.3× that of summer (77.6 vs 34.2 µmol/m² over 91,707 pixels; summer is 56% lower).</span><span class="it">I composit stagionali mostrano il crollo estivo dell'NO₂ — dovuto al maggiore rimescolamento atmosferico e all'assenza di riscaldamento — e il nucleo intenso invernale sul centro pianura. In media l'NO₂ invernale è circa 2,3× quello estivo (77,6 vs 34,2 µmol/m² su 91.707 pixel; l'estate è il 56% più bassa).</span></p></div>
   </div>
   <div class="revealcard">
-    <figure><img loading="lazy" decoding="async" width="1848" height="1188" src="../assets/img/no2/seasonal_distribution.webp" alt="Seasonal distribution of NO₂"></figure>
+    <figure><img loading="lazy" decoding="async" width="1848" height="1188" src="../assets/img/no2/seasonal_distribution.webp" data-hi="seasonal_distribution-hi.webp" alt="Seasonal distribution of NO₂"></figure>
     <div class="reveal"><h4><span class="en">Seasonal distribution of NO₂</span><span class="it">Distribuzione stagionale dell'NO₂</span></h4><p><span class="en">The distribution chart shows not only <em>how much</em> but <em>how</em> the season changes: in summer the values are compact at low, similar levels (well-mixed atmosphere), whereas in winter the distribution widens and slides to the right, with a long tail of high concentrations. It is not only an increase in the mean, but a higher <em>and</em> more unequal population of values — the signature of the Po Valley atmospheric stagnation caused by the winter thermal inversions.</span><span class="it">Il grafico della distribuzione mostra non solo <em>quanto</em> ma <em>come</em> cambia la stagione: d'estate i valori sono compatti su livelli bassi e simili (atmosfera ben rimescolata), mentre d'inverno la distribuzione si allarga e scivola verso destra, con una lunga coda di concentrazioni elevate. Non è solo un aumento della media, ma una popolazione di valori più alta <em>e</em> più disuguale — la firma del ristagno atmosferico padano dovuto alle inversioni termiche invernali.</span></p></div>
   </div>
 
@@ -576,7 +576,10 @@ document.getElementById('lang').addEventListener('click',function(e){
     big.style.width=w0+'px'; big.style.height=h0+'px';
     big.style.transform=t;
   }
-  function lim(){ return Math.max(2,Math.min(8,(big.naturalWidth||w0)/(w0||1))); }
+  function lim(){
+    var dpr=Math.min(window.devicePixelRatio||1,2);
+    return Math.max(1.5,Math.min(8,(big.naturalWidth||w0)/((w0||1)*dpr)));
+  }
   function loadHi(){
     var want=hiSrc;
     if(!want) return;

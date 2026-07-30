@@ -236,7 +236,7 @@ tr:nth-child(odd) td{background:transparent}
 .revealcard.is-tap .zoombtn.inpanel{opacity:1;pointer-events:auto}
 #lb{position:fixed;inset:0;z-index:200;background:rgba(12,9,5,.96);display:none}
 #lb.on{display:block}
-#lb .stage img{background:#f7f7f1}
+#lb .stage img,#lb .mini img{background:#f7f7f1}
 #lb .stage{position:absolute;inset:56px 20px 24px;overflow:hidden;touch-action:none;
   display:flex;align-items:center;justify-content:center;cursor:grab}
 #lb .stage.panning{cursor:grabbing}
@@ -626,7 +626,10 @@ document.querySelectorAll('figure img').forEach(function(img){
     big.style.width=w0+'px'; big.style.height=h0+'px';
     big.style.transform=t;
   }
-  function lim(){ return Math.max(2,Math.min(8,(big.naturalWidth||w0)/(w0||1))); }
+  function lim(){
+    var dpr=Math.min(window.devicePixelRatio||1,2);
+    return Math.max(1.5,Math.min(8,(big.naturalWidth||w0)/((w0||1)*dpr)));
+  }
   function loadHi(){
     var want=hiSrc;
     if(!want) return;
