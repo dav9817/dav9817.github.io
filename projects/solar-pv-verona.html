@@ -69,7 +69,7 @@ strong{color:var(--head)}
 em{color:#463f33}
 
 figure{margin:22px 0}
-figure img{width:100%;border-radius:12px;border:1px solid var(--line);display:block}
+figure img{width:100%;border-radius:12px;border:1px solid var(--line);display:block;height:auto}
 .hero{position:relative;border-radius:14px;overflow:hidden;margin:0 0 30px;border:1px solid var(--line)}
 .hero img{width:100%;height:360px;object-fit:cover;object-position:center;display:block;border:0;border-radius:0}
 .hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(14,10,6,.18) 26%,rgba(14,10,6,.82) 100%)}
@@ -270,8 +270,8 @@ tr:nth-child(odd) td{background:transparent}
   </ul>
   <p><span class="en">This variety directly conditions energy productivity, regulatory constraints and the engineering feasibility of the plants.</span><span class="it">Questa varietà condiziona direttamente producibilità energetica, vincoli normativi e fattibilità ingegneristica degli impianti.</span></p>
   <div class="two eq">
-    <figure><img src="../assets/img/solar/geomorphological_map-c.webp" alt="Geomorphological map of the Province of Verona"><figcaption><span class="en">Geomorphological map of the Province of Verona.</span><span class="it">Carta geomorfologica della Provincia di Verona.</span></figcaption></figure>
-    <figure><img src="../assets/img/solar/geomorphological_chart-c.webp" alt="Geomorphological composition"><figcaption><span class="en">Geomorphological composition: plain (69%), hills (21%), mountain (10%).</span><span class="it">Composizione geomorfologica: pianura (69%), collina (21%), montagna (10%).</span></figcaption></figure>
+    <figure><img loading="eager" decoding="async" width="2923" height="4133" src="../assets/img/solar/geomorphological_map-c.webp" alt="Geomorphological map of the Province of Verona"><figcaption><span class="en">Geomorphological map of the Province of Verona.</span><span class="it">Carta geomorfologica della Provincia di Verona.</span></figcaption></figure>
+    <figure><img loading="lazy" decoding="async" width="1034" height="844" src="../assets/img/solar/geomorphological_chart-c.webp" alt="Geomorphological composition"><figcaption><span class="en">Geomorphological composition: plain (69%), hills (21%), mountain (10%).</span><span class="it">Composizione geomorfologica: pianura (69%), collina (21%), montagna (10%).</span></figcaption></figure>
   </div>
   <table>
     <tr><th><span class="en">Geomorphological Category</span><span class="it">Categoria geomorfologica</span></th><th><span class="en">Elevation Classes</span><span class="it">Classi altimetriche</span></th><th><span class="en">Total Area (km²)</span><span class="it">Area totale (km²)</span></th><th><span class="en">Percentage (%)</span><span class="it">Percentuale (%)</span></th></tr>
@@ -291,7 +291,7 @@ tr:nth-child(odd) td{background:transparent}
   </table>
 
   <h2><span class="n">5.</span><span class="en">Methodology</span><span class="it">Metodologia</span></h2>
-  <figure><img src="../assets/img/solar/methodology-c.webp" alt="Methodological workflow (MCDA)"><figcaption><span class="en">MCDA methodological workflow: from raw data to strategic districts.</span><span class="it">Flusso metodologico MCDA: dai dati grezzi ai distretti strategici.</span></figcaption></figure>
+  <figure><img loading="lazy" decoding="async" width="2569" height="8791" src="../assets/img/solar/methodology-c.webp" alt="Methodological workflow (MCDA)"><figcaption><span class="en">MCDA methodological workflow: from raw data to strategic districts.</span><span class="it">Flusso metodologico MCDA: dai dati grezzi ai distretti strategici.</span></figcaption></figure>
   <p><span class="en">The workflow is developed entirely in QGIS and integrates three macro-layers analysed in parallel: land-use model analysis (minimising the consumption of productive farmland), morphological terrain analysis (computing and reclassifying slope and aspect from the DEM), and environmental/regulatory constraint analysis (Boolean exclusion masks). Through a Weighted Overlay (MCDA) process, the weights assigned to each criterion are combined to generate the potential-suitability map, then filtered with the constraint mask. The output is finally clustered on a hexagonal grid to identify the highest-potential macro-districts.</span><span class="it">Il flusso è sviluppato interamente in ambiente QGIS e integra tre macro-livelli analizzati in parallelo: analisi del modello d'uso del suolo (minimizzando il consumo di suolo agricolo produttivo), analisi morfologica del territorio (calcolo e riclassificazione di pendenza ed esposizione dal DEM), e analisi dei vincoli ambientali e normativi (maschere di esclusione booleane). Attraverso un processo di Weighted Overlay (MCDA), i pesi assegnati a ciascun criterio sono combinati per generare la mappa di idoneità potenziale, poi filtrata con la maschera dei vincoli. L'output è infine clusterizzato su griglia esagonale per identificare i macro-distretti a più alto potenziale.</span></p>
 
   <h2><span class="n">6.</span><span class="en">Intermediate Maps</span><span class="it">Mappe intermedie</span></h2>
@@ -301,21 +301,21 @@ tr:nth-child(odd) td{background:transparent}
   <p class="hint"><span class="en">Maps marked with <b>i</b> hide a description: hover over them (or tap, on phone and tablet) to reveal it.</span><span class="it">Le mappe contrassegnate con <b>i</b> nascondono una descrizione: passaci sopra il mouse (o toccale, da smartphone e tablet) per farla comparire.</span></p>
   <div class="two">
     <div class="revealcard">
-      <figure><img src="../assets/img/solar/raw_hypsometric-c.webp" alt="Hypsometric Map"></figure>
+      <figure><img loading="lazy" decoding="async" width="2923" height="4133" src="../assets/img/solar/raw_hypsometric-c.webp" alt="Hypsometric Map"></figure>
       <div class="reveal"><h4><span class="en">6.1.1 Hypsometric Map</span><span class="it">6.1.1 Carta ipsometrica</span></h4><p><span class="en">Identifies the elevation belts of the territory. It isolates the plain and low-hill areas (more suitable logistically and operationally) from the pre-Alpine mountain zones, marked by harsh climates and potential accessibility issues.</span><span class="it">Identifica le fasce altimetriche del territorio. Permette di isolare le aree di pianura e di bassa collina (maggiormente idonee dal punto di vista logistico e operativo) dalle zone montane prealpine, caratterizzate da climi rigidi e potenziali problemi di accessibilità.</span></p></div>
     </div>
     <div class="revealcard">
-      <figure><img src="../assets/img/solar/raw_aspect-c.webp" alt="Aspect Map"></figure>
+      <figure><img loading="lazy" decoding="async" width="2923" height="4133" src="../assets/img/solar/raw_aspect-c.webp" alt="Aspect Map"></figure>
       <div class="reveal"><h4><span class="en">6.1.2 Aspect Map</span><span class="it">6.1.2 Carta dell'esposizione</span></h4><p><span class="en">Analyses slope orientation. To optimise the plant's <em>Performance Ratio</em>, the model isolates and rewards areas with favourable exposure (South, South-East, South-West) that ensure the maximum annual solar irradiation, excluding north-facing slopes, structurally inefficient.</span><span class="it">Analizza l'orientamento dei versanti. In ottica di ottimizzazione del <em>Performance Ratio</em> dell'impianto, il modello isola e premia le aree con esposizione favorevole (Sud, Sud-Est, Sud-Ovest) che garantiscono il massimo irraggiamento solare annuo, escludendo i versanti esposti a Nord, strutturalmente inefficienti.</span></p></div>
     </div>
   </div>
   <div class="two">
     <div class="revealcard">
-      <figure><img src="../assets/img/solar/raw_slope-c.webp" alt="Slope Map"></figure>
+      <figure><img loading="lazy" decoding="async" width="2338" height="3307" src="../assets/img/solar/raw_slope-c.webp" alt="Slope Map"></figure>
       <div class="reveal"><h4><span class="en">6.1.3 Slope Map</span><span class="it">6.1.3 Carta della pendenza</span></h4><p><span class="en">The most critical morphological factor for the site's civil engineering. High slopes drastically increase earth-moving costs, hydrogeological instability risks and mutual-shading issues between module strings. Flat or gently sloping terrain is therefore optimal for standard solar-tracking mounting structures, reducing levelling and installation costs.</span><span class="it">Rappresenta il fattore morfologico più critico per l'ingegneria civile del sito. Pendenze elevate aumentano drasticamente i costi di movimento terra, i rischi di instabilità idrogeologica e le problematiche di ombreggiamento reciproco tra le stringhe di moduli. Terreni pianeggianti o con pendenze minime sono quindi ottimali per le strutture di montaggio standard a inseguimento solare, riducendo livellamento e costi di installazione.</span></p></div>
     </div>
     <div class="revealcard">
-      <figure><img src="../assets/img/solar/raw_landcover-c.webp" alt="Land Cover Map"></figure>
+      <figure><img loading="lazy" decoding="async" width="2338" height="3307" src="../assets/img/solar/raw_landcover-c.webp" alt="Land Cover Map"></figure>
       <div class="reveal"><h4><span class="en">6.1.4 Land Cover Map</span><span class="it">6.1.4 Carta dell'uso del suolo</span></h4><p><span class="en">The information base for the project's agro-environmental sustainability. Based on CORINE Land Cover classes, it maps the actual use of the provincial surfaces: it is set to exclude or penalise prime farmland, woodland and natural areas (zeroing fertile-soil consumption), rewarding built-up surfaces, disused industrial areas or marginal land — strategic to reduce landscape impact and speed up permitting.</span><span class="it">Rappresenta la base informativa per la sostenibilità agro-ambientale del progetto. Basata sulle classi del CORINE Land Cover, mappa la destinazione reale delle superfici provinciali: è impostata per escludere o penalizzare suoli agricoli di pregio, aree boscate e zone naturali (azzerando il consumo di suolo fertile), premiando superfici antropizzate, aree industriali dismesse o terreni marginali, strategici per ridurre l'impatto paesaggistico e accelerare il permitting.</span></p></div>
     </div>
   </div>
@@ -324,21 +324,21 @@ tr:nth-child(odd) td{background:transparent}
   <p><span class="en">This step defines the absolute-exclusion criteria through binary masks, where each cell is assigned a Boolean value (0 = excluded, 1 = suitable). The filtering zeroes out the risk of regulatory conflicts upstream, removing from the model the areas that are legally or physically non-buildable.</span><span class="it">Questa fase definisce i criteri di esclusione assoluta tramite maschere binarie, dove a ogni cella è assegnato un valore booleano (0 = escluso, 1 = idoneo). Il filtraggio azzera a monte il rischio di conflitti normativi, eliminando dal modello le aree legalmente o fisicamente non edificabili.</span></p>
   <div class="two">
     <div class="revealcard">
-      <figure><img src="../assets/img/solar/mask_natura2000-c.webp" alt="Natura 2000 Binary Mask Map"></figure>
+      <figure><img loading="lazy" decoding="async" width="2338" height="3307" src="../assets/img/solar/mask_natura2000-c.webp" alt="Natura 2000 Binary Mask Map"></figure>
       <div class="reveal"><h4><span class="en">6.2.1 Natura 2000 Binary Mask</span><span class="it">6.2.1 Maschera binaria Natura 2000</span></h4><p><span class="en">Isolates and fully zeroes the sites protected by the European network (SAC and SPA). Being maximum-protection areas for biodiversity, the exclusion prevents insurmountable constraints during the Environmental Impact Assessment (EIA).</span><span class="it">Isola e azzera completamente i siti protetti dalla rete europea (ZSC e ZPS). Trattandosi di aree a massima tutela per la biodiversità, l'esclusione previene vincoli insuperabili in fase di Valutazione di Impatto Ambientale (VIA).</span></p></div>
     </div>
     <div class="revealcard">
-      <figure><img src="../assets/img/solar/mask_water-c.webp" alt="Water Bodies Binary Mask Map"></figure>
+      <figure><img loading="lazy" decoding="async" width="2338" height="3307" src="../assets/img/solar/mask_water-c.webp" alt="Water Bodies Binary Mask Map"></figure>
       <div class="reveal"><h4><span class="en">6.2.2 Water Bodies Binary Mask</span><span class="it">6.2.2 Maschera binaria corpi idrici</span></h4><p><span class="en">Excludes surface water bodies, rivers and their geomorphological buffers, based on the CORINE Land Cover hydrographic classes. This constraint protects the hydrogeological setting and avoids flood-prone areas.</span><span class="it">Esclude i corpi idrici superficiali, i fiumi e i relativi buffer di rispetto geomorfologico, basandosi sulle classi idrografiche del CORINE Land Cover. Questo vincolo tutela l'assetto idrogeologico ed evita le aree a rischio inondazione.</span></p></div>
     </div>
   </div>
   <div class="two">
     <div class="revealcard">
-      <figure><img src="../assets/img/solar/mask_artificial-c.webp" alt="Artificial Surfaces Binary Mask Map"></figure>
+      <figure><img loading="lazy" decoding="async" width="2338" height="3307" src="../assets/img/solar/mask_artificial-c.webp" alt="Artificial Surfaces Binary Mask Map"></figure>
       <div class="reveal"><h4><span class="en">6.2.3 Artificial Surfaces Binary Mask</span><span class="it">6.2.3 Maschera binaria superfici artificiali</span></h4><p><span class="en">Excludes urban centres, continuous and discontinuous residential fabric, and large industrial or commercial infrastructure. This constraint preserves consolidated built-up areas and zeroes conflicts tied to local urban planning.</span><span class="it">Esclude i centri urbani, il tessuto residenziale continuo e discontinuo, e le grandi infrastrutture industriali o commerciali. Questo vincolo preserva le aree antropizzate consolidate e azzera i conflitti legati alla pianificazione urbanistica locale.</span></p></div>
     </div>
     <div class="revealcard">
-      <figure><img src="../assets/img/solar/mask_forest-c.webp" alt="Forests Binary Mask Map"></figure>
+      <figure><img loading="lazy" decoding="async" width="2338" height="3307" src="../assets/img/solar/mask_forest-c.webp" alt="Forests Binary Mask Map"></figure>
       <div class="reveal"><h4><span class="en">6.2.4 Forests Binary Mask</span><span class="it">6.2.4 Maschera binaria aree boscate</span></h4><p><span class="en">Isolates and fully excludes woodland — coniferous, broad-leaved and mixed forests. The exclusion protects the forest heritage and ecological corridors, preventing constraints linked to hydrogeological risk and the landscape-authorisation process.</span><span class="it">Isola ed esclude completamente le aree boscate — foreste di conifere, latifoglie e boschi misti. L'esclusione garantisce la tutela del patrimonio forestale e dei corridoi ecologici, prevenendo vincoli legati al dissesto idrogeologico e all'iter autorizzativo paesaggistico.</span></p></div>
     </div>
   </div>
@@ -347,21 +347,21 @@ tr:nth-child(odd) td{background:transparent}
   <p><span class="en">Here the environmental and morphological data are standardised through reclassification: each cell is assigned a discrete score on a 0–5 scale (maximum suitability), to make the different layers geometrically comparable in the final calculation.</span><span class="it">In questa fase i dati ambientali e morfologici sono standardizzati tramite riclassificazione: a ogni cella è assegnato un punteggio discreto su scala da 0 a 5 (idoneità massima), per rendere i diversi layer geometricamente confrontabili nell'algoritmo di calcolo finale.</span></p>
   <div class="two">
     <div class="revealcard">
-      <figure><img src="../assets/img/solar/score_landcover-c.webp" alt="Land Cover Suitability Map"></figure>
+      <figure><img loading="lazy" decoding="async" width="2338" height="3307" src="../assets/img/solar/score_landcover-c.webp" alt="Land Cover Suitability Map"></figure>
       <div class="reveal"><h4><span class="en">6.3.1 Land Cover Suitability Map</span><span class="it">6.3.1 Idoneità dell'uso del suolo</span></h4><p><span class="en">Translates land use into compatibility levels. The highest scores (5) go to degraded built-up areas and marginal land, while values decrease to the minimum for active farmland or vegetated surfaces.</span><span class="it">Traduce l'uso del suolo in livelli di compatibilità. I punteggi massimi (5) sono assegnati alle aree antropizzate degradate e ai terreni marginali, mentre i valori decrescono fino al minimo per le superfici agricole attive o vegetate.</span></p></div>
     </div>
     <div class="revealcard">
-      <figure><img src="../assets/img/solar/score_aspect-c.webp" alt="Aspect Suitability Map"></figure>
+      <figure><img loading="lazy" decoding="async" width="2338" height="3307" src="../assets/img/solar/score_aspect-c.webp" alt="Aspect Suitability Map"></figure>
       <div class="reveal"><h4><span class="en">6.3.2 Aspect Suitability Map</span><span class="it">6.3.2 Idoneità dell'esposizione</span></h4><p><span class="en">Converts slope orientation into energy-efficiency potential. It gives the maximum score (5) to South, South-East and South-West exposures and to flat terrain, progressively penalising exposures toward the northern quadrants.</span><span class="it">Converte l'orientamento dei versanti in potenziale di efficienza energetica. Assegna il punteggio massimo (5) alle esposizioni a Sud, Sud-Est e Sud-Ovest e ai terreni pianeggianti, penalizzando progressivamente le esposizioni verso i quadranti settentrionali.</span></p></div>
     </div>
   </div>
   <div class="two">
     <div class="revealcard">
-      <figure><img src="../assets/img/solar/score_slope-c.webp" alt="Slope Suitability Map"></figure>
+      <figure><img loading="lazy" decoding="async" width="2338" height="3307" src="../assets/img/solar/score_slope-c.webp" alt="Slope Suitability Map"></figure>
       <div class="reveal"><h4><span class="en">6.3.3 Slope Suitability Map</span><span class="it">6.3.3 Idoneità della pendenza</span></h4><p><span class="en">Classifies terrain steepness by the site's engineering complexity. Flat or nearly flat terrain (0–5°) gets the maximum score, ideal for tracking systems, while slopes above 20° are penalised for unsustainable piling costs.</span><span class="it">Classifica l'acclività del terreno in base alla complessità ingegneristica del sito. I terreni pianeggianti o quasi piatti (0–5°) ottengono il punteggio massimo, ideali per i sistemi a inseguimento, mentre le pendenze superiori a 20° sono penalizzate per i costi insostenibili di palificazione.</span></p></div>
     </div>
     <div class="revealcard">
-      <figure><img src="../assets/img/solar/score_raw_suitability-c.webp" alt="PV Suitability Map (Raw)"></figure>
+      <figure><img loading="lazy" decoding="async" width="2572" height="3637" src="../assets/img/solar/score_raw_suitability-c.webp" alt="PV Suitability Map (Raw)"></figure>
       <div class="reveal"><h4><span class="en">6.3.4 PV Suitability Map (Raw)</span><span class="it">6.3.4 Mappa di idoneità FV (grezza)</span></h4><p><span class="en">The preliminary integration of the three reclassified layers (Land use, Aspect, Slope). It shows the first numerical synthesis of the territorial potential of the Province of Verona, before the geometric application of the binary exclusion masks.</span><span class="it">Rappresenta l'integrazione preliminare dei tre layer riclassificati (Suolo, Esposizione, Pendenza). Mostra la prima sintesi numerica del potenziale territoriale della Provincia di Verona, prima dell'applicazione geometrica delle maschere binarie di esclusione.</span></p></div>
     </div>
   </div>
@@ -427,16 +427,16 @@ tr:nth-child(odd) td{background:transparent}
 
   <h2><span class="n">9.</span><span class="en">Final Suitability Analysis</span><span class="it">Analisi di idoneità finale</span></h2>
   <h3><span class="en">9.1 Technical Suitability Map</span><span class="it">9.1 Mappa di idoneità tecnica</span></h3>
-  <figure><img src="../assets/img/solar/suitability_final-c.webp" alt="Final technical suitability map"><figcaption><span class="en">Final high-resolution analytical result, net of the constraint mask.</span><span class="it">Risultato analitico finale ad alta risoluzione, al netto della maschera dei vincoli.</span></figcaption></figure>
+  <figure><img loading="lazy" decoding="async" width="2338" height="3307" src="../assets/img/solar/suitability_final-c.webp" alt="Final technical suitability map"><figcaption><span class="en">Final high-resolution analytical result, net of the constraint mask.</span><span class="it">Risultato analitico finale ad alta risoluzione, al netto della maschera dei vincoli.</span></figcaption></figure>
 
   <h3><span class="en">9.2 Strategic Solar Hotspots (500 m Grid Aggregation)</span><span class="it">9.2 Solar Hotspots strategici (aggregazione su griglia 500 m)</span></h3>
-  <figure><img src="../assets/img/solar/hotspots_grid-c.webp" alt="Solar hotspots on 500 m grid"><figcaption><span class="en">Hexagonal-grid aggregation: the real high-density suitability clusters emerge.</span><span class="it">Aggregazione su griglia esagonale: emergono i cluster reali ad alta densità di idoneità.</span></figcaption></figure>
+  <figure><img loading="lazy" decoding="async" width="3274" height="4629" src="../assets/img/solar/hotspots_grid-c.webp" alt="Solar hotspots on 500 m grid"><figcaption><span class="en">Hexagonal-grid aggregation: the real high-density suitability clusters emerge.</span><span class="it">Aggregazione su griglia esagonale: emergono i cluster reali ad alta densità di idoneità.</span></figcaption></figure>
 
   <h3><span class="en">9.3 Strategic Zoning &amp; District Identification</span><span class="it">9.3 Zonizzazione strategica &amp; individuazione dei distretti</span></h3>
   <p><span class="en">Converting the suitability map into the hexagonal grid made it possible to delineate three key macro-areas. Two indicators guide the comparison: the Prime Hotspot Coverage (density/concentration of Prime-class cells, an index of strategic relevance) and the High + Prime Areas (real availability of suitable land, an index of operational potential).</span><span class="it">La conversione della Suitability Map nella griglia esagonale ha permesso di perimetrare tre macro-aree chiave. Due indicatori guidano il confronto: la Prime Hotspot Coverage (densità/concentrazione di celle di classe Prime, indice di rilevanza strategica) e le High + Prime Areas (disponibilità reale di terreno idoneo, indice di potenziale operativo).</span></p>
   <div class="two">
-    <figure><img src="../assets/img/solar/prime_hotspots-c.webp" alt="Prime hotspots"><figcaption><span class="en">Distribution of the Prime Solar Hotspots.</span><span class="it">Distribuzione dei Prime Solar Hotspots.</span></figcaption></figure>
-    <figure><img src="../assets/img/solar/zoning_overview-c.webp" alt="District zoning"><figcaption><span class="en">Zoning: the three strategic districts on the provincial map.</span><span class="it">Zoning: i tre distretti strategici sulla mappa provinciale.</span></figcaption></figure>
+    <figure><img loading="lazy" decoding="async" width="2104" height="2976" src="../assets/img/solar/prime_hotspots-c.webp" alt="Prime hotspots"><figcaption><span class="en">Distribution of the Prime Solar Hotspots.</span><span class="it">Distribuzione dei Prime Solar Hotspots.</span></figcaption></figure>
+    <figure><img loading="lazy" decoding="async" width="2338" height="3307" src="../assets/img/solar/zoning_overview-c.webp" alt="District zoning"><figcaption><span class="en">Zoning: the three strategic districts on the provincial map.</span><span class="it">Zoning: i tre distretti strategici sulla mappa provinciale.</span></figcaption></figure>
   </div>
 
   <div class="district">
@@ -448,9 +448,9 @@ tr:nth-child(odd) td{background:transparent}
     </table>
     <p><span class="en">Located between the Verona ZAI (industrial zone), the Europa quadrant and the municipalities of San Giovanni Lupatoto and Buttapietra. An area already served by logistics and industrial infrastructure: top priority for permitting speed and lowest conflict risk, ideal for fast-return investments.</span><span class="it">Individuato tra la ZAI di Verona, il quadrante Europa e i comuni di San Giovanni Lupatoto e Buttapietra. Area già servita da infrastrutture logistiche e industriali: massima priorità per velocità di permitting e minor rischio di conflitti, ideale per investimenti a ritorno rapido.</span></p>
     <div class="three eq">
-      <figure><img src="../assets/img/solar/south_1-c-t.webp" alt="Verona South — map 1"></figure>
-      <figure><img src="../assets/img/solar/south_2-c-t.webp" alt="Verona South — map 2"></figure>
-      <figure><img class="nudge" src="../assets/img/solar/south_3-t.webp" alt="Verona South — map 3"></figure>
+      <figure><img loading="lazy" decoding="async" width="1682" height="2189" src="../assets/img/solar/south_1-c-t.webp" alt="Verona South — map 1"></figure>
+      <figure><img loading="lazy" decoding="async" width="3367" height="4380" src="../assets/img/solar/south_2-c-t.webp" alt="Verona South — map 2"></figure>
+      <figure><img loading="lazy" decoding="async" width="854" height="636" class="nudge" src="../assets/img/solar/south_3-t.webp" alt="Verona South — map 3"></figure>
     </div>
   </div>
 
@@ -463,9 +463,9 @@ tr:nth-child(odd) td{background:transparent}
     </table>
     <p><span class="en">The province's flagship strategic area: fully flat morphology (shading zeroed) and minimal constraints, limited to protected areas (SAC Adige River, Paludi del Brusà e Busatello, correctly isolated by the model). The highest absolute quantitative potential; it requires mitigation for farmland consumption and a proximity analysis to primary substations.</span><span class="it">Area strategica di punta della provincia: morfologia totalmente pianeggiante (ombreggiamenti azzerati) e vincoli minimi, circoscritti alle aree tutelate (ZSC Fiume Adige, Paludi del Brusà e Busatello, correttamente isolate dal modello). Il potenziale quantitativo assoluto più elevato; richiede mitigazione per il consumo di suolo agricolo e un'analisi di prossimità alle cabine primarie.</span></p>
     <div class="three eq">
-      <figure><img src="../assets/img/solar/plain_1-c-t.webp" alt="Lower Plain — map 1"></figure>
-      <figure><img src="../assets/img/solar/plain_2-c-t.webp" alt="Lower Plain — map 2"></figure>
-      <figure><img class="nudge" src="../assets/img/solar/plain_3-t.webp" alt="Lower Plain — map 3"></figure>
+      <figure><img loading="lazy" decoding="async" width="2943" height="1742" src="../assets/img/solar/plain_1-c-t.webp" alt="Lower Plain — map 1"></figure>
+      <figure><img loading="lazy" decoding="async" width="4646" height="2751" src="../assets/img/solar/plain_2-c-t.webp" alt="Lower Plain — map 2"></figure>
+      <figure><img loading="lazy" decoding="async" width="842" height="638" class="nudge" src="../assets/img/solar/plain_3-t.webp" alt="Lower Plain — map 3"></figure>
     </div>
   </div>
 
@@ -478,9 +478,9 @@ tr:nth-child(odd) td{background:transparent}
     </table>
     <p><span class="en">More fragmented and complex availability, conditioned by the hilly morphology and by landscape constraints (prime crops and vineyards). It requires an advanced engineering approach (slope-adaptive tracking systems) and a careful landscape-integration study.</span><span class="it">Disponibilità più frammentata e complessa, condizionata dalla morfologia collinare e da vincoli paesaggistici (colture e vitigni di pregio). Richiede un approccio ingegneristico avanzato (tracker a inseguimento adattabili alle pendenze) e un attento studio di inserimento nel paesaggio.</span></p>
     <div class="three eq">
-      <figure><img src="../assets/img/solar/west_1-c-t.webp" alt="West Verona — map 1"></figure>
-      <figure><img src="../assets/img/solar/west_2-c-t.webp" alt="West Verona — map 2"></figure>
-      <figure><img class="nudge" src="../assets/img/solar/west_3-t.webp" alt="West Verona — map 3"></figure>
+      <figure><img loading="lazy" decoding="async" width="2455" height="2036" src="../assets/img/solar/west_1-c-t.webp" alt="West Verona — map 1"></figure>
+      <figure><img loading="lazy" decoding="async" width="3507" height="2909" src="../assets/img/solar/west_2-c-t.webp" alt="West Verona — map 2"></figure>
+      <figure><img loading="lazy" decoding="async" width="831" height="576" class="nudge" src="../assets/img/solar/west_3-t.webp" alt="West Verona — map 3"></figure>
     </div>
   </div>
   <p class="note"><span class="en">* Prime Hotspot Coverage: equivalent number of Prime-class hexagonal cells contained in the district; partial cells at the boundaries are weighted in proportion to the area covered.</span><span class="it">* Prime Hotspot Coverage: numero equivalente di celle esagonali di classe Prime contenute nel distretto; le celle parziali ai confini sono pesate in proporzione all'area coperta.</span></p>
