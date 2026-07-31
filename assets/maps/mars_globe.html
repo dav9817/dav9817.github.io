@@ -46,6 +46,7 @@
       linear-gradient(var(--accent),var(--accent)) right bottom/9px 2px no-repeat,
       linear-gradient(var(--accent),var(--accent)) right bottom/2px 9px no-repeat;
     filter:drop-shadow(0 0 1px rgba(0,0,0,.95)) drop-shadow(0 0 4px rgba(224,72,58,.9))}
+  @media(max-width:520px){#panel{max-width:calc(100% - 152px)}}
   @media(max-width:520px){#kp{top:14px;right:64px;width:66px;height:66px;border-radius:10px}
     #kp #kpmk{min-width:13px;min-height:13px}}
   #fs-btn{position:absolute;z-index:6;right:14px;bottom:12px;padding:8px;line-height:0;
@@ -81,7 +82,7 @@
   .btn .ic i{position:absolute;left:0;right:0;height:2px;background:currentColor;border-radius:2px}
   .btn .ic i:nth-child(1){top:0}.btn .ic i:nth-child(2){top:4.5px}.btn .ic i:nth-child(3){top:9px}
 
-  #panel{position:absolute;z-index:6;top:14px;left:14px;width:290px;max-width:calc(100% - 28px);
+  #panel{position:absolute;z-index:20;top:14px;left:14px;width:290px;max-width:calc(100% - 28px);
     max-height:calc(100% - 28px);overflow-y:auto;background:var(--panel);border:1px solid var(--line);
     border-radius:12px;padding:12px 14px 14px;color:#e7dcd4;box-shadow:0 18px 50px rgba(0,0,0,.5);
     backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
