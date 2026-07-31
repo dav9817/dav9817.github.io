@@ -125,6 +125,9 @@ li{margin:.35em 0}
 .tools{color:#c8b7ac;font-size:.92rem}
 .refs{color:var(--muted);font-size:.86rem}
 .refs li{margin:.4em 0}
+iframe.map.full{position:fixed !important;inset:0 !important;width:100vw !important;
+  height:100vh !important;height:100dvh !important;z-index:200;border:0 !important;border-radius:0 !important}
+body.mapopen{overflow:hidden}
 iframe.map{width:100%;height:480px;border:1px solid var(--line);border-radius:14px;display:block;background:#0a0603}
 h3 .mdot{display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--accent);margin-right:11px;vertical-align:middle;box-shadow:0 0 6px 1px rgba(224,102,58,.5)}
 hr{border:none;border-top:1px solid var(--line);margin:54px 0}
@@ -360,7 +363,7 @@ img,svg,figure,figcaption,button,a.back,.card,.wm,.tag,.tags,.n,.kick,.phead,
   <p><span class="en">The study area covers the entire planet Mars, restricted to the latitudinal band between ±60°. This delimitation responds to a twofold need: on one hand it coincides with the extent of the subsurface-ice data (SWIM project), on the other it reflects precise logistical constraints — the polar zones are too cold and in the dark for too long, while the equatorial regions show a strong scarcity of accessible ice. On the technical side, the entire workflow adopts the Mars 2000 (Sphere) reference system (ESRI:104971, radius 3,396,190 m), native to the MOLA/HRSC models: every layer was reprojected into this CRS to ensure geometric consistency during the overlays.</span><span class="it">L'area di studio interessa l'intero pianeta Marte, circoscritta alla fascia latitudinale compresa tra ±60°. Questa delimitazione risponde a una duplice necessità: da un lato coincide con l'estensione dei dati sul ghiaccio sotterraneo (progetto SWIM), dall'altro riflette precisi vincoli logistici — le zone polari sono troppo fredde e a lungo al buio, mentre le regioni equatoriali presentano forte scarsità di ghiaccio accessibile. Sotto il profilo tecnico, l'intero flusso di lavoro adotta il sistema di riferimento Mars 2000 (Sphere) (ESRI:104971, raggio 3.396.190 m), nativo dei modelli MOLA/HRSC: ogni layer è stato riproiettato in questo CRS per garantire coerenza geometrica durante le sovrapposizioni.</span></p>
   <p><span class="en">For the visual exploration of the data, an interactive 3D globe of Mars was implemented: you can freely rotate and zoom, and from the <em>Layers</em> panel you can toggle the individual levels of the analysis on and off — the intermediate maps (§6), the reclassified criteria (§7), the suitability map with the candidate sites (§8–9) and the functional vocations (§10) — projected directly onto the sphere. The basemap is the natural-colour Viking mosaic; the SWIM and suitability layers cover the ±60° analysis band.</span><span class="it">Per l'esplorazione visiva dei dati è stato implementato un globo 3D interattivo di Marte: si ruota e si zooma liberamente, e dal pannello <em>Layers</em> si attivano e disattivano i singoli livelli dell'analisi — le mappe intermedie (§6), i criteri riclassificati (§7), la mappa di idoneità con i siti candidati (§8–9) e le vocazioni funzionali (§10) — proiettati direttamente sulla sfera. La base è il mosaico Viking a colori naturali; i livelli SWIM e di idoneità coprono la fascia di analisi ±60°.</span></p>
   <figure>
-    <iframe class="map" style="height:520px;background:#07090f;color-scheme:dark;opacity:0;transition:opacity .45s ease" src="../assets/maps/mars_globe.html?v=46" loading="lazy" title="Mars — Interactive 3D globe with layer panel" onload="this.style.opacity=1"></iframe>
+    <iframe class="map" style="height:520px;background:#07090f;color-scheme:dark;opacity:0;transition:opacity .45s ease" src="../assets/maps/mars_globe.html?v=47" loading="lazy" title="Mars — Interactive 3D globe with layer panel" onload="this.style.opacity=1"></iframe>
     <figcaption><em><span class="en">Interactive 3D globe — drag to rotate, scroll or pinch to zoom; open “Layers” to overlay the analysis levels onto the planet's surface.</span><span class="it">Globo 3D interattivo — trascina per ruotare, scroll o pinch per lo zoom; apri “Layers” per sovrapporre i livelli dell'analisi sulla superficie del pianeta.</span></em></figcaption>
   </figure>
 
@@ -945,6 +948,25 @@ document.getElementById('lang').addEventListener('click',function(e){
            img.dataset.hi ? img.src.replace(/[^/]+$/, img.dataset.hi) : null); });
     (panel||host).appendChild(b);
   });
+})();
+</script>
+<script>
+/* la mappa 3D chiede di espandersi a tutto schermo */
+(function(){
+  var fr=document.querySelector('iframe.map'); if(!fr) return;
+  var on=false;
+  function set(v){
+    on=!!v;
+    fr.classList.toggle('full',on);
+    document.body.classList.toggle('mapopen',on);
+    try{ fr.contentWindow.postMessage({mapfsState:on},'*'); }catch(e){}
+  }
+  window.addEventListener('message',function(e){
+    if(!e.data||!e.data.mapfs) return;
+    if(e.origin!==location.origin && e.origin!=='null') return;   /* solo la nostra mappa */
+    set(e.data.mapfs==='on');
+  });
+  window.addEventListener('keydown',function(e){ if(e.key==='Escape'&&on) set(false); });
 })();
 </script>
 </body>

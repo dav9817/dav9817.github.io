@@ -48,7 +48,13 @@
     filter:drop-shadow(0 0 1px rgba(0,0,0,.95)) drop-shadow(0 0 4px rgba(224,72,58,.9))}
   @media(max-width:520px){#kp{top:14px;right:64px;width:66px;height:66px;border-radius:10px}
     #kp #kpmk{min-width:13px;min-height:13px}}
-  #scale{position:absolute;z-index:5;right:14px;bottom:12px;pointer-events:none;text-align:right;
+  #fs-btn{position:absolute;z-index:6;right:14px;bottom:12px;padding:8px;line-height:0;
+    background:var(--panel);color:#f0e6df;border:1px solid var(--line);border-radius:10px;cursor:pointer;
+    backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);opacity:.85;transition:opacity .2s,border-color .2s,color .2s}
+  #fs-btn:hover{opacity:1;border-color:var(--accent);color:#fff}
+  #fs-btn svg{display:block;width:17px;height:17px;stroke:currentColor;fill:none}
+  @media(max-width:520px){#fs-btn{right:12px;bottom:10px;padding:7px}}
+  #scale{position:absolute;z-index:5;right:58px;bottom:12px;pointer-events:none;text-align:right;
     color:#f0e6df;font-size:.72rem;font-weight:700;letter-spacing:.02em;text-shadow:0 1px 6px rgba(0,0,0,.9)}
   #scale .bar{height:3px;background:#f0e6df;border-radius:2px;margin:4px 0 0 auto;
     box-shadow:0 1px 3px rgba(0,0,0,.7);transition:width .12s ease}
@@ -151,6 +157,7 @@
     <svg width="18" height="18" viewBox="0 0 24 24" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" fill="none">
       <path d="M4 7h16"/><path d="M9 7V4.8h6V7"/><path d="M6.5 7l1 12.2h9l1-12.2"/><path d="M10 10.5v5.5M14 10.5v5.5"/>
     </svg></button>
+  <button id="fs-btn" title="Schermo intero" aria-label="Schermo intero"><svg viewBox="0 0 24 24" stroke-width="1.9" stroke-linecap="round" aria-hidden="true"><path d="M4 9V5a1 1 0 0 1 1-1h4"/><path d="M20 9V5a1 1 0 0 0-1-1h-4"/><path d="M4 15v4a1 1 0 0 0 1 1h4"/><path d="M20 15v4a1 1 0 0 1-1 1h-4"/></svg></button>
   <div id="kp" title="La tua posizione sul pianeta"><canvas id="kpc"></canvas><span id="kpmk"></span></div>
   <div id="panel" aria-label="Layers">
     <h3>Layers <span class="x" id="close">×</span></h3>
@@ -462,19 +469,60 @@ function updateOverlay(){
 // ---------- controls ----------
 let drag=false,px=0,py=0,moved=false,lastInput=performance.now(),auto=true;
 const el=renderer.domElement;
-el.addEventListener('pointerdown',e=>{el.setPointerCapture(e.pointerId);drag=true;moved=false;px=e.clientX;py=e.clientY;auto=false;});
-el.addEventListener('pointermove',e=>{if(!drag)return;const dx=(e.clientX-px)/180,dy=(e.clientY-py)/180;
+const pts=new Map(); let dragId=null;
+el.addEventListener('pointerdown',e=>{
+  el.setPointerCapture(e.pointerId); pts.set(e.pointerId,{x:e.clientX,y:e.clientY}); auto=false;
+  if(pts.size===1){ drag=true; moved=false; dragId=e.pointerId; px=e.clientX; py=e.clientY; }
+  else { drag=false; dragId=null; }        /* due dita: comanda lo zoom, la rotazione si ferma */
+});
+el.addEventListener('pointermove',e=>{
+  if(pts.has(e.pointerId)) pts.set(e.pointerId,{x:e.clientX,y:e.clientY});
+  if(!drag||e.pointerId!==dragId||pts.size>1) return;
+  const dx=(e.clientX-px)/180,dy=(e.clientY-py)/180;
   if(Math.abs(e.clientX-px)+Math.abs(e.clientY-py)>3)moved=true; px=e.clientX;py=e.clientY;
-  group.rotation.y+=dx;group.rotation.x=Math.max(-1.25,Math.min(1.25,group.rotation.x+dy));lastInput=performance.now();});
-el.addEventListener('pointerup',e=>{drag=false;lastInput=performance.now();
-  if(!moved){ if(selPOI)deselectPOI(); if(panel.classList.contains('open'))openP(false); }});
-el.addEventListener('pointercancel',()=>{drag=false;});
+  group.rotation.y+=dx;group.rotation.x=Math.max(-1.25,Math.min(1.25,group.rotation.x+dy));lastInput=performance.now();
+});
+function endPointer(e){
+  pts.delete(e.pointerId); lastInput=performance.now();
+  if(pts.size===1){                         /* tolto un dito: riprende da dove sta quello rimasto */
+    const [id,p]=pts.entries().next().value; dragId=id; px=p.x; py=p.y; drag=true; moved=true;
+  } else if(pts.size===0){
+    drag=false; dragId=null;
+    if(!moved){ if(selPOI)deselectPOI(); if(panel.classList.contains('open'))openP(false); }
+  }
+}
+el.addEventListener('pointerup',endPointer);
+el.addEventListener('pointercancel',endPointer);
 el.addEventListener('wheel',e=>{e.preventDefault();camera.position.z=Math.max(1.4,Math.min(4.2,camera.position.z+e.deltaY*0.0016));auto=false;lastInput=performance.now();maybeUpgrade();},{passive:false});
 let pd=0;
+el.addEventListener('touchstart',()=>{pd=0;},{passive:true});
 el.addEventListener('touchmove',e=>{if(e.touches.length===2){e.preventDefault();
   const a=e.touches[0],b=e.touches[1],d=Math.hypot(a.clientX-b.clientX,a.clientY-b.clientY);
   if(pd)camera.position.z=Math.max(1.4,Math.min(4.2,camera.position.z-(d-pd)*0.006));pd=d;auto=false;lastInput=performance.now();maybeUpgrade();}},{passive:false});
 el.addEventListener('touchend',()=>pd=0);
+
+
+// ---- schermo intero: chiede alla pagina che ospita la mappa di espandere il riquadro ----
+(function(){
+  const b=document.getElementById('fs-btn'), inFrame=window.parent!==window;
+  const OUT='<path d="M4 9V5a1 1 0 0 1 1-1h4"/><path d="M20 9V5a1 1 0 0 0-1-1h-4"/>'+
+            '<path d="M4 15v4a1 1 0 0 0 1 1h4"/><path d="M20 15v4a1 1 0 0 1-1 1h-4"/>';
+  const IN ='<path d="M9 4v4a1 1 0 0 1-1 1H4"/><path d="M15 4v4a1 1 0 0 0 1 1h4"/>'+
+            '<path d="M9 20v-4a1 1 0 0 0-1-1H4"/><path d="M15 20v-4a1 1 0 0 1 1-1h4"/>';
+  let on=false;
+  function ask(v){ if(inFrame) parent.postMessage({mapfs:v?'on':'off'},'*'); }
+  b.addEventListener('click',e=>{e.stopPropagation(); ask(!on);});
+  b.addEventListener('pointerdown',e=>e.stopPropagation());
+  window.addEventListener('message',e=>{
+    if(!e.data||typeof e.data.mapfsState==='undefined') return;
+    on=!!e.data.mapfsState;
+    b.querySelector('svg').innerHTML = on?IN:OUT;
+    b.title=b.ariaLabel= on?'Esci da schermo intero':'Schermo intero';
+    setTimeout(()=>{resize();kpResize();},60);
+  });
+  window.addEventListener('keydown',e=>{ if(e.key==='Escape'&&on) ask(false); });
+  if(!inFrame) b.style.display='none';
+})();
 
 function resize(){const w=stage.clientWidth,h=stage.clientHeight;renderer.setSize(w,h);camera.aspect=w/h;camera.updateProjectionMatrix();}
 window.addEventListener('resize',resize);resize();
