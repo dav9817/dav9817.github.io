@@ -264,6 +264,13 @@ tr:nth-child(odd) td{background:transparent}
 #lb .mini .vp{position:absolute;border:1.5px solid #fff;background:rgba(255,255,255,.18);
   border-radius:2px;pointer-events:none}
 @media(max-width:600px){#lb .mini{width:96px;right:12px;bottom:12px}}
+
+/* nessuna evidenziazione blu su immagini e interfaccia: il testo dei paragrafi resta copiabile */
+img,svg,figure,figcaption,button,a.back,.card,.wm,.tag,.tags,.n,.kick,.phead,
+.revealcard,.reveal,.panel,.totop,.tree,.bigpic,#lb,#lb *,#prog{
+  -webkit-user-select:none;-moz-user-select:none;user-select:none;
+  -webkit-user-drag:none}
+#lb,#lb *,.card,figure img{-webkit-touch-callout:none}
 </style>
 <script>
 (function(){try{var l=localStorage.getItem('lang');}catch(e){}

@@ -202,6 +202,13 @@ footer{color:var(--muted);font-size:.84rem;text-align:center;padding:38px 20px 0
   .card:nth-child(3){--pc:color(display-p3 0.455 0.533 0.847)}
   .card:nth-child(4){--pc:color(display-p3 0.812 0.443 0.314)}
 }
+
+/* nessuna evidenziazione blu su immagini e interfaccia: il testo dei paragrafi resta copiabile */
+img,svg,figure,figcaption,button,a.back,.card,.wm,.tag,.tags,.n,.kick,.phead,
+.revealcard,.reveal,.panel,.totop,.tree,.bigpic,#lb,#lb *,#prog{
+  -webkit-user-select:none;-moz-user-select:none;user-select:none;
+  -webkit-user-drag:none}
+#lb,#lb *,.card,figure img{-webkit-touch-callout:none}
 </style>
 <script>
 (function(){try{var l=localStorage.getItem('lang');}catch(e){}
